@@ -1,0 +1,32 @@
+export default {
+  messages: {
+    title: 'Book_ManagementSystem',
+    home: 'home',
+    book_manage: 'book_manage',
+    book_List: 'book_List',
+    book_catetory: 'book_catetory',
+    user_manage: 'user_manage',
+    user_list: 'user_list',
+    admin_list: 'admin_list',
+    order_manage: 'order_manage',
+    order_list: 'order_list',
+    order_check: 'order_check',
+    admin: 'admin',
+    common_User: 'common_User',
+    book: 'book',
+    order: 'order',
+    commonUserMessage: 'Today’s new visitors: +',
+    bookMessage: 'Today’s book: +',
+    orderMessage: 'Sold Today: +',
+    MonthUserTitle: 'This month’s user summary',
+    MonthUserMessage1: 'Views:',
+    MonthUserMessage2: 'New Purchasers:',
+    MonthBookTitle: 'Summary of this month’s book',
+    MonthBookMessage1: 'Quantity:',
+    MonthBookMessage2: 'Number Sold:',
+    MonthOrderTitle: 'Summary of this month’s orders',
+    MonthOrderMessage1: 'Volume:',
+    MonthOrderMessage2: 'Total Amount:',
+    totalHome: 'totalCount'
+  }
+}
