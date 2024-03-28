@@ -3,6 +3,8 @@ import { watch, ref, onMounted, inject } from 'vue'
 import { useRoute } from 'vue-router'
 import { ArrowRight } from '@element-plus/icons-vue'
 import LanguageChange from '@/components/languageChange.vue'
+import { useLoginerStore } from '@/stores/LoginerStore'
+const LoginerStore = useLoginerStore()
 const route = useRoute()
 const props = defineProps(['isCollapse'])
 const emit = defineEmits(['changeCollapse'])
@@ -78,7 +80,13 @@ onMounted(() => {
 
     <el-col :span="20">
       <div class="right">
-        <LanguageChange></LanguageChange>
+        <div class="isLogin" v-if="LoginerStore.userInfo.token">
+          <span>rooki</span>
+          <LanguageChange></LanguageChange>
+        </div>
+        <div class="noLogin" v-else>
+          <LanguageChange></LanguageChange>
+        </div>
       </div>
     </el-col>
   </el-row>
@@ -99,11 +107,14 @@ onMounted(() => {
 <style scoped lang="scss">
 .header {
   background-color: skyblue;
-
+  position: relative;
   .right {
-    text-align: right;
-    padding-right: 3rem;
-    padding-top: 0.6rem;
+    position: absolute;
+    top: 0.6rem;
+    right: 3rem;
+    .isLogin {
+      display: flex;
+    }
   }
   .el-icon {
     color: white;
