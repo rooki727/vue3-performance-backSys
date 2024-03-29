@@ -10,6 +10,11 @@ import OrderVerify from '@/views/Order/OrderVerify/OrderVerify.vue'
 import AdminList from '@/views/User/Admin/AdminList.vue'
 import UserList from '@/views/User/User/UserList.vue'
 import UserIndex from '@/views/User/UserIndex.vue'
+import LoginInfo from '@/views/LoginInfo/LoginInfo.vue'
+import BasicInfo from '@/views/LoginInfo/BasicInfo/BasicInfo.vue'
+import CancelAccount from '@/views/LoginInfo/CancelAccount/CancelAccount.vue'
+import ModifyAwator from '@/views/LoginInfo/ModifyAwator/ModifyAwator.vue'
+import PasswordManagement from '@/views/LoginInfo/PasswordManagement/PasswordManagement.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -24,6 +29,33 @@ const router = createRouter({
           path: '/',
           component: HomeIndex,
           name: HomeIndex
+        },
+        {
+          path: '/loginInfo',
+          component: LoginInfo,
+          name: LoginInfo,
+          children: [
+            {
+              path: 'basicinfo',
+              component: BasicInfo,
+              name: BasicInfo
+            },
+            {
+              path: 'modifyawator',
+              component: ModifyAwator,
+              name: ModifyAwator
+            },
+            {
+              path: 'passwordmanagement',
+              component: PasswordManagement,
+              name: PasswordManagement
+            },
+            {
+              path: 'cancelaccount',
+              component: CancelAccount,
+              name: CancelAccount
+            }
+          ]
         },
         {
           path: '/user',

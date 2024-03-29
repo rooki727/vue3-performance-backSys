@@ -34,9 +34,9 @@ provide('getRmove', getRmove)
   background-color: rgb(17, 17, 137);
 }
 .content {
-  padding-left: 12%;
+  padding-left: 12.5rem;
 }
 .isClose {
-  padding-left: 4%;
+  padding-left: 4rem;
 }
 </style>

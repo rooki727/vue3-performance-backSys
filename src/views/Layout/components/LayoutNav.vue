@@ -115,7 +115,7 @@ defineExpose({ removeActive })
   }
 }
 .el-menu-vertical-demo:not(.el-menu--collapse) {
-  width: 200px;
-  min-height: 400px;
+  width: 12.5rem;
+  min-height: 25rem;
 }
 </style>

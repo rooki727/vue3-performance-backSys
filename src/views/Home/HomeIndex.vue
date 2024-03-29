@@ -77,7 +77,7 @@ const BookStore = useBookStore()
       <div class="mainRight">
         <VerticalCharts></VerticalCharts>
         <div class="qucikTo" style="text-align: center">
-          <span>点击快速导航</span>
+          <span>{{ $t('messages.Click_toNav') }}</span>
           <table width="100%">
             <thead>
               <tr>
