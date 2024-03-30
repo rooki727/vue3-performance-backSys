@@ -3,7 +3,9 @@
 import { onMounted, computed } from 'vue'
 import * as echarts from 'echarts'
 import { useBookStore } from '@/stores/BookStore'
-
+import { useI18n } from 'vue-i18n'
+// 获取t方法才可以在js代码里使用
+const { t } = useI18n()
 const bookStore = useBookStore()
 // store来的数据，如果需要在script使用，需要使用计算书写拿过来再用
 const ListValue = computed(() => bookStore.book.categoryList)
@@ -16,7 +18,7 @@ const setCharts = () => {
   // 绘制图表
   myChart.setOption({
     title: {
-      text: '图书类别数量',
+      text: t('messages.Number_of_book_categories'),
       subtext: '',
       left: 'center'
     },

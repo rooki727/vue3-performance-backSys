@@ -9,12 +9,11 @@ export const useLoginerStore = defineStore(
       token: '1231231',
       id: 123123213,
       account: 123456,
-      awatar: '',
+      awatar: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
       verify: 'First-level',
       name: 'rooki',
       gender: '男',
       phone: 1231231231,
-      password: 12312312,
       email: '123456@qq.com'
     })
 
@@ -22,13 +21,7 @@ export const useLoginerStore = defineStore(
 
     // 清空函数
     const clearUser = () => {
-      userInfo.value = {
-        token: '',
-        nickname: '',
-        account: null,
-        awatar: '',
-        verify: ''
-      }
+      userInfo.value = {}
     }
     return {
       userInfo,

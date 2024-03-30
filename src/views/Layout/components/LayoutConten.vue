@@ -5,8 +5,12 @@ import { ArrowRight } from '@element-plus/icons-vue'
 import LanguageChange from '@/components/languageChange.vue'
 import { useLoginerStore } from '@/stores/LoginerStore'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
+// 获取t方法才可以在js代码里使用
+const { t } = useI18n()
 const Router = useRouter()
 const LoginerStore = useLoginerStore()
+
 const route = useRoute()
 const props = defineProps(['isCollapse'])
 const emit = defineEmits(['changeCollapse'])
@@ -25,44 +29,44 @@ const changeBreadName = () => {
     // （实现国际化借助route里的name，在数组上加上对应的name  $t(`messages.${v-name}`)）
     switch (route.path) {
       case '/user/adminlist':
-        secondBreadName.value = '用户管理'
-        thitdBreadName.value = '管理员列表'
+        secondBreadName.value = t('messages.user_manage')
+        thitdBreadName.value = t('messages.admin_list')
         break
       case '/user/userlist':
-        secondBreadName.value = '用户管理'
-        thitdBreadName.value = '用户列表'
+        secondBreadName.value = t('messages.user_manage')
+        thitdBreadName.value = t('messages.user_list')
         break
       case '/book/booklist':
-        secondBreadName.value = '图书管理'
-        thitdBreadName.value = '图书列表'
+        secondBreadName.value = t('messages.book_manage')
+        thitdBreadName.value = t('messages.book_List')
         break
       case '/book/bookcategory':
-        secondBreadName.value = '图书管理'
-        thitdBreadName.value = '图书分类'
+        secondBreadName.value = t('messages.book_manage')
+        thitdBreadName.value = t('messages.book_catetory')
         break
       case '/order/orderlist':
-        secondBreadName.value = '订单管理'
-        thitdBreadName.value = '订单列表'
+        secondBreadName.value = t('messages.order_manage')
+        thitdBreadName.value = t('messages.order_list')
         break
       case '/order/orderverify':
-        secondBreadName.value = '订单管理'
-        thitdBreadName.value = '订单审核'
+        secondBreadName.value = t('messages.order_manage')
+        thitdBreadName.value = t('messages.order_check')
         break
       case '/loginInfo/basicinfo':
-        secondBreadName.value = '账号管理'
-        thitdBreadName.value = '基本资料'
+        secondBreadName.value = t('messages.LoginerInfo')
+        thitdBreadName.value = t('messages.Basic_information')
         break
       case '/loginInfo/modifyawator':
-        secondBreadName.value = '账号管理'
-        thitdBreadName.value = '修改头像'
+        secondBreadName.value = t('messages.LoginerInfo')
+        thitdBreadName.value = t('messages.Modify_Awator')
         break
       case '/loginInfo/passwordmanagement':
-        secondBreadName.value = '账号管理'
-        thitdBreadName.value = '密码管理'
+        secondBreadName.value = t('messages.LoginerInfo')
+        thitdBreadName.value = t('messages.Password_management')
         break
       case '/loginInfo/cancelaccount':
-        secondBreadName.value = '账号管理'
-        thitdBreadName.value = '注销账号'
+        secondBreadName.value = t('messages.LoginerInfo')
+        thitdBreadName.value = t('messages.Cancel_account')
         break
 
       default:
@@ -136,10 +140,7 @@ onMounted(() => {
           <div class="uerinfo">
             <el-dropdown size="small" split-button type="primary" style="background-color: skyblue">
               <!-- 增加头像 -->
-              <el-avatar
-                size="small"
-                src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png"
-              />
+              <el-avatar size="small" :src="LoginerStore.userInfo.awatar" />
               <span style="margin-left: 0.1875rem">
                 {{ LoginerStore.userInfo.name }}
               </span>

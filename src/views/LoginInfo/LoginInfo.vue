@@ -11,21 +11,29 @@
       mode="horizontal"
       :popper-offset="16"
       style="max-width: 60rem"
-      default-active="/loginInfo/basicinfo"
+      default-active="$route.path"
       router
     >
-      <el-menu-item index="/loginInfo/basicinfo">{{
-        $t('messages.Basic_information')
-      }}</el-menu-item>
-      <el-menu-item index="/loginInfo/modifyawator">{{
-        $t('messages.Modify_Awator')
-      }}</el-menu-item>
-      <el-menu-item index="/loginInfo/passwordmanagement">{{
-        $t('messages.Password_management')
-      }}</el-menu-item>
-      <el-menu-item index="/loginInfo/cancelaccount">{{
-        $t('messages.Cancel_account')
-      }}</el-menu-item>
+      <el-menu-item
+        index="/loginInfo/basicinfo"
+        :class="{ 'is-active': $route.path === '/loginInfo/basicinfo' }"
+        >{{ $t('messages.Basic_information') }}</el-menu-item
+      >
+      <el-menu-item
+        index="/loginInfo/modifyawator"
+        :class="{ 'is-active': $route.path === '/loginInfo/modifyawator' }"
+        >{{ $t('messages.Modify_Awator') }}</el-menu-item
+      >
+      <el-menu-item
+        index="/loginInfo/passwordmanagement"
+        :class="{ 'is-active': $route.path === '/loginInfo/passwordmanagement' }"
+        >{{ $t('messages.Password_management') }}</el-menu-item
+      >
+      <el-menu-item
+        index="/loginInfo/cancelaccount"
+        :class="{ 'is-active': $route.path === '/loginInfo/cancelaccount' }"
+        >{{ $t('messages.Cancel_account') }}</el-menu-item
+      >
     </el-menu>
   </div>
   <RouterView></RouterView>
