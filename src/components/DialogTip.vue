@@ -16,6 +16,9 @@ const changeDialogVisible = () => {
     :title="$t('messages.Warning')"
     width="500"
     align-center
+    :show-close="false"
+    :lock-scroll="false"
+    :close-on-click-modal="false"
   >
     <span>{{ props.TipMessage }}</span>
     <template #footer>

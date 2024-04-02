@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { reactive, computed } from 'vue'
 
 export const useOrderStore = defineStore(
   'order',
   () => {
-    const order = ref({
+    const order = reactive({
       totalCount: 1002,
       todayAdd: 2,
       monthOrderCount: 100,

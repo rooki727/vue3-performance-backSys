@@ -1,6 +1,10 @@
 <script setup>
 import { ref, reactive, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useLoginerStore } from '@/stores/LoginerStore'
+import { updatePasswordAPI } from '@/apis/login'
+import { ElMessage } from 'element-plus'
+import { useRouter } from 'vue-router'
 // 获取t方法才可以在js代码里使用
 const { t } = useI18n()
 const ruleForm = reactive({
@@ -9,6 +13,11 @@ const ruleForm = reactive({
   checkPass: '',
   captcha: ''
 })
+const router = useRouter()
+const LoginerStore = useLoginerStore()
+const LoginerId = computed(() => LoginerStore.userInfo.id)
+const LoginerOriPassword = computed(() => LoginerStore.userInfo.password)
+console.log(LoginerOriPassword.value)
 // 图片验证码
 const getcaptcha = ref([])
 const captchaString = computed(() => getcaptcha.value.map((item) => item.value).join(''))
@@ -24,19 +33,33 @@ const validateConfirm = (rule, value, callback) => {
     callback()
   }
 }
-// 提醒框确认
+// 提醒框组件功能使用
 const centerDialogVisible = ref(false)
 const changeDialogVisible = (value) => {
   centerDialogVisible.value = value
 }
 const submitForm = (formRef) => {
   // 调用表单的 validate 方法进行验证
-  formRef.validate((valid) => {
+  formRef.validate(async (valid) => {
     if (valid) {
       // 如果表单验证通过，可以继续执行提交逻辑
-      console.log('表单验证通过，可以提交表单')
       // 进行api提交
-      console.log(ruleForm) // 输出表单数据
+      if (ruleForm.Oripass === LoginerOriPassword.value) {
+        await updatePasswordAPI(LoginerId.value, ruleForm.pass)
+        ElMessage({
+          message: '修改密码成功',
+          type: 'success',
+          plain: true
+        })
+        router.replace('/login')
+        LoginerStore.clearUser()
+      } else {
+        ElMessage({
+          message: '原密码错误',
+          type: 'error',
+          plain: true
+        })
+      }
     } else {
       // 如果表单验证不通过，出现dialog并且提醒
       centerDialogVisible.value = true
@@ -118,16 +141,35 @@ const changeCaptcha = () => {
       class="demo-ruleForm"
     >
       <el-form-item :label="$t('messages.Original_password')" prop="Oripass">
-        <el-input v-model="ruleForm.Oripass" type="password" autocomplete="off" />
+        <el-input
+          v-model="ruleForm.Oripass"
+          type="password"
+          autocomplete="off"
+          :placeholder="$t('messages.input_originPass_required')"
+        />
       </el-form-item>
       <el-form-item :label="$t('messages.Password')" prop="pass">
-        <el-input v-model="ruleForm.pass" type="password" autocomplete="off" />
+        <el-input
+          v-model="ruleForm.pass"
+          type="password"
+          autocomplete="off"
+          :placeholder="$t('messages.input_pass')"
+        />
       </el-form-item>
       <el-form-item :label="$t('messages.Confirm_Password')" prop="checkPass">
-        <el-input v-model="ruleForm.checkPass" type="password" autocomplete="off" />
+        <el-input
+          v-model="ruleForm.checkPass"
+          type="password"
+          autocomplete="off"
+          :placeholder="$t('messages.checkpass_input')"
+        />
       </el-form-item>
       <el-form-item :label="$t('messages.Captcha')" prop="captcha">
-        <el-input v-model="ruleForm.captcha" style="width: 7rem" />
+        <el-input
+          v-model="ruleForm.captcha"
+          style="width: 7rem"
+          :placeholder="$t('messages.captcha_input')"
+        />
         <el-button class="captcha-box" @click="changeCaptcha">
           <el-link
             v-for="(char, index) in getcaptcha"

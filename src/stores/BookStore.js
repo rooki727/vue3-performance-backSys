@@ -1,8 +1,8 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { reactive } from 'vue'
 
 export const useBookStore = defineStore('book', () => {
-  const book = ref({
+  const book = reactive({
     totalCount: 5000,
     todayAdd: 15,
     monthAdd: 500,

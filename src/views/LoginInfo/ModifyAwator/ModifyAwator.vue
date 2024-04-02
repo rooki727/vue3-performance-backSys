@@ -2,10 +2,11 @@
 import DialogTip from '@/components/DialogTip.vue'
 import { useLoginerStore } from '@/stores/LoginerStore'
 import { Picture as IconPicture } from '@element-plus/icons-vue'
-import { ref } from 'vue'
-
+import { computed, ref } from 'vue'
+import { ElMessage } from 'element-plus'
 const LoginerStore = useLoginerStore()
 const currentAwator = ref('')
+const LoginerId = computed(() => LoginerStore.userInfo.id)
 // 捕获错误信息
 const handleError = (error) => {
   let errorMessage = error.message || 'An unknown error occurred'
@@ -25,14 +26,20 @@ const openFilePicker = () => {
 const handleFileChange = (event) => {
   const file = event.target.files[0]
   currentAwator.value = URL.createObjectURL(file)
-  // 调用上传头像的方法 uploadAvatar
 }
-// 上传成功后更新用户头像路径
-// 错误则出现dialog提醒
+
 const centerDialogVisible = ref(false)
 const uploadSave = () => {
   if (currentAwator.value != '') {
     LoginerStore.userInfo.awatar = currentAwator.value
+    console.log(currentAwator.value)
+    // 调用上传头像的方法 uploadAvatar
+    LoginerStore.uploadAvatar(LoginerId.value, currentAwator.value)
+    ElMessage({
+      message: '修改成功',
+      type: 'success',
+      plain: true
+    })
     currentAwator.value = ''
   } else {
     centerDialogVisible.value = true
@@ -56,7 +63,7 @@ const changeDialogVisible = (value) => {
         <span class="demonstration">{{ $t('messages.Avatar_preview') }}</span>
         <!-- 浏览头像位置 -->
         <el-image
-          :src="currentAwator ? currentAwator : LoginerStore.userInfo.awatar"
+          :src="currentAwator ? currentAwator : LoginerStore.userInfo?.awatar"
           @error="handleError('填写后端传来的图片加载失败messages')"
         >
           <template #error>

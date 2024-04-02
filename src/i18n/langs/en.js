@@ -72,7 +72,7 @@ export default {
     base_nameinput: 'Please enter a nickname',
     base_namerule: 'The minimum length of the nickname is 5',
     base_phoneinput: 'Please enter a phone number',
-    base_phonerule: 'The minimum length of the phone number is 8',
+    base_phonerule: 'The minimum length of the phone number is 11',
     base_digitsonly: 'Phone numbers can only be Arabic numerals',
     email_required: 'Please enter your email address',
     email_invalid: 'Please enter a valid email address',
@@ -83,6 +83,23 @@ export default {
     Unbinding_debinding: 'Unbinding/debinding',
     debinding_reason: 'Please enter the reason for your account cancellation',
     seven_major_book_categories: 'Monthly sales list of seven major book categories',
-    Number_of_book_categories: 'Number of book categories'
+    Number_of_book_categories: 'Number of book categories',
+    account_input: 'Please enter the account number',
+    account_min: 'The account must be at least 5 characters long',
+    password_inputAll:
+      'The password must be at least 8 digits long and must contain letters and numbers',
+    login: 'login',
+    System_Notice:
+      'Registration and login: Before using the library management system, users need to register an account and log in to the system. When registering, you need to provide true and valid personal information, including name, contact information, etc.',
+    System_Notice2:
+      'Protection of personal information: Users’ personal information will be strictly protected and will not be used for illegal purposes. At the same time, users should also keep their account and password properly to avoid leaking them to others.',
+    System_Notice3:
+      'Prohibited behaviors: Users shall not use the library management system to carry out illegal or illegal operations, and once discovered, the library management system has the right to take corresponding measures, including banning accounts.',
+    System_Notice4:
+      'System user guide: Users should carefully read the user guide provided by the system to understand the system functions and operation procedures, so as to make better use of the library management system.',
+    System_Notice5:
+      'Feedback and suggestions: If users have any questions or suggestions in the process of use, they can give feedback through the feedback channel provided by the system, and the library management system will deal with and improve them in a timely manner.',
+    System_Notice6:
+      'Compliance with regulations: When using the library management system, users need to comply with the relevant regulations and systems, and jointly maintain the normal operation and order of the library management system.'
   }
 }

@@ -6,6 +6,7 @@ import router from './router'
 import 'normalize.css'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import i18n from './i18n'
+import 'element-plus/dist/index.css'
 const app = createApp(App)
 const pinia = createPinia()
 app.use(pinia)
@@ -15,4 +16,5 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }
 app.use(i18n)
+
 app.mount('#app')

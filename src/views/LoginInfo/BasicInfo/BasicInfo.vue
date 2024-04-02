@@ -1,19 +1,19 @@
 <script  setup>
 import { useLoginerStore } from '@/stores/LoginerStore'
-import { ref } from 'vue'
+import { ref, reactive, onMounted } from 'vue'
 import DialogTip from '@/components/DialogTip.vue'
 import { useI18n } from 'vue-i18n'
+import { ElMessage } from 'element-plus'
 // 获取t方法才可以在js代码里使用
 const { t } = useI18n()
 const LoginerStore = useLoginerStore()
-const userForm = ref({
+const userForm = reactive({
   name: '',
   gender: '',
   phone: null,
   email: ''
 })
-// Object.assign() 或扩展运算符来创建一个新的对象，从而确保不会直接修改 store 中的值
-Object.assign(userForm.value, LoginerStore.userInfo)
+
 const ruleFormRef = ref()
 const rules = {
   name: [
@@ -30,7 +30,7 @@ const rules = {
       message: t('messages.base_phoneinput'),
       trigger: 'blur'
     },
-    { type: 'number', min: 8, message: t('messages.base_phonerule'), trigger: 'blur' },
+    { type: 'Number', min: 11, message: t('messages.base_phonerule'), trigger: 'blur' },
     {
       pattern: /^[0-9]+$/, // 使用正则表达式限制输入只能为数字字符
       message: t('messages.base_digitsonly'), // 自定义提示消息
@@ -58,9 +58,20 @@ const submitForm = (formRef) => {
   formRef.validate((valid) => {
     if (valid) {
       // 如果表单验证通过，可以继续执行提交逻辑
-      console.log('表单验证通过，可以提交表单')
       // 进行api提交修改stores 重新获取数据
-      console.log(userForm) // 输出表单数据
+      LoginerStore.updateupdateBase(
+        userForm.id,
+        userForm.name,
+        parseInt(userForm.phone),
+        userForm.email
+      )
+      Object.assign(userForm, LoginerStore.userInfo)
+      ElMessage({
+        message: '修改成功',
+        type: 'success',
+        plain: true
+      })
+      resetForm()
     } else {
       // 如果表单验证不通过，出现dialog并且提醒
       centerDialogVisible.value = true
@@ -75,10 +86,14 @@ const changeDialogVisible = (value) => {
 
 // 重置按钮
 const resetForm = () => {
-  userForm.value.name = ''
-  userForm.value.phone = null
-  userForm.value.email = ''
+  userForm.name = ''
+  userForm.phone = null
+  userForm.email = ''
 }
+onMounted(() => {
+  // Object.assign() 或扩展运算符来创建一个新的对象，从而确保不会直接修改 store 中的值
+  Object.assign(userForm, LoginerStore.userInfo)
+})
 </script>
 
 <template>
@@ -105,7 +120,7 @@ const resetForm = () => {
         ><el-text>{{ LoginerStore.userInfo?.verify }}</el-text></el-form-item
       >
       <el-form-item :label="$t('messages.name')" prop="name">
-        <el-input v-model="userForm.name"
+        <el-input v-model="userForm.name" :placeholder="$t('messages.base_nameinput')"
       /></el-form-item>
       <el-form-item :label="$t('messages.gender')" prop="gender">
         <el-radio-group v-model="userForm.gender">
@@ -114,10 +129,13 @@ const resetForm = () => {
         </el-radio-group>
       </el-form-item>
       <el-form-item :label="$t('messages.phone')" prop="phone">
-        <el-input v-model="userForm.phone"
+        <el-input
+          v-model="userForm.phone"
+          :placeholder="$t('messages.base_phoneinput')"
+          type="Number"
       /></el-form-item>
       <el-form-item :label="$t('messages.email')" prop="email">
-        <el-input v-model="userForm.email"
+        <el-input v-model="userForm.email" :placeholder="$t('messages.email_required')"
       /></el-form-item>
       <el-form-item>
         <el-button type="primary" @click="submitForm(ruleFormRef)" style="margin-left: 0.5rem">

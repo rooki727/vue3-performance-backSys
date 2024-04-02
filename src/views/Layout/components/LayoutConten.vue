@@ -10,7 +10,7 @@ import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 const Router = useRouter()
 const LoginerStore = useLoginerStore()
-
+const circleUrl = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
 const route = useRoute()
 const props = defineProps(['isCollapse'])
 const emit = defineEmits(['changeCollapse'])
@@ -140,7 +140,10 @@ onMounted(() => {
           <div class="uerinfo">
             <el-dropdown size="small" split-button type="primary" style="background-color: skyblue">
               <!-- 增加头像 -->
-              <el-avatar size="small" :src="LoginerStore.userInfo.awatar" />
+              <el-avatar
+                size="small"
+                :src="LoginerStore.userInfo?.awatar ? LoginerStore.userInfo?.awatar : circleUrl"
+              />
               <span style="margin-left: 0.1875rem">
                 {{ LoginerStore.userInfo.name }}
               </span>

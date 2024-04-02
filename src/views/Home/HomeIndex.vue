@@ -6,9 +6,14 @@ import { useUserStore } from '@/stores/userStore'
 import { useBookStore } from '@/stores/BookStore'
 import VerticalCharts from './components/VerticalCharts.vue'
 import MonthItem from './components/MonthItem.vue'
+import { onMounted } from 'vue'
 const OrderStore = useOrderStore()
 const userStore = useUserStore()
 const BookStore = useBookStore()
+const getTableForm = () => {
+  userStore.getUser()
+}
+onMounted(() => getTableForm())
 </script>
 
 <template>
@@ -16,27 +21,27 @@ const BookStore = useBookStore()
     <div class="header">
       <totalItem
         :title="$t('messages.admin')"
-        :count="userStore.user.adminCount"
+        :count="userStore.user?.adminCount"
         style="background-image: linear-gradient(to right, rgb(242, 49, 49), rgb(204, 153, 102))"
       ></totalItem>
       <totalItem
         :title="$t('messages.common_User')"
-        :count="userStore.user.commonUserCount"
+        :count="userStore.user?.commonUserCount"
         :message="$t('messages.commonUserMessage')"
-        :todayCount="userStore.user.todayAdd"
+        :todayCount="userStore.user?.todayAdd"
         style="background-image: linear-gradient(to right, rgb(204, 153, 102), rgb(220, 220, 35))"
       ></totalItem>
       <totalItem
         :title="$t('messages.book')"
-        :count="BookStore.book.totalCount"
+        :count="BookStore.book?.totalCount"
         :message="$t('messages.bookMessage')"
-        :todayCount="BookStore.book.todayAdd"
+        :todayCount="BookStore.book?.todayAdd"
         style="background-image: linear-gradient(to right, rgb(220, 220, 35), rgb(36, 224, 39))"
       ></totalItem>
       <totalItem
         :title="$t('messages.order')"
-        :count="OrderStore.order.totalCount"
-        :todayCount="OrderStore.order.todayAdd"
+        :count="OrderStore.order?.totalCount"
+        :todayCount="OrderStore.order?.todayAdd"
         :message="$t('messages.orderMessage')"
         style="background-image: linear-gradient(to right, rgb(36, 224, 39), rgb(36, 224, 214))"
       ></totalItem>

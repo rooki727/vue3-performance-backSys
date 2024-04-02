@@ -1,31 +1,81 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
-
+import { reactive } from 'vue'
+import {
+  checkFormLoginAPI,
+  getLoginerPhoneAPI,
+  updateBaseAPI,
+  getNewLoginerAPI,
+  uploadAvatarAPI
+} from '@/apis/login'
 export const useLoginerStore = defineStore(
   'userLogin',
   () => {
     // 定义登陆用户对象
-    const userInfo = ref({
-      token: '1231231',
-      id: 123123213,
-      account: 123456,
-      awatar: 'https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png',
-      verify: 'First-level',
-      name: 'rooki',
-      gender: '男',
-      phone: 1231231231,
-      email: '123456@qq.com'
-    })
+    const userInfo = reactive({})
 
     // 写api请求登陆人信息请求
+    const getLoginerForm = async (account, password) => {
+      // 假设获取的是res
+      const res = await checkFormLoginAPI(account, password)
+      Object.assign(userInfo, res[0])
 
+      // 合并 res 的属性到 userInfo
+    }
     // 清空函数
     const clearUser = () => {
-      userInfo.value = {}
+      // 使用 Object.keys() 和 delete 关键字删除 userInfo 对象的所有属性
+      Object.keys(userInfo).forEach((key) => {
+        delete userInfo[key]
+      })
     }
+
+    // // check验证码，并且返回值部分，实际应用应放到loginerStore里
+    // const checkLoginStatus = async () => {
+    //   const res = await checkLoginStatusAPI()
+    //   let checkInterval = setInterval(async () => {
+    //     if (res.data.loggedIn) {
+    //       clearInterval(checkInterval)
+    //     }
+    //   }, 2000)
+    // }
+    // onUnmounted(() => {
+    //   clearInterval(checkInterval)
+    // })
+
+    // phone获取表单数据
+    const getLoginerPhone = async (phone) => {
+      phone = parseInt(phone)
+      // 假设获取的是res
+      const res = await getLoginerPhoneAPI(phone)
+      Object.assign(userInfo, res[0])
+    }
+    // 修改基本资料
+    const updateupdateBase = async (id, name, phone, email) => {
+      await updateBaseAPI(id, name, phone, email)
+
+      getNewLoginer(id)
+    }
+    // 更新头像
+    const uploadAvatar = async (id, awatar) => {
+      await uploadAvatarAPI(id, awatar)
+
+      getNewLoginer(id)
+    }
+
+    // 重新获取该登录者的信息
+    const getNewLoginer = async (id) => {
+      const res = await getNewLoginerAPI(id)
+      Object.assign(userInfo, res)
+    }
+
     return {
       userInfo,
-      clearUser
+      clearUser,
+      getLoginerForm,
+      getLoginerPhone,
+      updateupdateBase,
+      getNewLoginer,
+      uploadAvatar
     }
   },
   {
