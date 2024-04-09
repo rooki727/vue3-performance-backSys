@@ -6,13 +6,17 @@ import { useUserStore } from '@/stores/userStore'
 import { useBookStore } from '@/stores/BookStore'
 import VerticalCharts from './components/VerticalCharts.vue'
 import MonthItem from './components/MonthItem.vue'
-import { onMounted } from 'vue'
+import { computed, onMounted } from 'vue'
 const OrderStore = useOrderStore()
 const userStore = useUserStore()
 const BookStore = useBookStore()
 const getTableForm = () => {
   userStore.getUser()
+  userStore.getAdminList()
+  userStore.getCommonUser()
 }
+const adminCount = computed(() => userStore.adminList.length)
+const commonUserCount = computed(() => userStore.commonUserList.length)
 onMounted(() => getTableForm())
 </script>
 
@@ -21,12 +25,12 @@ onMounted(() => getTableForm())
     <div class="header">
       <totalItem
         :title="$t('messages.admin')"
-        :count="userStore.user?.adminCount"
+        :count="adminCount"
         style="background-image: linear-gradient(to right, rgb(242, 49, 49), rgb(204, 153, 102))"
       ></totalItem>
       <totalItem
         :title="$t('messages.common_User')"
-        :count="userStore.user?.commonUserCount"
+        :count="commonUserCount"
         :message="$t('messages.commonUserMessage')"
         :todayCount="userStore.user?.todayAdd"
         style="background-image: linear-gradient(to right, rgb(204, 153, 102), rgb(220, 220, 35))"

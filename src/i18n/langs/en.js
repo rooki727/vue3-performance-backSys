@@ -100,6 +100,22 @@ export default {
     System_Notice5:
       'Feedback and suggestions: If users have any questions or suggestions in the process of use, they can give feedback through the feedback channel provided by the system, and the library management system will deal with and improve them in a timely manner.',
     System_Notice6:
-      'Compliance with regulations: When using the library management system, users need to comply with the relevant regulations and systems, and jointly maintain the normal operation and order of the library management system.'
+      'Compliance with regulations: When using the library management system, users need to comply with the relevant regulations and systems, and jointly maintain the normal operation and order of the library management system.',
+    switch_Login_method: 'Switch the login method',
+    qrCode_login: 'QR code login',
+    account_login: 'Log in with your account and password',
+    phoen_login: 'SMS login',
+    cannot_messages: 'Can’t receive text messages?',
+    forget_pass: 'Forgot your password?',
+    addUser: 'Add users',
+    search: 'Search',
+    bluk_del: 'Delete in bulk',
+    searchName_input:
+      'Please enter a search nickname and clear the input box to obtain the complete tabular data',
+    verify_input: 'Please enter permissions',
+    operations: 'operate',
+    edit: 'edit',
+    delete: 'Delete',
+    id_input: 'Please enter a unique ID'
   }
 }

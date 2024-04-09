@@ -1,29 +1,80 @@
 import { defineStore } from 'pinia'
-import { reactive } from 'vue'
-import { getUserListAPI, getAdminListAPI, addAdminListAPI } from '@/apis/user'
+import { ref } from 'vue'
+import {
+  getUserListAPI,
+  getAdminListAPI,
+  addAdminListAPI,
+  updateAdminListAPI,
+  deleteAdminAPI,
+  getCommonUserAPI,
+  addCommonUserAPI,
+  updateCommonUserAPI,
+  deleteCommonUserAPI
+} from '@/apis/user'
 export const useUserStore = defineStore('user', () => {
-  const user = reactive({})
-  const adminList = reactive({})
+  const user = ref({})
+  const adminList = ref([])
+  const commonUserList = ref([])
   // 加上api请求
   const getUser = async () => {
     const res = await getUserListAPI()
-    Object.assign(user, res[0])
+    user.value = res
   }
   //获取管理员
   const getAdminList = async () => {
     const res = await getAdminListAPI()
-    Object.assign(adminList, res)
+    // 使用深拷贝函数将 res 的内容复制到 adminList 中
+    adminList.value = res
   }
-  // 添加用户
+  // 添加管理员
   const addAdmin = async (id, name, account, verify, gender, phone, email) => {
     await addAdminListAPI(id, name, account, verify, gender, phone, email)
     getAdminList()
   }
+  // 修改管理员信息
+  const updateAdmin = async (id, name, account, verify, gender, phone, email) => {
+    await updateAdminListAPI(id, name, account, verify, gender, phone, email)
+    getAdminList()
+  }
+  // 删除管理员
+  const deleteAdmin = async (id) => {
+    await deleteAdminAPI(id)
+    getAdminList()
+  }
+
+  // 普通用户部分
+  const getCommonUser = async () => {
+    const res = await getCommonUserAPI()
+    commonUserList.value = res
+  }
+
+  // 添加普通用户
+  const addCommonUser = async (id, name, account, verify, gender, phone, email) => {
+    await addCommonUserAPI(id, name, account, verify, gender, phone, email)
+    getCommonUser()
+  }
+  // 修改普通用户信息
+  const updateCommonUser = async (id, name, account, verify, gender, phone, email) => {
+    await updateCommonUserAPI(id, name, account, verify, gender, phone, email)
+    getCommonUser()
+  }
+  // 删除普通用户
+  const deleteCommonUser = async (id) => {
+    await deleteCommonUserAPI(id)
+    getCommonUser()
+  }
   return {
     user,
     adminList,
+    commonUserList,
     getUser,
     getAdminList,
-    addAdmin
+    addAdmin,
+    updateAdmin,
+    deleteAdmin,
+    getCommonUser,
+    addCommonUser,
+    updateCommonUser,
+    deleteCommonUser
   }
 })

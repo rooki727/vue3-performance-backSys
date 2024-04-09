@@ -9,13 +9,11 @@ const { t } = useI18n()
 // 弹框功能设置
 const props = defineProps(['dialogFormVisible', 'title'])
 const centerDialogVisible = computed(() => props.dialogFormVisible)
-
 const title = computed(() => props.title)
 const emit = defineEmits(['changeDialogVisible'])
 const changeDialogVisible = () => {
   emit('changeDialogVisible', false)
 }
-
 const addForm = ref(null)
 const addform = reactive({
   id: null,
@@ -26,7 +24,6 @@ const addform = reactive({
   phone: null,
   email: ''
 })
-
 const rules = {
   id: [
     {
@@ -89,13 +86,13 @@ const submitadd = (addForm) => {
     if (valid) {
       // api数据请求，添加该用户的信息
       emit('changeDialogVisible', false)
-      userStore.addAdmin(
+      userStore.addCommonUser(
         addform.id,
         addform.name,
-        addform.account,
+        parseInt(addform.account),
         addform.verify,
         addform.gender,
-        addform.phone,
+        parseInt(addform.phone),
         addform.email
       )
       // 如果 addUser 没有报错，则执行成功提示
@@ -120,7 +117,7 @@ const submitadd = (addForm) => {
   >
     <el-form :model="addform" :rules="rules" ref="addForm">
       <el-form-item label="id" label-width="8.75rem" prop="id">
-        <el-input v-model="addform.id" autocomplete="off" />
+        <el-input v-model="addform.id" autocomplete="off" :disabled="props.idCanInput" />
       </el-form-item>
       <el-form-item :label="$t('messages.name')" label-width="8.75rem" prop="name">
         <el-input v-model="addform.name" autocomplete="off" />

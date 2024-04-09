@@ -10,20 +10,20 @@
       "token": "1231231",
       "id": "123123213",
       "account": 123456,
-      "awatar": "blob:http://localhost:5173/faab70c3-d16f-4802-b9da-807619e29b31",
+      "awatar": "blob:http://localhost:5173/231aeb6d-eee3-49de-b927-1ac2ba3f8bdc",
       "verify": "first",
       "name": "rooki",
       "gender": "男",
       "phone": 13653051214,
       "email": "123456@qq.com",
-      "password": "12345678a"
+      "password": "1234567890a"
     },
     {
       "token": "12312312",
       "id": "12312223",
       "account": 12345678,
       "awatar": "blob:http://localhost:5173/961b5907-19f7-4c7c-9d3b-e1a4ac6666d8",
-      "verify": "first",
+      "verify": "second",
       "name": "rooki22222",
       "gender": "男",
       "phone": 15626493252,
@@ -31,17 +31,13 @@
       "password": "1234560a"
     }
   ],
-  "users": [
-    {
-      "totalCount": 3000,
-      "todayAdd": 10,
-      "adminCount": 10,
-      "commonUserCount": 2990,
-      "monthVisit": 1000,
-      "perPurchase": 30,
-      "id": "2eb4"
-    }
-  ],
+  "users": {
+    "totalCount": 3000,
+    "todayAdd": 10,
+    "monthVisit": 1000,
+    "perPurchase": 30,
+    "id": "2eb4"
+  },
   "adminList": [
     {
       "id": "1",
@@ -53,48 +49,75 @@
       "email": "123456@qq.com"
     },
     {
-      "id": "2",
-      "name": "rooki2",
-      "gender": "男",
-      "account": 1668943466,
-      "phone": 1231231231,
-      "verify": "second",
-      "email": "123456@qq.com"
-    },
-    {
       "id": "3",
-      "name": "wk22222",
+      "name": "rooki",
+      "account": 213123,
+      "verify": "first",
       "gender": "男",
-      "account": 1668943466,
-      "phone": 1231231231,
-      "verify": "second",
-      "email": "123456@qq.com"
-    },
-    {
-      "id": "213",
-      "name": "lk2222",
-      "account": "123123",
-      "verify": "1",
-      "gender": "男",
-      "phone": "8613653051212",
+      "phone": 8613653051212,
       "email": "1668943468@qq.com"
     },
     {
-      "id": "4",
-      "name": "2312312",
-      "account": "23123123",
+      "id": "7",
+      "name": "33123",
+      "account": 12312312,
       "verify": "1",
       "gender": "男",
-      "phone": "8613653051212",
+      "phone": 8613653051212,
       "email": "1668943468@qq.com"
     },
     {
-      "id": "5",
-      "name": "wwwww",
-      "account": "1231231",
+      "id": "8",
+      "name": "33123213",
+      "account": 1231231222,
+      "verify": "1",
+      "gender": "女",
+      "phone": 8613653051212,
+      "email": "1668943468@qq.com"
+    },
+    {
+      "id": "12",
+      "name": "123213223",
+      "account": 1232222211,
       "verify": "1",
       "gender": "男",
-      "phone": "8613653051212",
+      "phone": 8613653051212,
+      "email": "1668943468@qq.com"
+    },
+    {
+      "id": "14",
+      "name": "1546546",
+      "account": 125464565567,
+      "verify": "1",
+      "gender": "男",
+      "phone": 8613653051212,
+      "email": "1668943468@qq.com"
+    },
+    {
+      "id": "9",
+      "name": "21312312",
+      "account": 113321,
+      "verify": "12",
+      "gender": "女",
+      "phone": 8613653051212,
+      "email": "1668943468@qq.com"
+    },
+    {
+      "id": "10",
+      "name": "2222212",
+      "account": 1133221,
+      "verify": "12",
+      "gender": "男",
+      "phone": 8613653051212,
+      "email": "1668943468@qq.com"
+    },
+    {
+      "id": "13",
+      "name": "2312321",
+      "account": 131231,
+      "verify": "1",
+      "gender": "男",
+      "phone": 8613653051212,
       "email": "1668943468@qq.com"
     }
   ],
@@ -127,13 +150,31 @@
       "email": "123456@qq.com"
     },
     {
-      "id": "4",
-      "name": "llaaa",
-      "gender": "男",
-      "account": 1668943468,
-      "phone": 1231231231,
+      "id": "7",
+      "name": "rooki",
+      "account": 12312312,
       "verify": "common",
-      "email": "123456@qq.com"
+      "gender": "男",
+      "phone": 8613653051212,
+      "email": "1668943468@qq.com"
+    },
+    {
+      "id": "8",
+      "name": "rooki2",
+      "account": 123123122,
+      "verify": "common",
+      "gender": "男",
+      "phone": 8613653051212,
+      "email": "1668943468@qq.com"
+    },
+    {
+      "id": "9",
+      "name": "rooki3",
+      "account": 1231231323,
+      "verify": "common",
+      "gender": "男",
+      "phone": 8613653051212,
+      "email": "1668943468@qq.com"
     }
   ]
 }

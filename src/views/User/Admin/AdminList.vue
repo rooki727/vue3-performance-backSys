@@ -1,10 +1,11 @@
 <script setup>
-import tableItem from '../components/tableItem.vue'
-import { ref, reactive, onMounted, watch } from 'vue'
-import addDialog from '../components/addDialog.vue'
+import tableItem from './components/tableItem.vue'
+import { ref, onMounted, watch, computed } from 'vue'
+import addDialog from './components/addDialog.vue'
 import { useLoginerStore } from '@/stores/LoginerStore'
 import { useUserStore } from '@/stores/userStore'
 import { useI18n } from 'vue-i18n'
+import { ElMessage } from 'element-plus'
 
 // 获取t方法才可以在js代码里使用
 const { t } = useI18n()
@@ -14,23 +15,7 @@ const UserStore = useUserStore()
 const searchInput = ref('')
 const dialogTitle = ref('')
 // 表格内容
-const tableformAdmin = reactive([])
-// 搜索功能
-const submitSearch = () => {
-  if (searchInput.value.length >= 5) {
-    // 过滤条件拼接成新数据
-    tableformAdmin.splice(
-      0,
-      tableformAdmin.length,
-      ...tableformAdmin.filter((item) => item.name === searchInput.value)
-    )
-  }
-}
-const handleBlur = () => {
-  if (!searchInput.value.trim()) {
-    Object.assign(tableformAdmin, UserStore.adminList)
-  }
-}
+const tableformAdmin = ref([])
 
 // 获取table数据
 const getTableForm = async () => {
@@ -48,17 +33,64 @@ const openAddDialog = () => {
   dialogTitle.value = t('messages.addUser')
   changeDialogVisible(true)
 }
+const computedAdminList = computed(() => JSON.parse(JSON.stringify(UserStore.adminList)))
+// 先将表单赋值给一个表格用于存储数据，实现页面搜索不需要加载api
+const originalTableformAdmin = ref([])
 // 使用 watch 监听 adminList 的变化
 watch(
-  () => UserStore.adminList,
+  () => computedAdminList.value,
   (newValue) => {
-    Object.assign(tableformAdmin, newValue)
+    tableformAdmin.value = newValue
+    originalTableformAdmin.value = newValue
   },
   {
     deep: true
   }
 )
 
+// 搜索功能
+const resetSearch = () => {
+  searchInput.value = ''
+  tableformAdmin.value = [...originalTableformAdmin.value]
+}
+// 监听输入框的 input 事件，触发搜索功能
+const handleSearch = (inputvalue) => {
+  // 进行搜索操作，可以在这里触发相应的搜索逻辑
+  // 备份原始数据
+  const originalData = [...originalTableformAdmin.value]
+
+  // 如果输入为空，恢复原始数据
+  if (inputvalue === '') {
+    tableformAdmin.value = [...originalTableformAdmin.value]
+  } else {
+    // 根据输入值过滤数据
+    const filteredData = originalData.filter((item) => item.name.includes(inputvalue))
+    // 更新表格数据
+    tableformAdmin.value = filteredData
+  }
+}
+
+// 批量删除功能
+const delTableId = ref([])
+const getDelTable = (value) => {
+  delTableId.value = value
+}
+const blukDel = () => {
+  if (delTableId.value.length > 0) {
+    // 执行请求操作
+    delTableId.value.forEach((item) => UserStore.deleteAdmin(parseInt(item)))
+    ElMessage({ type: 'success', message: '删除成功' })
+    // 删除完后清空数据
+    delTableId.value = []
+  } else {
+    ElMessage({
+      type: 'error',
+      message: '请勾选需要删除的数据'
+    })
+  }
+}
+
+// 加载网页加载数据
 onMounted(() => {
   getTableForm()
 })
@@ -76,11 +108,11 @@ onMounted(() => {
       v-model="searchInput"
       style="width: 33rem; margin-left: 1rem"
       :placeholder="$t('messages.searchName_input')"
-      @blur="handleBlur"
+      @input="handleSearch"
       clearable
     ></el-input>
-    <el-button type="primary" @click="submitSearch" style="margin-left: 3rem">{{
-      $t('messages.search')
+    <el-button type="primary" @click="resetSearch" style="margin-left: 3rem">{{
+      $t('messages.reset')
     }}</el-button>
   </div>
   <el-divider border-style="dashed" />
@@ -92,15 +124,15 @@ onMounted(() => {
       :disabled="LoginerStore.userInfo.verify !== 'first'"
       ><el-icon><Plus /></el-icon>{{ $t('messages.addUser') }}</el-button
     >
-    <el-button type="danger" :disabled="LoginerStore.userInfo.verify !== 'first'"
+    <el-button type="danger" :disabled="LoginerStore.userInfo.verify !== 'first'" @click="blukDel"
       ><el-icon><DeleteFilled /></el-icon>{{ $t('messages.bluk_del') }}</el-button
     >
   </div>
 
   <el-divider border-style="dashed" />
   <div class="table">
-    <div class="getTable">
-      <tableItem :tableformAdmin="tableformAdmin"></tableItem>
+    <div class="taleDiv">
+      <tableItem :tableformAdmin="tableformAdmin" @getDelTable="getDelTable"></tableItem>
     </div>
   </div>
 </template>
