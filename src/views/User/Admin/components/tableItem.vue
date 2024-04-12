@@ -4,6 +4,7 @@
     :clickRow="clickRow"
     :title="dialogTitle"
     :dialogFormVisible="dialogFormVisible"
+    @updateClickRow="updateClickRow"
     @changeDialogVisible="changeDialogVisible"
   ></editDialog>
   <div>
@@ -33,14 +34,19 @@
             :disabled="LoginerStore.userInfo?.verify !== 'first' || scope.row?.verify === 'first'"
             >{{ $t('messages.edit') }}</el-button
           >
-          <el-button
-            link
-            type="primary"
-            size="small"
-            @click="handleDelete(scope.row)"
-            :disabled="LoginerStore.userInfo?.verify !== 'first' || scope.row.verify === 'first'"
-            >{{ $t('messages.delete') }}</el-button
-          >
+          <el-popconfirm :title="$t('messages.confirmToDetele')" @confirm="handleDelete(scope.row)">
+            <template #reference>
+              <el-button
+                link
+                type="primary"
+                size="small"
+                :disabled="
+                  LoginerStore.userInfo?.verify !== 'first' || scope.row.verify === 'first'
+                "
+                >{{ $t('messages.delete') }}</el-button
+              >
+            </template>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
@@ -78,7 +84,10 @@ const cannotInpId = ref(true)
 const changeDialogVisible = (value) => {
   dialogFormVisible.value = value
 }
-
+// 取消按钮时重置点击行
+const updateClickRow = (newValue) => {
+  clickRow.value = newValue
+}
 const props = defineProps(['tableformAdmin'])
 // 分页功能
 const pageSize = ref(6)

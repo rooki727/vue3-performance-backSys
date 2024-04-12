@@ -30,7 +30,7 @@ const changeDialogVisible = (value) => {
 
 // 点击打开添加表单
 const openAddDialog = () => {
-  dialogTitle.value = t('messages.addUser')
+  dialogTitle.value = t('messages.add_admin')
   changeDialogVisible(true)
 }
 const computedAdminList = computed(() => JSON.parse(JSON.stringify(UserStore.adminList)))
@@ -78,7 +78,7 @@ const getDelTable = (value) => {
 const blukDel = () => {
   if (delTableId.value.length > 0) {
     // 执行请求操作
-    delTableId.value.forEach((item) => UserStore.deleteAdmin(parseInt(item)))
+    delTableId.value.forEach((item) => UserStore.deleteAdmin(item))
     ElMessage({ type: 'success', message: '删除成功' })
     // 删除完后清空数据
     delTableId.value = []
@@ -122,7 +122,7 @@ onMounted(() => {
       type="warning"
       style="margin-left: 2rem"
       :disabled="LoginerStore.userInfo.verify !== 'first'"
-      ><el-icon><Plus /></el-icon>{{ $t('messages.addUser') }}</el-button
+      ><el-icon><Plus /></el-icon>{{ $t('messages.add_admin') }}</el-button
     >
     <el-button type="danger" :disabled="LoginerStore.userInfo.verify !== 'first'" @click="blukDel"
       ><el-icon><DeleteFilled /></el-icon>{{ $t('messages.bluk_del') }}</el-button

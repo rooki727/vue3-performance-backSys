@@ -17,12 +17,11 @@ export const getAdminListAPI = () => {
 }
 
 // 添加管理员
-export const addAdminListAPI = (id, name, account, verify, gender, phone, email) => {
+export const addAdminListAPI = (name, account, verify, gender, phone, email) => {
   return httpInstance({
     url: '/adminList',
     method: 'POST',
     data: {
-      id: id,
       name: name,
       account: account,
       verify: verify,
@@ -67,12 +66,11 @@ export const getCommonUserAPI = () => {
 }
 
 // 添加普通用户
-export const addCommonUserAPI = (id, name, account, verify, gender, phone, email) => {
+export const addCommonUserAPI = (name, account, verify, gender, phone, email) => {
   return httpInstance({
     url: '/commonUserList',
     method: 'POST',
     data: {
-      id: id,
       name: name,
       account: account,
       verify: verify,

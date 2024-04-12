@@ -11,12 +11,12 @@ const props = defineProps(['dialogFormVisible', 'title'])
 const centerDialogVisible = computed(() => props.dialogFormVisible)
 const title = computed(() => props.title)
 const emit = defineEmits(['changeDialogVisible'])
-const changeDialogVisible = () => {
-  emit('changeDialogVisible', false)
-}
+const verifyChoose = [
+  { id: 1, verify: 'first' },
+  { id: 2, verify: 'second' }
+]
 const addForm = ref(null)
 const addform = reactive({
-  id: null,
   name: '',
   account: null,
   verify: '',
@@ -25,14 +25,6 @@ const addform = reactive({
   email: ''
 })
 const rules = {
-  id: [
-    {
-      type: Number,
-      required: true,
-      message: t('messages.id_input'),
-      trigger: 'blur'
-    }
-  ],
   name: [
     {
       required: true,
@@ -54,7 +46,7 @@ const rules = {
     }
   ],
   gender: [{ required: true }],
-  verify: [{ required: true, message: t('messages.verify_input'), trigger: 'blur' }],
+  verify: [{ required: true }],
   phone: [
     {
       required: true,
@@ -81,13 +73,28 @@ const rules = {
     }
   ]
 }
+
+// 重置表单函数
+const resetForm = () => {
+  addform.name = ''
+  addform.account = null
+  addform.verify = ''
+  addform.gender = ''
+  addform.phone = null
+  addform.email = ''
+}
+
+const changeDialogVisible = () => {
+  emit('changeDialogVisible', false)
+  resetForm()
+}
+
 const submitadd = (addForm) => {
   addForm.validate((valid) => {
     if (valid) {
       // api数据请求，添加该用户的信息
       emit('changeDialogVisible', false)
       userStore.addAdmin(
-        addform.id,
         addform.name,
         parseInt(addform.account),
         addform.verify,
@@ -97,6 +104,7 @@ const submitadd = (addForm) => {
       )
       // 如果 addUser 没有报错，则执行成功提示
       ElMessage({ type: 'success', message: '添加成功' })
+      resetForm()
     } else {
       // 如果表单验证不通过，提醒
       ElMessage({ type: 'error', message: '添加失败！请检查输入信息' })
@@ -116,17 +124,23 @@ const submitadd = (addForm) => {
     :close-on-click-modal="false"
   >
     <el-form :model="addform" :rules="rules" ref="addForm">
-      <el-form-item label="id" label-width="8.75rem" prop="id">
-        <el-input v-model="addform.id" autocomplete="off" :disabled="props.idCanInput" />
-      </el-form-item>
       <el-form-item :label="$t('messages.name')" label-width="8.75rem" prop="name">
         <el-input v-model="addform.name" autocomplete="off" />
       </el-form-item>
       <el-form-item :label="$t('messages.account')" label-width="8.75rem" prop="account">
         <el-input v-model="addform.account" autocomplete="off" />
       </el-form-item>
+
+      <!-- 使用下拉框选择权限 -->
       <el-form-item :label="$t('messages.verify')" label-width="8.75rem" prop="verify">
-        <el-input v-model="addform.verify" autocomplete="off" />
+        <el-select v-model="addform.verify" placeholder="请选择类型">
+          <el-option
+            v-for="item in verifyChoose"
+            :key="item.id"
+            :label="item.verify"
+            :value="item.verify"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item :label="$t('messages.gender')" label-width="8.75rem" prop="gender">
         <el-radio-group v-model="addform.gender">

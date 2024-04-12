@@ -78,7 +78,7 @@ const getDelTable = (value) => {
 const blukDel = () => {
   if (delTableId.value.length > 0) {
     // 执行请求操作
-    delTableId.value.forEach((item) => UserStore.deleteCommonUser(parseInt(item)))
+    delTableId.value.forEach((item) => UserStore.deleteCommonUser(item))
     ElMessage({ type: 'success', message: '删除成功' })
     // 删除完后清空数据
     delTableId.value = []

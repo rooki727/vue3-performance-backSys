@@ -27,8 +27,8 @@ export const useUserStore = defineStore('user', () => {
     adminList.value = res
   }
   // 添加管理员
-  const addAdmin = async (id, name, account, verify, gender, phone, email) => {
-    await addAdminListAPI(id, name, account, verify, gender, phone, email)
+  const addAdmin = async (name, account, verify, gender, phone, email) => {
+    await addAdminListAPI(name, account, verify, gender, phone, email)
     getAdminList()
   }
   // 修改管理员信息
@@ -49,8 +49,8 @@ export const useUserStore = defineStore('user', () => {
   }
 
   // 添加普通用户
-  const addCommonUser = async (id, name, account, verify, gender, phone, email) => {
-    await addCommonUserAPI(id, name, account, verify, gender, phone, email)
+  const addCommonUser = async (name, account, verify, gender, phone, email) => {
+    await addCommonUserAPI(name, account, verify, gender, phone, email)
     getCommonUser()
   }
   // 修改普通用户信息

@@ -40,141 +40,377 @@
   },
   "adminList": [
     {
-      "id": "1",
       "name": "rooki",
       "gender": "男",
       "account": 1668943468,
       "phone": 1231231231,
       "verify": "first",
-      "email": "123456@qq.com"
+      "email": "123456@qq.com",
+      "id": "6f65"
     },
     {
-      "id": "3",
       "name": "rooki",
       "account": 213123,
+      "verify": "first",
+      "gender": "男",
+      "phone": 8613653051212,
+      "email": "1668943468@qq.com",
+      "id": "0cd7"
+    },
+    {
+      "name": "33123",
+      "account": 12312312,
+      "verify": "first",
+      "gender": "男",
+      "phone": 8613653051212,
+      "email": "1668943468@qq.com",
+      "id": "0c39"
+    },
+    {
+      "name": "daadadadad",
+      "account": 123123123,
+      "verify": "first",
+      "gender": "男",
+      "phone": 8613653051212,
+      "email": "1668943468@qq.com",
+      "id": "6ecf"
+    },
+    {
+      "id": "55e6",
+      "name": "213123123",
+      "account": 123123,
+      "verify": "second",
+      "gender": "男",
+      "phone": 12312312312,
+      "email": "1234562@qq.com"
+    },
+    {
+      "id": "5b81",
+      "name": "2131231",
+      "account": 23123123,
+      "verify": "first",
+      "gender": "女",
+      "phone": 12312312312,
+      "email": "1234562@qq.com"
+    },
+    {
+      "id": "bde2",
+      "name": "text1",
+      "account": 3213123,
       "verify": "first",
       "gender": "男",
       "phone": 8613653051212,
       "email": "1668943468@qq.com"
     },
     {
-      "id": "7",
-      "name": "33123",
-      "account": 12312312,
-      "verify": "1",
-      "gender": "男",
-      "phone": 8613653051212,
-      "email": "1668943468@qq.com"
-    },
-    {
-      "id": "8",
-      "name": "33123213",
-      "account": 1231231222,
-      "verify": "1",
+      "id": "9505",
+      "name": "321312",
+      "account": 123123,
+      "verify": "second",
       "gender": "女",
-      "phone": 8613653051212,
-      "email": "1668943468@qq.com"
-    },
-    {
-      "id": "12",
-      "name": "123213223",
-      "account": 1232222211,
-      "verify": "1",
-      "gender": "男",
-      "phone": 8613653051212,
-      "email": "1668943468@qq.com"
-    },
-    {
-      "id": "14",
-      "name": "1546546",
-      "account": 125464565567,
-      "verify": "1",
-      "gender": "男",
-      "phone": 8613653051212,
-      "email": "1668943468@qq.com"
-    },
-    {
-      "id": "9",
-      "name": "21312312",
-      "account": 113321,
-      "verify": "12",
-      "gender": "女",
-      "phone": 8613653051212,
-      "email": "1668943468@qq.com"
-    },
-    {
-      "id": "10",
-      "name": "2222212",
-      "account": 1133221,
-      "verify": "12",
-      "gender": "男",
-      "phone": 8613653051212,
-      "email": "1668943468@qq.com"
-    },
-    {
-      "id": "13",
-      "name": "2312321",
-      "account": 131231,
-      "verify": "1",
-      "gender": "男",
       "phone": 8613653051212,
       "email": "1668943468@qq.com"
     }
   ],
   "commonUserList": [
     {
-      "id": "1",
       "name": "zsaaa",
-      "gender": "男",
+      "gender": "女",
       "account": 1668943468,
       "phone": 1231231231,
       "verify": "common",
-      "email": "123456@qq.com"
+      "email": "123456@qq.com",
+      "id": "4919"
     },
     {
-      "id": "2",
       "name": "lsaaa",
       "gender": "男",
       "account": 1668943468,
       "phone": 1231231231,
       "verify": "common",
-      "email": "123456@qq.com"
+      "email": "123456@qq.com",
+      "id": "9892"
     },
     {
-      "id": "3",
-      "name": "wwaaa",
-      "gender": "男",
-      "account": 1668943468,
-      "phone": 1231231231,
-      "verify": "common",
-      "email": "123456@qq.com"
-    },
-    {
-      "id": "7",
       "name": "rooki",
       "account": 12312312,
       "verify": "common",
       "gender": "男",
       "phone": 8613653051212,
-      "email": "1668943468@qq.com"
+      "email": "1668943468@qq.com",
+      "id": "35cd"
     },
     {
-      "id": "8",
       "name": "rooki2",
       "account": 123123122,
       "verify": "common",
       "gender": "男",
       "phone": 8613653051212,
-      "email": "1668943468@qq.com"
+      "email": "1668943468@qq.com",
+      "id": "28f1"
     },
     {
-      "id": "9",
-      "name": "rooki3",
-      "account": 1231231323,
+      "id": "f2d7",
+      "name": "423423",
+      "account": 32423,
       "verify": "common",
-      "gender": "男",
+      "gender": "女",
       "phone": 8613653051212,
       "email": "1668943468@qq.com"
+    }
+  ],
+  "books": {
+    "totalCount": 5000,
+    "todayAdd": 15,
+    "monthAdd": 500,
+    "monthOut": 460
+  },
+  "bookList": [
+    {
+      "book_name": "学习",
+      "author": "详细",
+      "category": "科学类",
+      "price": 55,
+      "stock_quantity": 22,
+      "id": "10f0"
+    },
+    {
+      "book_name": "科普书",
+      "author": "kpi",
+      "category": "科普类",
+      "price": 55,
+      "stock_quantity": 22,
+      "id": "a839"
+    },
+    {
+      "book_name": "颜色",
+      "author": "啊实打实",
+      "category": "艺术类",
+      "price": 55,
+      "stock_quantity": 22,
+      "id": "e9c9"
+    },
+    {
+      "id": "9029",
+      "book_name": "高等数学2",
+      "author": "ads",
+      "category": "文学类",
+      "price": 41,
+      "stock_quantity": 12
+    },
+    {
+      "id": "0051",
+      "book_name": "321312",
+      "author": "321312",
+      "category": "社科类",
+      "price": 21,
+      "stock_quantity": 21
+    }
+  ],
+  "categoryList": [
+    {
+      "catetory": "文学类",
+      "count": 660,
+      "id": "c0bb"
+    },
+    {
+      "catetory": "科学类",
+      "count": 1200,
+      "id": "ba02"
+    },
+    {
+      "catetory": "历史类",
+      "count": 220,
+      "id": "a2e5"
+    },
+    {
+      "catetory": "科普类",
+      "count": 1000,
+      "id": "e6e2"
+    },
+    {
+      "catetory": "艺术类",
+      "count": 400,
+      "id": "e3ef"
+    },
+    {
+      "catetory": "社科类",
+      "count": 900,
+      "id": "befa"
+    },
+    {
+      "catetory": "生活类",
+      "count": 800,
+      "id": "05ab"
+    }
+  ],
+  "Literature": [
+    {
+      "name": "小说",
+      "value": 10,
+      "id": "a007"
+    },
+    {
+      "name": "诗歌",
+      "value": 20,
+      "id": "f9cb"
+    },
+    {
+      "name": "散文",
+      "value": 33,
+      "id": "cd1d"
+    },
+    {
+      "name": "戏剧",
+      "value": 15,
+      "id": "f406"
+    }
+  ],
+  "Science": [
+    {
+      "name": "自然科学",
+      "value": 20,
+      "id": "6dba"
+    },
+    {
+      "name": "社会科学",
+      "value": 33,
+      "id": "fe2a"
+    },
+    {
+      "name": "应用科学",
+      "value": 15,
+      "id": "57e5"
+    }
+  ],
+  "History": [
+    {
+      "name": "古代史",
+      "value": 20,
+      "id": "1f8c"
+    },
+    {
+      "name": "中世纪史",
+      "value": 33,
+      "id": "a5f1"
+    },
+    {
+      "name": "近代史",
+      "value": 15,
+      "id": "8411"
+    },
+    {
+      "name": "现代史",
+      "value": 22,
+      "id": "d42a"
+    }
+  ],
+  "PopularScience": [
+    {
+      "name": "自然科学",
+      "value": 20,
+      "id": "039f"
+    },
+    {
+      "name": "社会科学",
+      "value": 33,
+      "id": "a931"
+    },
+    {
+      "name": "医学健康",
+      "value": 15,
+      "id": "7353"
+    },
+    {
+      "name": "环境科学",
+      "value": 22,
+      "id": "6d5d"
+    },
+    {
+      "name": "技术与工程",
+      "value": 26,
+      "id": "da35"
+    }
+  ],
+  "Arts": [
+    {
+      "name": "绘画",
+      "value": 20,
+      "id": "1a7b"
+    },
+    {
+      "name": "雕塑",
+      "value": 33,
+      "id": "98d1"
+    },
+    {
+      "name": "音乐",
+      "value": 15,
+      "id": "6e58"
+    },
+    {
+      "name": "戏剧",
+      "value": 22,
+      "id": "5c8c"
+    },
+    {
+      "name": "文学",
+      "value": 26,
+      "id": "ffbd"
+    }
+  ],
+  "SocialSciences": [
+    {
+      "name": "心理学",
+      "value": 20,
+      "id": "0eb6"
+    },
+    {
+      "name": "经济学",
+      "value": 33,
+      "id": "d76f"
+    },
+    {
+      "name": "政治学",
+      "value": 15,
+      "id": "868c"
+    },
+    {
+      "name": "社会学",
+      "value": 22,
+      "id": "be55"
+    },
+    {
+      "name": "法学",
+      "value": 26,
+      "id": "d46e"
+    }
+  ],
+  "Life": [
+    {
+      "name": "自助成长",
+      "value": 20,
+      "id": "a66d"
+    },
+    {
+      "name": "职业发展",
+      "value": 33,
+      "id": "6f1e"
+    },
+    {
+      "name": "时间管理",
+      "value": 15,
+      "id": "1f3f"
+    },
+    {
+      "name": "营养健康",
+      "value": 22,
+      "id": "2c94"
+    },
+    {
+      "name": "健身运动",
+      "value": 26,
+      "id": "3890"
     }
   ]
 }

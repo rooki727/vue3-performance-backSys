@@ -1,7 +1,9 @@
-<template>图书分类</template>
+<template>
+  <TreeEcharts></TreeEcharts>
+</template>
 
-<script>
-export default {}
+<script setup>
+import TreeEcharts from './components/TreeEcharts.vue'
 </script>
 
 <style>

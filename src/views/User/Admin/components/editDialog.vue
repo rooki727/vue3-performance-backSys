@@ -11,10 +11,15 @@ const props = defineProps(['dialogFormVisible', 'title', 'clickRow', 'cannotInpI
 const centerDialogVisible = computed(() => props.dialogFormVisible)
 const title = computed(() => props.title)
 const clickRow = computed(() => props.clickRow)
-const emit = defineEmits(['changeDialogVisible'])
+const emit = defineEmits(['changeDialogVisible', 'updateClickRow'])
 const changeDialogVisible = () => {
+  emit('updateClickRow', {}) // 发送事件给父组件，请求修改props.clickRow的值为null
   emit('changeDialogVisible', false)
 }
+const verifyChoose = [
+  { id: 1, verify: 'first' },
+  { id: 2, verify: 'second' }
+]
 const addForm = ref(null)
 const addform = reactive({
   id: null,
@@ -134,8 +139,16 @@ watch(
       <el-form-item :label="$t('messages.account')" label-width="8.75rem" prop="account">
         <el-input v-model="addform.account" autocomplete="off" />
       </el-form-item>
+      <!-- 使用下拉框选择权限 -->
       <el-form-item :label="$t('messages.verify')" label-width="8.75rem" prop="verify">
-        <el-input v-model="addform.verify" autocomplete="off" />
+        <el-select v-model="addform.verify" placeholder="请选择类型">
+          <el-option
+            v-for="item in verifyChoose"
+            :key="item.id"
+            :label="item.verify"
+            :value="item.verify"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item :label="$t('messages.gender')" label-width="8.75rem" prop="gender">
         <el-radio-group v-model="addform.gender">
