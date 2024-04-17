@@ -117,7 +117,7 @@ watch(
       </el-form-item>
       <!-- 使用下拉框选择分类 -->
       <el-form-item :label="$t('messages.category')" label-width="8.75rem" prop="category">
-        <el-select v-model="addform.category" placeholder="请选择类型">
+        <el-select v-model="addform.category" :placeholder="$t('messages.please_Choose')">
           <el-option
             v-for="item in categoryList"
             :key="item.id"

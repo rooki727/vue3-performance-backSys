@@ -1,16 +1,35 @@
 
 <script setup>
-import { onMounted, computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 import * as echarts from 'echarts'
 import { useOrderStore } from '@/stores/OrderStore'
 import { useI18n } from 'vue-i18n'
 // 获取t方法才可以在js代码里使用
 const { t } = useI18n()
-const orderStore = useOrderStore()
+const OrderStore = useOrderStore()
 // store来的数据，如果需要在script使用，需要使用计算书写拿过来再用
-const sixListValue = computed(() => orderStore.order.MonthSaleList)
+const monthList = ref([])
+const computedMonthList = computed(() => OrderStore.MonthSaleList)
+watch(
+  () => computedMonthList.value,
+  (newVal) => {
+    monthList.value = newVal
+    setCharts()
+  },
+  {
+    deep: true
+  }
+)
 const setCharts = () => {
-  var myChart = echarts.init(document.querySelector('.baseChartBox'))
+  const chartBox = document.querySelector('.baseChartBox')
+
+  // 检查是否已经存在图表实例
+  if (chartBox && chartBox.echartsInstance) {
+    // 销毁现有的实例
+    chartBox.echartsInstance.dispose()
+  }
+
+  var myChart = echarts.init(chartBox)
   // 绘制图表
   myChart.setOption({
     title: {
@@ -18,22 +37,18 @@ const setCharts = () => {
     },
     tooltip: {},
     xAxis: {
-      data: sixListValue.value?.map((item) => item.catetory)
+      data: monthList.value.map((item) => item.catetory)
     },
     yAxis: {},
     series: [
       {
         name: '销量',
         type: 'bar',
-        data: sixListValue.value?.map((item) => item.count)
+        data: monthList.value.map((item) => item.count)
       }
     ]
   })
 }
-
-onMounted(() => {
-  setCharts()
-})
 </script>
 
 <template>

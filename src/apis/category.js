@@ -53,3 +53,44 @@ export const getLifeAPI = () => {
     method: 'GET'
   })
 }
+
+// 添加一级分类
+export const addFirstCategoryAPI = (name, value, url) => {
+  return httpInstance({
+    url: '/categoryList',
+    method: 'POST',
+    data: {
+      name: name,
+      value: value,
+      url: url
+    }
+  })
+}
+
+// 添加二级分类
+export const addSecondCategoryAPI = (url, name, value) => {
+  return httpInstance({
+    url: `/${url}`,
+    method: 'POST',
+    data: {
+      name: name,
+      value: value
+    }
+  })
+}
+
+// 删除一级分类
+export const delFirstCategoryAPI = (id) => {
+  return httpInstance({
+    url: '/categoryList/' + id,
+    method: 'DELETE'
+  })
+}
+
+// 删除二级分类
+export const delSecondCategoryAPI = (url, id) => {
+  return httpInstance({
+    url: `/${url}/${id}`,
+    method: 'DELETE'
+  })
+}

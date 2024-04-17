@@ -1,6 +1,6 @@
 
 <script setup>
-import { onMounted, computed, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import * as echarts from 'echarts'
 import { useBookStore } from '@/stores/BookStore'
 import { useI18n } from 'vue-i18n'
@@ -14,8 +14,9 @@ watch(
   () => ListValue.value,
   (newVal) => {
     getcategoryList.value = newVal.map((item) => {
-      return { value: item.count, name: item.catetory }
+      return { value: item.value, name: item.name }
     })
+
     // 数据更新后重新渲染图表
     setCharts()
   },
@@ -25,7 +26,15 @@ watch(
 )
 
 const setCharts = () => {
-  var myChart = echarts.init(document.querySelector('.vertical-chart-box'))
+  const chartBox = document.querySelector('.vertical-chart-box')
+
+  // 检查是否已经存在图表实例
+  if (chartBox && chartBox.echartsInstance) {
+    // 销毁现有的实例
+    chartBox.echartsInstance.dispose()
+  }
+
+  var myChart = echarts.init(chartBox)
   // 绘制图表
   myChart.setOption({
     title: {
@@ -57,10 +66,6 @@ const setCharts = () => {
     ]
   })
 }
-
-onMounted(() => {
-  setCharts()
-})
 </script>
 
 <template>

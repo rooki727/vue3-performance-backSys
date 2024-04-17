@@ -118,10 +118,9 @@ const handleEdit = (row) => {
 }
 
 const handleDelete = async (row) => {
-  console.log(row.id)
   // 在这里使用 row 数据执行删除操作
   // api服务器删除后重新获取列表
-  BookStore.deleteBookList(row.id)
+  await BookStore.deleteBookList(row.id)
   // 如果 deleteBookList 没有报错，则执行成功提示
   ElMessage({ type: 'success', message: '删除成功' })
 }

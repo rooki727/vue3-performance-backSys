@@ -116,20 +116,25 @@ const exportToExcel = () => {
     LastArray.value.push(item.split(','))
   })
   wsData.push(...LastArray.value)
+  // 将二维数组转换为工作表对象。
   const ws = XLSX.utils.aoa_to_sheet(wsData)
 
-  // 将工作表添加到Workbook中
+  // 将工作表添加到 Workbook 中，命名为 'Sheet1'。
   XLSX.utils.book_append_sheet(wb, ws, 'Sheet1')
 
-  // 生成Excel文件
+  //将 Workbook 对象转换为 Excel 文件的二进制数组。
   const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'array' })
 
   // 将Excel文件保存到本地
+  // 创建一个 Blob 对象，表示二进制数据。
   const blob = new Blob([wbout], { type: 'application/octet-stream' })
   const fileName = 'BookList.xlsx' // 设置文件名，可以根据需要修改
+  // 创建一个下载链接元素。
   const downloadLink = document.createElement('a')
+  // 将 Blob 对象的 URL 赋值给下载链接的 href 属性。
   downloadLink.href = window.URL.createObjectURL(blob)
   downloadLink.download = fileName
+  // 模拟点击下载链接，触发文件下载
   downloadLink.click()
 }
 // 加载网页加载数据

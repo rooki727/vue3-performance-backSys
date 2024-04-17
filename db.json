@@ -10,7 +10,7 @@
       "token": "1231231",
       "id": "123123213",
       "account": 123456,
-      "awatar": "blob:http://localhost:5173/231aeb6d-eee3-49de-b927-1ac2ba3f8bdc",
+      "awatar": "blob:http://localhost:5173/9bb18f9b-9b8b-4302-9c02-cae60ef125b1",
       "verify": "first",
       "name": "rooki",
       "gender": "男",
@@ -32,7 +32,6 @@
     }
   ],
   "users": {
-    "totalCount": 3000,
     "todayAdd": 10,
     "monthVisit": 1000,
     "perPurchase": 30,
@@ -160,7 +159,6 @@
     }
   ],
   "books": {
-    "totalCount": 5000,
     "todayAdd": 15,
     "monthAdd": 500,
     "monthOut": 460
@@ -209,39 +207,52 @@
   ],
   "categoryList": [
     {
-      "catetory": "文学类",
-      "count": 660,
+      "name": "文学类",
+      "value": 660,
+      "url": "Literature",
       "id": "c0bb"
     },
     {
-      "catetory": "科学类",
-      "count": 1200,
+      "name": "科学类",
+      "value": 1200,
+      "url": "Science",
       "id": "ba02"
     },
     {
-      "catetory": "历史类",
-      "count": 220,
+      "name": "历史类",
+      "value": 220,
+      "url": "History",
       "id": "a2e5"
     },
     {
-      "catetory": "科普类",
-      "count": 1000,
+      "name": "科普类",
+      "value": 1000,
+      "url": "PopularScience",
       "id": "e6e2"
     },
     {
-      "catetory": "艺术类",
-      "count": 400,
+      "name": "艺术类",
+      "value": 400,
+      "url": "Arts",
       "id": "e3ef"
     },
     {
-      "catetory": "社科类",
-      "count": 900,
+      "name": "社科类",
+      "value": 900,
+      "url": "SocialSciences",
       "id": "befa"
     },
     {
-      "catetory": "生活类",
-      "count": 800,
+      "name": "生活类",
+      "value": 800,
+      "url": "Life",
       "id": "05ab"
+    },
+    {
+      "id": "5642",
+      "name": "aaaa",
+      "value": "1213",
+      "url": "aaaa"
     }
   ],
   "Literature": [
@@ -303,6 +314,11 @@
       "name": "现代史",
       "value": 22,
       "id": "d42a"
+    },
+    {
+      "id": "0810",
+      "name": "aaaaa",
+      "value": "1231"
     }
   ],
   "PopularScience": [
@@ -357,6 +373,11 @@
       "name": "文学",
       "value": 26,
       "id": "ffbd"
+    },
+    {
+      "id": "253f",
+      "name": "2321",
+      "value": "1111"
     }
   ],
   "SocialSciences": [
@@ -411,6 +432,306 @@
       "name": "健身运动",
       "value": 26,
       "id": "3890"
+    }
+  ],
+  "order": {
+    "todayAdd": 2
+  },
+  "orderList": [
+    {
+      "id": "2323",
+      "name": "rooki",
+      "account": 1234567,
+      "state": "已完成",
+      "summaryState": "已汇总",
+      "time": "2023-8-6 10:10:10",
+      "books": [
+        {
+          "id": "9807",
+          "name": "aaa",
+          "catetory": "文学类",
+          "price": 123,
+          "count": 1
+        },
+        {
+          "id": "5675",
+          "name": "aaabc",
+          "catetory": "科学类",
+          "price": 88,
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "1ff2",
+      "name": "rooki2",
+      "account": 123456,
+      "state": "已完成",
+      "summaryState": "已汇总",
+      "time": "2023-7-6 10:10:10",
+      "books": [
+        {
+          "id": "b213",
+          "name": "aaa",
+          "catetory": "科学类",
+          "price": 123,
+          "count": 2
+        },
+        {
+          "id": "a123",
+          "name": "aaacc",
+          "catetory": "科学类",
+          "price": 19,
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "1fa2",
+      "name": "rooki2",
+      "account": 123456,
+      "state": "已完成",
+      "summaryState": "已汇总",
+      "time": "2023-7-6 10:10:10",
+      "books": [
+        {
+          "id": "b213",
+          "name": "aaa",
+          "catetory": "科学类",
+          "price": 123,
+          "count": 2
+        },
+        {
+          "id": "a123",
+          "name": "aaacc",
+          "catetory": "科学类",
+          "price": 19,
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "1af2",
+      "name": "rooki2",
+      "account": 123456,
+      "state": "已完成",
+      "summaryState": "已汇总",
+      "time": "2023-7-6 10:10:10",
+      "books": [
+        {
+          "id": "b213",
+          "name": "aaa",
+          "catetory": "科学类",
+          "price": 123,
+          "count": 2
+        },
+        {
+          "id": "a123",
+          "name": "aaacc",
+          "catetory": "科学类",
+          "price": 19,
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "12e2",
+      "name": "rooki22222",
+      "account": 123456,
+      "state": "申请退款中",
+      "summaryState": "未汇总",
+      "time": "2023-5-6 10:10:10",
+      "books": [
+        {
+          "id": "b213",
+          "name": "aaa",
+          "catetory": "科学类",
+          "price": 123,
+          "count": 2
+        },
+        {
+          "id": "a123",
+          "name": "aaacc",
+          "catetory": "科学类",
+          "price": 19,
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "12d2",
+      "name": "dawda",
+      "account": 123456,
+      "state": "申请退款中",
+      "summaryState": "未汇总",
+      "time": "2023-3-6 10:10:10",
+      "books": [
+        {
+          "id": "b213",
+          "name": "aaa",
+          "catetory": "科学类",
+          "price": 123,
+          "count": 2
+        },
+        {
+          "id": "a123",
+          "name": "aaacc",
+          "catetory": "科学类",
+          "price": 19,
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "1cc2",
+      "name": "awdawda",
+      "account": 123456,
+      "state": "已退款",
+      "summaryState": "未汇总",
+      "time": "2023-2-6 10:10:10",
+      "books": [
+        {
+          "id": "b213",
+          "name": "aaa",
+          "catetory": "科学类",
+          "price": 123,
+          "count": 2
+        },
+        {
+          "id": "a123",
+          "name": "aaacc",
+          "catetory": "科学类",
+          "price": 19,
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "1bb2",
+      "name": "dadwa1",
+      "account": 123456,
+      "state": "已完成",
+      "summaryState": "未汇总",
+      "time": "2023-1-6 10:10:10",
+      "books": [
+        {
+          "id": "b213",
+          "name": "aaa",
+          "catetory": "科学类",
+          "price": 123,
+          "count": 2
+        },
+        {
+          "id": "a123",
+          "name": "aaacc",
+          "catetory": "科学类",
+          "price": 19,
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "12a2",
+      "name": "asda21221",
+      "account": 123456,
+      "state": "已退款",
+      "summaryState": "未汇总",
+      "time": "2023-6-6 10:10:10",
+      "books": [
+        {
+          "id": "b213",
+          "name": "aaa",
+          "catetory": "科学类",
+          "price": 123,
+          "count": 2
+        },
+        {
+          "id": "a123",
+          "name": "aaacc",
+          "catetory": "科学类",
+          "price": 19,
+          "count": 1
+        }
+      ]
+    },
+    {
+      "id": "5352",
+      "name": "adadaw1",
+      "account": 134567,
+      "state": "已退款",
+      "summaryState": "未汇总",
+      "time": "2024-1-6 10:10:10",
+      "books": [
+        {
+          "id": "1234",
+          "name": "aaa",
+          "catetory": "文学类",
+          "price": 123,
+          "count": 1
+        },
+        {
+          "id": "8676",
+          "name": "aaabc",
+          "catetory": "科学类",
+          "price": 28,
+          "count": 1
+        }
+      ]
+    }
+  ],
+  "MonthSaleList": [
+    {
+      "catetory": "文学类",
+      "count": 6,
+      "totalMoney": 120
+    },
+    {
+      "catetory": "科学类",
+      "count": 12,
+      "totalMoney": 120
+    },
+    {
+      "catetory": "历史类",
+      "count": 22,
+      "totalMoney": 120
+    },
+    {
+      "catetory": "科普类",
+      "count": 10,
+      "totalMoney": 120
+    },
+    {
+      "catetory": "艺术类",
+      "count": 7,
+      "totalMoney": 120
+    },
+    {
+      "catetory": "社科类",
+      "count": 9,
+      "totalMoney": 120
+    },
+    {
+      "catetory": "生活类",
+      "count": 8,
+      "totalMoney": 120
+    }
+  ],
+  "SummaryList": [
+    {
+      "id": "a37f",
+      "name": "rooki2",
+      "account": 123456,
+      "time": "2024-04-17 22:58:41",
+      "totalMoney": 530,
+      "totalCount": 4
+    },
+    {
+      "id": "6b06",
+      "name": "rooki",
+      "account": 1234567,
+      "time": "2024-04-17 23:04:28",
+      "totalMoney": 211,
+      "totalCount": 2
     }
   ]
 }
