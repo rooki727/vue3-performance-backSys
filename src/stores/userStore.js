@@ -27,13 +27,13 @@ export const useUserStore = defineStore('user', () => {
     adminList.value = res
   }
   // 添加管理员
-  const addAdmin = async (name, account, verify, gender, phone, email) => {
-    await addAdminListAPI(name, account, verify, gender, phone, email)
+  const addAdmin = async (name, account, password, verify, gender, phone, email, buildTime) => {
+    await addAdminListAPI(name, account, password, verify, gender, phone, email, buildTime)
     getAdminList()
   }
   // 修改管理员信息
-  const updateAdmin = async (id, name, account, verify, gender, phone, email) => {
-    await updateAdminListAPI(id, name, account, verify, gender, phone, email)
+  const updateAdmin = async (id, name, account, verify, gender, phone, email, password) => {
+    await updateAdminListAPI(id, name, account, verify, gender, phone, email, password)
     getAdminList()
   }
   // 删除管理员
@@ -49,18 +49,36 @@ export const useUserStore = defineStore('user', () => {
   }
 
   // 添加普通用户
-  const addCommonUser = async (name, account, verify, gender, phone, email) => {
-    await addCommonUserAPI(name, account, verify, gender, phone, email)
+  const addCommonUser = async (
+    name,
+    account,
+    password,
+    verify,
+    gender,
+    phone,
+    email,
+    buildTime
+  ) => {
+    await addCommonUserAPI(name, account, password, verify, gender, phone, email, buildTime)
     getCommonUser()
   }
   // 修改普通用户信息
-  const updateCommonUser = async (id, name, account, verify, gender, phone, email) => {
-    await updateCommonUserAPI(id, name, account, verify, gender, phone, email)
+  const updateCommonUser = async (
+    user_id,
+    name,
+    account,
+    password,
+    verify,
+    gender,
+    phone,
+    email
+  ) => {
+    await updateCommonUserAPI(user_id, name, account, password, verify, gender, phone, email)
     getCommonUser()
   }
   // 删除普通用户
-  const deleteCommonUser = async (id) => {
-    await deleteCommonUserAPI(id)
+  const deleteCommonUser = async (user_id) => {
+    await deleteCommonUserAPI(user_id)
     getCommonUser()
   }
   return {

@@ -64,14 +64,15 @@ const submitForm = (formRef) => {
         userForm.name,
         parseInt(userForm.phone),
         userForm.email
-      )
-      Object.assign(userForm, LoginerStore.userInfo)
-      ElMessage({
-        message: '修改成功',
-        type: 'success',
-        plain: true
+      ).then(() => {
+        ElMessage({
+          message: '修改成功',
+          type: 'success',
+          plain: true
+        })
+        Object.assign(userForm, LoginerStore.userInfo)
+        resetForm()
       })
-      resetForm()
     } else {
       // 如果表单验证不通过，出现dialog并且提醒
       centerDialogVisible.value = true

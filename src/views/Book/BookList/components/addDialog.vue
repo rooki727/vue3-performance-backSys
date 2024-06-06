@@ -1,10 +1,21 @@
 <script  setup>
-import { reactive, computed, ref } from 'vue'
+import { reactive, computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { ElMessage } from 'element-plus'
 import { useBookStore } from '@/stores/BookStore'
 const BookStore = useBookStore()
-const categoryList = computed(() => BookStore.categoryList)
+const categoryListComputed = computed(() => BookStore.categoryList)
+const categoryList = ref([])
+const statusList = [{ id: 1, status: '未出库' }]
+watch(
+  () => categoryListComputed.value,
+  (newVal) => {
+    categoryList.value = newVal
+  },
+  {
+    deep: true
+  }
+)
 // 获取t方法才可以在js代码里使用
 const { t } = useI18n()
 // 弹框功能设置
@@ -19,7 +30,7 @@ const addform = reactive({
   author: '',
   category: '',
   price: null,
-  stock_quantity: null
+  status: ''
 })
 const rules = {
   book_name: [
@@ -65,7 +76,7 @@ const resetForm = () => {
   addform.author = ''
   addform.category = ''
   addform.price = null
-  addform.stock_quantity = null
+  addform.status = ''
 }
 const changeDialogVisible = () => {
   emit('changeDialogVisible', false)
@@ -74,6 +85,7 @@ const changeDialogVisible = () => {
 const submitadd = (addForm) => {
   addForm.validate((valid) => {
     if (valid) {
+      const date = new Date()
       // api数据请求，添加该book
       emit('changeDialogVisible', false)
       BookStore.addBookList(
@@ -81,11 +93,18 @@ const submitadd = (addForm) => {
         addform.author,
         addform.category,
         parseInt(addform.price),
-        parseInt(addform.stock_quantity)
+        addform.status,
+        date
       )
-      // 如果 addBookList 没有报错，则执行成功提示
-      ElMessage({ type: 'success', message: '添加成功' })
-      resetForm()
+        .then(() => {
+          // 如果 addBookList 没有报错，则执行成功提示
+          ElMessage({ type: 'success', message: '添加成功' })
+          resetForm()
+        })
+        .catch(() => {
+          // 处理请求失败的情况
+          ElMessage({ type: 'erro', message: '添加失败！请检查输入信息' })
+        })
     } else {
       // 如果表单验证不通过，提醒
       ElMessage({ type: 'error', message: '添加失败！请检查输入信息' })
@@ -114,20 +133,27 @@ const submitadd = (addForm) => {
 
       <!-- 使用下拉框选择分类 -->
       <el-form-item :label="$t('messages.category')" label-width="8.75rem" prop="category">
-        <el-select v-model="addform.category" placeholder="请选择类型">
+        <el-select v-model="addform.category" :placeholder="$t('messages.please_Choose')">
           <el-option
             v-for="item in categoryList"
             :key="item.id"
-            :label="item.catetory"
-            :value="item.catetory"
+            :label="item.category"
+            :value="item.category"
           />
         </el-select>
       </el-form-item>
       <el-form-item :label="$t('messages.price')" label-width="8.75rem" prop="price">
         <el-input v-model="addform.price" autocomplete="off" />
       </el-form-item>
-      <el-form-item :label="$t('messages.count')" label-width="8.75rem" prop="stock_quantity">
-        <el-input v-model="addform.stock_quantity" autocomplete="off" />
+      <el-form-item :label="$t('messages.book_status')" label-width="8.75rem" prop="status">
+        <el-select v-model="addform.status" :placeholder="$t('messages.please_Choose')">
+          <el-option
+            v-for="item in statusList"
+            :key="item.id"
+            :label="item.status"
+            :value="item.status"
+          />
+        </el-select>
       </el-form-item>
     </el-form>
     <template #footer>

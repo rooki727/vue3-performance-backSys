@@ -19,9 +19,10 @@ const changeDialogVisible = () => {
 const verifyChoose = [{ id: 1, verify: 'common' }]
 const addForm = ref(null)
 const addform = reactive({
-  id: null,
+  user_id: null,
   name: '',
   account: null,
+  password: '',
   verify: '',
   gender: '',
   phone: null,
@@ -54,6 +55,18 @@ const rules = {
       type: Number,
       min: 5,
       message: t('messages.account_min'),
+      trigger: 'blur'
+    }
+  ],
+  password: [
+    {
+      required: true,
+      message: t('messages.input_pass'),
+      trigger: 'blur'
+    },
+    {
+      pattern: /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
+      message: t('messages.password_inputAll'),
       trigger: 'blur'
     }
   ],
@@ -90,20 +103,29 @@ const submitadd = (addForm) => {
     if (valid) {
       // api数据请求，添加该用户的信息
       emit('changeDialogVisible', false)
-      userStore.updateCommonUser(
-        addform.id,
-        addform.name,
-        parseInt(addform.account),
-        addform.verify,
-        addform.gender,
-        parseInt(addform.phone),
-        addform.email
-      )
-      // 如果 addUser 没有报错，则执行成功提示
-      ElMessage({ type: 'success', message: '修改成功' })
+      userStore
+        .updateCommonUser(
+          addform.user_id,
+          addform.name,
+          parseInt(addform.account),
+          addform.password,
+          addform.verify,
+          addform.gender,
+          parseInt(addform.phone),
+          addform.email
+        )
+        .then(() => {
+          // 如果 addUser 没有报错，则执行成功提示
+          ElMessage({ type: 'success', message: '修改成功' })
+        })
+        .catch(() => {
+          // 处理请求失败的情况
+          ElMessage({ type: 'erro', message: '修改失败！请检查输入信息' })
+          // 在此处可以添加相应的错误处理逻辑，例如提示用户登录失败等
+        })
     } else {
       // 如果表单验证不通过，提醒
-      ElMessage({ type: 'error', message: '添加失败！请检查输入信息' })
+      ElMessage({ type: 'error', message: '修改失败！请检查输入信息' })
     }
   })
 }
@@ -127,14 +149,17 @@ watch(
     :close-on-click-modal="false"
   >
     <el-form :model="addform" :rules="rules" ref="addForm">
-      <el-form-item label="id" label-width="8.75rem" prop="id">
-        <el-input v-model="addform.id" autocomplete="off" :disabled="cannotInpId" />
+      <el-form-item label="user_id" label-width="8.75rem" prop="user_id">
+        <el-input v-model="addform.user_id" autocomplete="off" :disabled="cannotInpId" />
       </el-form-item>
       <el-form-item :label="$t('messages.name')" label-width="8.75rem" prop="name">
         <el-input v-model="addform.name" autocomplete="off" />
       </el-form-item>
       <el-form-item :label="$t('messages.account')" label-width="8.75rem" prop="account">
         <el-input v-model="addform.account" autocomplete="off" />
+      </el-form-item>
+      <el-form-item :label="$t('messages.Password')" label-width="8.75rem" prop="password">
+        <el-input v-model="addform.password" autocomplete="off" />
       </el-form-item>
       <!-- 使用下拉框选择权限 -->
       <el-form-item :label="$t('messages.verify')" label-width="8.75rem" prop="verify">

@@ -3,7 +3,7 @@ import httpInstance from '@/utils/http'
 // 获取概要books
 export const getbooksAPI = () => {
   return httpInstance({
-    url: '/books',
+    url: '/book/getBookSum',
     method: 'GET'
   })
 }
@@ -11,52 +11,64 @@ export const getbooksAPI = () => {
 // 获取bookList
 export const getbookListAPI = () => {
   return httpInstance({
-    url: '/bookList',
+    url: '/book/findAllBook',
     method: 'GET'
   })
 }
 // 获取bookCategoriesList
 export const getcategoryListAPI = () => {
   return httpInstance({
-    url: '/categoryList',
+    url: '/book/findCategory',
     method: 'GET'
   })
 }
 
 // 添加bookList
-export const addBookListAPI = (book_name, author, category, price, stock_quantity) => {
+export const addBookListAPI = (book_name, author, category, price, status, buildTime) => {
   return httpInstance({
-    url: '/bookList',
+    url: '/book/addBook',
     method: 'POST',
     data: {
       book_name: book_name,
       author: author,
       category: category,
       price: price,
-      stock_quantity: stock_quantity
+      status: status,
+      buildTime: buildTime
     }
   })
 }
 
 // 修改bookList
-export const updateBookListAPI = (id, book_name, author, category, price, stock_quantity) => {
+export const updateBookListAPI = (book_id, book_name, author, category, price, status) => {
   return httpInstance({
-    url: '/bookList/' + id,
-    method: 'PATCH',
+    url: '/book/updateBook',
+    method: 'POST',
     data: {
-      id: id,
+      book_id: book_id,
       book_name: book_name,
       author: author,
       category: category,
       price: price,
-      stock_quantity: stock_quantity
+      status: status
     }
   })
 }
 // 删除BookList
-export const deleteBookListAPI = (id) => {
+export const deleteBookListAPI = (book_id) => {
   return httpInstance({
-    url: `/bookList/${id}`,
-    method: 'DELETE'
+    url: '/book/deteleBook',
+    method: 'POST',
+    data: {
+      book_id: book_id
+    }
+  })
+}
+
+// 获取MonthSaleList
+export const getMonthSaleListAPI = () => {
+  return httpInstance({
+    url: '/book/getMonthSaleList',
+    method: 'GET'
   })
 }

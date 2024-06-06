@@ -1,10 +1,11 @@
 <script setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, reactive, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useLoginerStore } from '@/stores/LoginerStore'
 import { updatePasswordAPI } from '@/apis/login'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
+import { getCaptchaAPI } from '@/apis/user'
 // 获取t方法才可以在js代码里使用
 const { t } = useI18n()
 const ruleForm = reactive({
@@ -102,26 +103,13 @@ const rules = {
 }
 
 // 假设一个验证功能：具体得用后端的接口提供的验证码
-const randomPosition = () => {
-  const position = Math.random() * 10 + 5 // 随机位置
-  const rotation = Math.random() * 40 - 20 // 随机旋转角度
-  return { position, rotation }
+
+const generateCaptcha = async () => {
+  const res = await getCaptchaAPI()
+  getcaptcha.value = res
 }
-const generateCaptcha = () => {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-  let captcha = []
-  for (let i = 0; i < 4; i++) {
-    captcha.push({
-      value: chars.charAt(Math.floor(Math.random() * chars.length)),
-      ...randomPosition
-    })
-  }
-  return captcha
-}
-getcaptcha.value = generateCaptcha()
-const changeCaptcha = () => {
-  getcaptcha.value = generateCaptcha()
-}
+
+onMounted(() => generateCaptcha())
 </script>
 
 <template>
@@ -170,7 +158,7 @@ const changeCaptcha = () => {
           style="width: 7rem"
           :placeholder="$t('messages.captcha_input')"
         />
-        <el-button class="captcha-box" @click="changeCaptcha">
+        <el-button class="captcha-box" @click="generateCaptcha">
           <el-link
             v-for="(char, index) in getcaptcha"
             :key="index"

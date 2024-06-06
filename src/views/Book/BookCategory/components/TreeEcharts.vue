@@ -83,8 +83,17 @@ const computedData = computed(() => props.childrenArray)
 watch(
   () => computedData.value,
   (newVal) => {
+    // 转换数据格式
+    const treeEchartsData = ref([])
+    newVal.forEach((item) => {
+      treeEchartsData.value.push({
+        name: item.category,
+        value: item.value
+      })
+    })
+
     // 将 children 数组加入 rootObject
-    rootObject.value.children = newVal
+    rootObject.value.children = treeEchartsData.value
     setCharts()
   },
   {

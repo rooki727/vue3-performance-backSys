@@ -12,7 +12,7 @@
     <el-input
       v-model="searchInput"
       style="width: 16rem; margin-left: 1rem"
-      :placeholder="$t('messages.searchName_input')"
+      :placeholder="$t('messages.user_idInput')"
       @input="handleSearch"
       clearable
     ></el-input>
@@ -81,9 +81,9 @@ const handleSearch = (inputvalue) => {
     // 根据输入值过滤数据
     let filteredData
     if (filteredOrders.value.length > 0) {
-      filteredData = filteredOrders.value.filter((item) => item.name.includes(inputvalue))
+      filteredData = filteredOrders.value.filter((item) => item.user_id == inputvalue)
     } else {
-      filteredData = originList.value.filter((item) => item.name.includes(inputvalue))
+      filteredData = originList.value.filter((item) => item.user_id == inputvalue)
     }
     orderList.value = filteredData
     // 更新表格数据
@@ -93,12 +93,12 @@ const getDateChoose = (value) => {
   if (value) {
     if (filteredOrders.value.length > 0) {
       filteredOrders.value = filteredOrders.value.filter((order) => {
-        const orderDate = new Date(order.time) // 将订单时间转换为日期对象
+        const orderDate = new Date(order.formattedBuildTime) // 将订单时间转换为日期对象
         return orderDate.getTime() >= value[0] && orderDate.getTime() <= value[1] // 比较时间戳是否相等
       })
     } else {
       filteredOrders.value = originList.value.filter((order) => {
-        const orderDate = new Date(order.time) // 将订单时间转换为日期对象
+        const orderDate = new Date(order.formattedBuildTime) // 将订单时间转换为日期对象
         return orderDate.getTime() >= value[0] && orderDate.getTime() <= value[1] // 比较时间戳是否相等
       })
     }
@@ -129,11 +129,11 @@ const exportToExcel = () => {
   // 创建一个Workbook对象
   const wb = XLSX.utils.book_new()
   // 将数据转换为Excel格式
-  const wsData = [['id', '昵称', '账号', '汇总时间', '总消费金额', '总消费数量']]
+  const wsData = [['summary_id', 'user_id', '汇总时间', '总消费金额', '总消费数量']]
   // 将JSON数据转换为CSV格式设置一个分隔符，然后将得到的字符串重新切割为数组
   const csvData = originList.value
     .map((order) => {
-      return `${order.id},${order.name},${order.account},${order.time},${order.totalMoney},${order.totalCount}`
+      return `${order.summary_id},${order.user_id},${order.formattedBuildTime},${order.totalMoney},${order.totalCount}`
     })
     .join('、')
   const LastArray = ref([])

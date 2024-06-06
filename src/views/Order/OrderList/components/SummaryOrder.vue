@@ -13,19 +13,18 @@ const title = computed(() => props.title)
 const emit = defineEmits(['changeDialogVisible'])
 const tableList = ref([])
 const tableListComputed = computed(() => props.originList)
-const nameChoose = ref([])
+const userChoose = ref([])
 const chooseAll = ref([])
-const filteredAccounts = ref([])
 const summaryDate = ref([])
 const checkBtnUse = (row) => {
   const currentDate = new Date()
   // 将指定时间字符串转换为日期对象
-  const rowTime = new Date(row.time)
+  const rowTime = new Date(row.formattedBuildTime)
   // 计算两个日期对象之间的时间差（以毫秒为单位）
   const timeDiff = currentDate.getTime() - rowTime.getTime()
   // 将时间差转换为天数
   const daysDiff = timeDiff / (1000 * 3600 * 24)
-  if (daysDiff > 30 && row.state === '已完成' && row.summaryState === '未汇总') {
+  if (daysDiff > 30 && row.order_status === '已完成' && row.summary_status === '未汇总') {
     return true
   } else {
     return false
@@ -34,7 +33,7 @@ const checkBtnUse = (row) => {
 function removeDuplicates(array) {
   const seen = new Set()
   return array.filter((item) => {
-    const key = item.name + item.account
+    const key = item.user_id
     if (seen.has(key)) {
       return false
     } else {
@@ -53,12 +52,11 @@ watch(
     })
 
     chooseAll.value.forEach((item) => {
-      nameChoose.value.push({
-        name: item.name,
-        account: item.account
+      userChoose.value.push({
+        user_id: item.user_id
       })
     })
-    nameChoose.value = removeDuplicates(nameChoose.value)
+    userChoose.value = removeDuplicates(userChoose.value)
   },
   {
     deep: true
@@ -66,69 +64,34 @@ watch(
 )
 const addForm = ref(null)
 const addform = reactive({
-  name: '',
-  account: null,
+  user_id: null,
   time: '',
   totalMoney: null,
   totalCount: null
 })
 
 const rules = {
-  name: [
+  user_id: [
     {
       required: true,
       message: t('messages.base_nameinput')
     }
-  ],
-  account: [
-    {
-      required: true,
-      message: t('messages.account_input')
-    }
   ]
 }
 
-// 根据选择的 name 过滤对应的 account
+// 根据选择获取数据表
 const updateAccountOptions = () => {
-  addform.account = ''
-  filteredAccounts.value = nameChoose.value.filter((item) => item.name === addform.name)
-}
-//选择完成时触发函数，得到form的全部值
-const getSummaryDate = () => {
-  summaryDate.value = chooseAll.value.filter(
-    (item) => item.name === addform.name && item.account === addform.account
-  )
-
-  addform.totalMoney = summaryDate.value.reduce(
-    (total, item) => total + parseInt(item.perOrderMoney),
-    0
-  )
-  addform.totalCount = summaryDate.value.reduce((total, item) => total + item.books.length, 0)
+  summaryDate.value = chooseAll.value.filter((item) => item.user_id === addform.user_id)
+  addform.totalMoney = summaryDate.value.reduce((total, item) => total + parseInt(item.price), 0)
+  addform.totalCount = summaryDate.value.length
   const date = new Date()
-  // 获取日期中的年、月、日、时、分、秒
-  const year = date.getFullYear()
-  const month = date.getMonth() + 1 // 月份从 0 开始，所以需要加 1
-  const day = date.getDate()
-  const hours = date.getHours()
-  const minutes = date.getMinutes()
-  const seconds = date.getSeconds()
-
-  // 格式化月份和日期，确保单个数字前面有 0
-  const formattedMonth = month < 10 ? `0${month}` : month
-  const formattedDay = day < 10 ? `0${day}` : day
-  const formattedHours = hours < 10 ? `0${hours}` : hours
-  const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes
-  const formattedSeconds = seconds < 10 ? `0${seconds}` : seconds
-
-  // 构建最终的日期时间字符串
-  const formattedDate = `${year}-${formattedMonth}-${formattedDay} ${formattedHours}:${formattedMinutes}:${formattedSeconds}`
-
-  addform.time = formattedDate
+  addform.time = date
 }
 // 重置表单函数
 const resetForm = () => {
-  addform.name = ''
-  addform.account = null
+  addform.user_id = null
+  addform.totalMoney = null
+  addform.totalCount = null
 }
 const changeDialogVisible = () => {
   emit('changeDialogVisible', false)
@@ -137,23 +100,28 @@ const changeDialogVisible = () => {
 const submitadd = (addForm) => {
   addForm.validate(async (valid) => {
     if (valid) {
+      console.log(summaryDate.value)
+      console.log(addform)
+
       await OrderStore.addSummaryList(
-        addform.name,
-        addform.account,
+        addform.user_id,
         addform.time,
         addform.totalMoney,
         addform.totalCount
       )
-      summaryDate.value.forEach(async (item) => {
-        await OrderStore.updateOrderSummaryState(item.id, '已汇总')
-      })
-
-      // api数据请求，添加该用户的信息
-      emit('changeDialogVisible', false)
-
-      // 如果 addUser 没有报错，则执行成功提示
-      ElMessage({ type: 'success', message: '汇总成功' })
-      resetForm()
+        .then(() => {
+          // api数据请求，添加该用户的信息
+          emit('changeDialogVisible', false)
+          ElMessage({ type: 'success', message: '汇总成功' })
+          resetForm()
+          // 更新订单汇总状态
+          summaryDate.value.forEach(async (item) => {
+            await OrderStore.updateOrderSummaryState(item.order_id, '已汇总')
+          })
+        })
+        .catch(() => {
+          ElMessage({ type: 'error', message: '汇总失败' })
+        })
     } else {
       // 如果表单验证不通过，提醒
       ElMessage({ type: 'error', message: '汇总失败！请检查输入信息' })
@@ -174,35 +142,26 @@ const submitadd = (addForm) => {
   >
     <el-divider content-position="center">{{ $t('messages.following_order_Choose') }}</el-divider>
     <el-form :model="addform" :rules="rules" ref="addForm">
-      <el-form-item> </el-form-item>
       <!-- 使用下拉框选择符合要求的名字 -->
-      <el-form-item :label="$t('messages.name')" label-width="8.75rem" prop="name">
+      <el-form-item label="user_id" label-width="8.75rem" prop="name">
         <el-select
-          v-model="addform.name"
+          v-model="addform.user_id"
           :placeholder="$t('messages.base_nameinput')"
           @change="updateAccountOptions"
         >
           <el-option
-            v-for="item in nameChoose"
+            v-for="item in userChoose"
             :key="item.id"
-            :label="item.name"
-            :value="item.name"
+            :label="item.user_id"
+            :value="item.user_id"
           />
         </el-select>
       </el-form-item>
-      <el-form-item :label="$t('messages.account')" label-width="8.75rem" prop="account">
-        <el-select
-          v-model="addform.account"
-          :placeholder="$t('messages.account_input')"
-          @change="getSummaryDate"
-        >
-          <el-option
-            v-for="item in filteredAccounts"
-            :key="item.id"
-            :label="item.account"
-            :value="item.account"
-          />
-        </el-select>
+      <el-form-item :label="$t('messages.totalMoney')" label-width="8.75rem" prop="totalMoney">
+        <el-input v-model="addform.totalMoney" disabled />
+      </el-form-item>
+      <el-form-item :label="$t('messages.totalCount')" label-width="8.75rem" prop="totalCount">
+        <el-input v-model="addform.totalCount" disabled />
       </el-form-item>
     </el-form>
     <template #footer>

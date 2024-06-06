@@ -2,14 +2,14 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
 import * as echarts from 'echarts'
-import { useOrderStore } from '@/stores/OrderStore'
+import { useBookStore } from '@/stores/BookStore'
 import { useI18n } from 'vue-i18n'
 // 获取t方法才可以在js代码里使用
 const { t } = useI18n()
-const OrderStore = useOrderStore()
+const BookStore = useBookStore()
 // store来的数据，如果需要在script使用，需要使用计算书写拿过来再用
 const monthList = ref([])
-const computedMonthList = computed(() => OrderStore.MonthSaleList)
+const computedMonthList = computed(() => BookStore.monthSaleList)
 watch(
   () => computedMonthList.value,
   (newVal) => {
@@ -37,14 +37,14 @@ const setCharts = () => {
     },
     tooltip: {},
     xAxis: {
-      data: monthList.value.map((item) => item.catetory)
+      data: monthList.value.map((item) => item.category)
     },
     yAxis: {},
     series: [
       {
         name: '销量',
         type: 'bar',
-        data: monthList.value.map((item) => item.count)
+        data: monthList.value.map((item) => item.value)
       }
     ]
   })

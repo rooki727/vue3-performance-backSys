@@ -4,7 +4,22 @@ import { useI18n } from 'vue-i18n'
 import { ElMessage } from 'element-plus'
 import { useBookStore } from '@/stores/BookStore'
 const BookStore = useBookStore()
-const categoryList = computed(() => BookStore.categoryList)
+const categoryListComputed = computed(() => BookStore.categoryList)
+const categoryList = ref([])
+const statusList = [
+  { id: 1, status: '未出库' },
+  { id: 2, status: '已出库' },
+  { id: 3, status: '待出库' }
+]
+watch(
+  () => categoryListComputed.value,
+  (newVal) => {
+    categoryList.value = newVal
+  },
+  {
+    deep: true
+  }
+)
 // 获取t方法才可以在js代码里使用
 const { t } = useI18n()
 // 弹框功能设置
@@ -15,13 +30,14 @@ const clickRow = computed(() => props.clickRow)
 
 const addForm = ref(null)
 const addform = reactive({
-  id: null,
+  book_id: null,
   book_name: '',
   author: '',
   category: '',
   price: null,
-  stock_quantity: null
+  status: ''
 })
+
 const rules = {
   book_name: [
     {
@@ -40,21 +56,15 @@ const rules = {
   category: [
     {
       required: true,
-      message: t('messages.book_categoryinput'), // 如果未输入电子邮件地址，则显示此消息
+      message: t('messages.book_categoryinput'),
       trigger: 'blur'
     }
   ],
   price: [{ required: true, message: t('messages.book_priceinput'), trigger: 'blur' }],
-  stock_quantity: [
+  status: [
     {
       required: true,
-      message: t('messages.book_stock_quantityinput'),
-      trigger: 'blur'
-    },
-
-    {
-      pattern: /^[0-9]+$/, // 使用正则表达式限制输入只能为数字字符
-      message: t('messages.base_digitsonly'), // 自定义提示消息
+      message: t('messages.book_categoryinput'), // 如果未输入电子邮件地址，则显示此消息
       trigger: 'blur'
     }
   ]
@@ -65,24 +75,31 @@ const changeDialogVisible = () => {
   emit('updateClickRow', {}) // 发送事件给父组件，请求修改props.clickRow的值为null
   emit('changeDialogVisible', false)
 }
+
 const submitadd = (addForm) => {
   addForm.validate((valid) => {
     if (valid) {
       // api数据请求，添加该用户的信息
       emit('changeDialogVisible', false)
       BookStore.updateBookList(
-        addform.id,
+        addform.book_id,
         addform.book_name,
         addform.author,
         addform.category,
         parseInt(addform.price),
-        parseInt(addform.stock_quantity)
+        addform.status
       )
-      // 如果 addUser 没有报错，则执行成功提示
-      ElMessage({ type: 'success', message: '修改成功' })
+        .then(() => {
+          // 如果 addUser 没有报错，则执行成功提示
+          ElMessage({ type: 'success', message: '修改成功' })
+        })
+        .catch(() => {
+          // 处理请求失败的情况
+          ElMessage({ type: 'erro', message: '修改失败！请检查输入信息' })
+        })
     } else {
       // 如果表单验证不通过，提醒
-      ElMessage({ type: 'error', message: '添加失败！请检查输入信息' })
+      ElMessage({ type: 'error', message: '修改失败！请检查输入信息' })
     }
   })
 }
@@ -107,7 +124,7 @@ watch(
   >
     <el-form :model="addform" :rules="rules" ref="addForm">
       <el-form-item label="id" label-width="8.75rem" prop="id">
-        <el-input v-model="addform.id" autocomplete="off" :disabled="props.cannotInpId" />
+        <el-input v-model="addform.book_id" autocomplete="off" :disabled="props.cannotInpId" />
       </el-form-item>
       <el-form-item :label="$t('messages.book_name')" label-width="8.75rem" prop="book_name">
         <el-input v-model="addform.book_name" autocomplete="off" />
@@ -121,16 +138,23 @@ watch(
           <el-option
             v-for="item in categoryList"
             :key="item.id"
-            :label="item.catetory"
-            :value="item.catetory"
+            :label="item.category"
+            :value="item.category"
           />
         </el-select>
       </el-form-item>
       <el-form-item :label="$t('messages.price')" label-width="8.75rem" prop="price">
         <el-input v-model="addform.price" autocomplete="off" />
       </el-form-item>
-      <el-form-item :label="$t('messages.count')" label-width="8.75rem" prop="stock_quantity">
-        <el-input v-model="addform.stock_quantity" autocomplete="off" />
+      <el-form-item :label="$t('messages.book_status')" label-width="8.75rem" prop="status">
+        <el-select v-model="addform.status" :placeholder="$t('messages.please_Choose')">
+          <el-option
+            v-for="item in statusList"
+            :key="item.id"
+            :label="item.status"
+            :value="item.status"
+          />
+        </el-select>
       </el-form-item>
     </el-form>
     <template #footer>

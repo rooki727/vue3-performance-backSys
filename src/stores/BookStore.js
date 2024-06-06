@@ -6,17 +6,23 @@ import {
   getcategoryListAPI,
   addBookListAPI,
   updateBookListAPI,
-  deleteBookListAPI
+  deleteBookListAPI,
+  getMonthSaleListAPI
 } from '@/apis/book'
 export const useBookStore = defineStore('book', () => {
   const book = ref({})
   const bookList = ref([])
   const categoryList = ref([])
-
+  const monthSaleList = ref([])
   // 获取book月概要
   const getbooks = async () => {
     const res = await getbooksAPI()
     book.value = res
+  }
+  // 获取分类销售榜
+  const getMonthSaleList = async () => {
+    const res = await getMonthSaleListAPI()
+    monthSaleList.value = res
   }
 
   // 获取bookList
@@ -32,18 +38,18 @@ export const useBookStore = defineStore('book', () => {
   }
 
   // 添加bookList
-  const addBookList = async (book_name, author, category, price, stock_quantity) => {
-    await addBookListAPI(book_name, author, category, price, stock_quantity)
+  const addBookList = async (book_name, author, category, price, status, buildTime) => {
+    await addBookListAPI(book_name, author, category, price, status, buildTime)
     getbookList()
   }
   // 修改bookList信息
-  const updateBookList = async (id, book_name, author, category, price, stock_quantity) => {
-    await updateBookListAPI(id, book_name, author, category, price, stock_quantity)
+  const updateBookList = async (book_id, book_name, author, category, price, status) => {
+    await updateBookListAPI(book_id, book_name, author, category, price, status)
     getbookList()
   }
   // 删除bookList
-  const deleteBookList = async (id) => {
-    await deleteBookListAPI(id)
+  const deleteBookList = async (book_id) => {
+    await deleteBookListAPI(book_id)
     getbookList()
   }
 
@@ -51,11 +57,13 @@ export const useBookStore = defineStore('book', () => {
     book,
     bookList,
     categoryList,
+    monthSaleList,
     getbooks,
     getbookList,
     getcategoryList,
     addBookList,
     updateBookList,
-    deleteBookList
+    deleteBookList,
+    getMonthSaleList
   }
 })

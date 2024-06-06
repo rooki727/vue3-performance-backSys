@@ -10,7 +10,7 @@
       "token": "1231231",
       "id": "123123213",
       "account": 123456,
-      "awatar": "blob:http://localhost:5173/9bb18f9b-9b8b-4302-9c02-cae60ef125b1",
+      "awatar": "blob:http://localhost:3001/89e14b07-4988-4617-9d3c-ee73d79065ed",
       "verify": "first",
       "name": "rooki",
       "gender": "男",
@@ -33,7 +33,7 @@
   ],
   "users": {
     "todayAdd": 10,
-    "monthVisit": 1000,
+    "monthAdd": 1000,
     "perPurchase": 30,
     "id": "2eb4"
   },
@@ -442,7 +442,7 @@
       "id": "2323",
       "name": "rooki",
       "account": 1234567,
-      "state": "已完成",
+      "state": "申请退款中",
       "summaryState": "已汇总",
       "time": "2023-8-6 10:10:10",
       "books": [
@@ -488,30 +488,6 @@
     },
     {
       "id": "1fa2",
-      "name": "rooki2",
-      "account": 123456,
-      "state": "已完成",
-      "summaryState": "已汇总",
-      "time": "2023-7-6 10:10:10",
-      "books": [
-        {
-          "id": "b213",
-          "name": "aaa",
-          "catetory": "科学类",
-          "price": 123,
-          "count": 2
-        },
-        {
-          "id": "a123",
-          "name": "aaacc",
-          "catetory": "科学类",
-          "price": 19,
-          "count": 1
-        }
-      ]
-    },
-    {
-      "id": "1af2",
       "name": "rooki2",
       "account": 123456,
       "state": "已完成",
@@ -611,7 +587,7 @@
       "name": "dadwa1",
       "account": 123456,
       "state": "已完成",
-      "summaryState": "未汇总",
+      "summaryState": "已汇总",
       "time": "2023-1-6 10:10:10",
       "books": [
         {
@@ -683,37 +659,44 @@
     {
       "catetory": "文学类",
       "count": 6,
-      "totalMoney": 120
+      "totalMoney": 120,
+      "id": "d1dd"
     },
     {
       "catetory": "科学类",
       "count": 12,
-      "totalMoney": 120
+      "totalMoney": 120,
+      "id": "51d8"
     },
     {
       "catetory": "历史类",
       "count": 22,
-      "totalMoney": 120
+      "totalMoney": 120,
+      "id": "4037"
     },
     {
       "catetory": "科普类",
       "count": 10,
-      "totalMoney": 120
+      "totalMoney": 120,
+      "id": "115a"
     },
     {
       "catetory": "艺术类",
       "count": 7,
-      "totalMoney": 120
+      "totalMoney": 120,
+      "id": "74d0"
     },
     {
       "catetory": "社科类",
       "count": 9,
-      "totalMoney": 120
+      "totalMoney": 120,
+      "id": "511e"
     },
     {
       "catetory": "生活类",
       "count": 8,
-      "totalMoney": 120
+      "totalMoney": 120,
+      "id": "3d57"
     }
   ],
   "SummaryList": [
@@ -731,6 +714,14 @@
       "account": 1234567,
       "time": "2024-04-17 23:04:28",
       "totalMoney": 211,
+      "totalCount": 2
+    },
+    {
+      "id": "c421",
+      "name": "dadwa1",
+      "account": 123456,
+      "time": "2024-06-03 19:57:28",
+      "totalMoney": 265,
       "totalCount": 2
     }
   ]

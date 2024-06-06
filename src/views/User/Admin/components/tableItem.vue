@@ -15,6 +15,7 @@
       <el-table-column fixed prop="name" :label="$t('messages.name')" width="150" />
 
       <el-table-column prop="account" :label="$t('messages.account')" width="200" />
+
       <el-table-column prop="gender" :label="$t('messages.gender')" width="120" />
       <el-table-column property="verify" prop="verify" :label="$t('messages.verify')" width="120" />
       <el-table-column prop="phone" :label="$t('messages.phone')" width="210" />
@@ -149,9 +150,16 @@ const handleEdit = (row) => {
 const handleDelete = async (row) => {
   // 在这里使用 row 数据执行删除操作
   // api服务器删除后重新获取列表
-  userStore.deleteAdmin(row.id)
-  // 如果 addUser 没有报错，则执行成功提示
-  ElMessage({ type: 'success', message: '删除成功' })
+  userStore
+    .deleteAdmin(row.id)
+    .then(() => {
+      ElMessage({ type: 'success', message: '删除成功' })
+    })
+    .catch((error) => {
+      // 处理请求失败的情况
+      ElMessage({ type: 'erro', message: error })
+      // 在此处可以添加相应的错误处理逻辑，例如提示用户登录失败等
+    })
 }
 </script>
 

@@ -136,7 +136,7 @@ onMounted(() => {
 
     <el-col :span="20">
       <div class="right">
-        <div class="isLogin" v-if="LoginerStore.userInfo?.token">
+        <div class="isLogin" v-if="LoginerStore.userInfo?.id">
           <div class="uerinfo">
             <el-dropdown size="small" split-button type="primary" style="background-color: skyblue">
               <!-- 增加头像 -->

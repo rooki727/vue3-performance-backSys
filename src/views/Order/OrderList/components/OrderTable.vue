@@ -1,47 +1,47 @@
 <template>
   <el-table :data="currentPageData" style="width: 100%">
-    <el-table-column label="Id" width="100">
+    <el-table-column label="order_id" width="100">
       <template #default="scope">
         <div style="display: flex; align-items: center">
-          <span style="margin-left: 10px">{{ scope.row.id }}</span>
+          <span style="margin-left: 40px">{{ scope.row.order_id }}</span>
         </div>
       </template>
     </el-table-column>
-    <el-table-column :label="$t('messages.name')" width="130">
+    <el-table-column label="book_id" width="130">
       <template #default="scope">
         <div style="display: flex; align-items: center">
-          <span style="margin-left: 10px">{{ scope.row.name }}</span>
+          <span style="margin-left: 10px">{{ scope.row.book_id }}</span>
         </div>
       </template>
     </el-table-column>
-    <el-table-column :label="$t('messages.account')" width="160">
+    <el-table-column label="user_id" width="160">
       <template #default="scope">
         <div style="display: flex; align-items: center">
-          <span style="margin-left: 10px">{{ scope.row.account }}</span>
+          <span style="margin-left: 10px">{{ scope.row.user_id }}</span>
         </div>
       </template>
     </el-table-column>
-    <el-table-column :label="$t('messages.ordertime')" width="180">
+    <el-table-column :label="$t('messages.ordertime')" width="280">
       <template #default="scope">
         <div style="display: flex; align-items: center">
           <el-icon><timer /></el-icon>
-          <span style="margin-left: 10px">{{ scope.row.time }}</span>
+          <span style="margin-left: 10px">{{ scope.row.formattedBuildTime }}</span>
         </div>
       </template>
     </el-table-column>
     <el-table-column :label="$t('messages.perOrderMoney')" width="160">
       <template #default="scope">
         <div style="display: flex; align-items: center">
-          <span style="margin-left: 10px">{{ scope.row.perOrderMoney }}</span>
+          <span style="margin-left: 10px">￥{{ scope.row.price }}</span>
         </div>
       </template>
     </el-table-column>
     <!-- 此处修改成下拉框 -->
-    <el-table-column :label="$t('messages.state')" width="180">
+    <el-table-column :label="$t('messages.order_status')" width="180">
       <template #default="scope">
         <div style="display: flex; align-items: center">
           <el-select
-            v-model="scope.row.state"
+            v-model="scope.row.order_status"
             placeholder="Select"
             style="width: 7.5rem"
             @change="changeSlecet(scope.row)"
@@ -56,37 +56,14 @@
         </div>
       </template>
     </el-table-column>
-    <el-table-column :label="$t('messages.summaryState')" width="160">
+    <el-table-column :label="$t('messages.summaryState')" width="200">
       <template #default="scope">
         <div style="display: flex; align-items: center">
-          <span style="margin-left: 10px">{{ scope.row.summaryState }}</span>
+          <span style="margin-left: 10px">{{ scope.row.summary_status }}</span>
         </div>
       </template>
     </el-table-column>
-    <el-table-column :label="$t('messages.detail')" width="180">
-      <template #default="scope">
-        <el-popover effect="light" trigger="hover" placement="top" width="auto">
-          <template #default>
-            <div v-for="item in scope.row.books" :key="item.id">
-              <div>
-                {{ $t('messages.book_name') }}:{{ item.name }} ，{{ $t('messages.category') }}:{{
-                  item.catetory
-                }}
-              </div>
-              <div>
-                {{ $t('messages.price') }}:{{ item.price }} ，{{ $t('messages.count') }}:{{
-                  item.count
-                }}
-              </div>
-              <hr />
-            </div>
-          </template>
-          <template #reference>
-            <el-tag>{{ $t('messages.detail') }}</el-tag>
-          </template>
-        </el-popover>
-      </template>
-    </el-table-column>
+
     <el-table-column :label="$t('messages.operations')">
       <template #default="scope">
         <el-popconfirm :title="$t('messages.confirmToDetele')" @confirm="handleDelete(scope.row)">
@@ -129,13 +106,13 @@ const stateOptions = [
   },
   {
     id: 2,
-    value: t('messages.Requesting_refund'),
-    label: t('messages.Requesting_refund')
+    value: t('messages.notFinish'),
+    label: t('messages.notFinish')
   },
   {
     id: 3,
-    value: t('messages.refund'),
-    label: t('messages.refund')
+    value: t('messages.refunded'),
+    label: t('messages.refunded')
   }
 ]
 // 分页功能
@@ -156,23 +133,26 @@ const computedOrderList = computed(() => props.orderList)
 const tableData = ref([])
 
 const handleDelete = async (row) => {
-  await OrderStore.deleteOrder(row.id)
-  ElMessage({ type: 'success', message: `成功删除订单：${row.id} !` })
+  await OrderStore.deleteOrder(row.order_id)
+  ElMessage({ type: 'success', message: `成功删除订单：${row.order_id} !` })
 }
 const changeSlecet = async (row) => {
-  await OrderStore.updateOrderState(row.id, row.state)
-  ElMessage({ type: 'success', message: `成功修改订单${row.id}状态为：${row.state} !` })
+  await OrderStore.updateOrderState(row.order_id, row.order_status)
+  ElMessage({
+    type: 'success',
+    message: `成功修改订单${row.order_id}状态为：${row.order_status} !`
+  })
 }
 
 const checkBtnUse = (row) => {
   const currentDate = new Date()
   // 将指定时间字符串转换为日期对象
-  const rowTime = new Date(row.time)
+  const rowTime = new Date(row.formattedBuildTime)
   // 计算两个日期对象之间的时间差（以毫秒为单位）
   const timeDiff = currentDate.getTime() - rowTime.getTime()
   // 将时间差转换为天数
   const daysDiff = timeDiff / (1000 * 3600 * 24)
-  if (daysDiff > 30 && row.state === '已完成') {
+  if (daysDiff > 30 && row.order_status === '已完成') {
     return false
   } else {
     return true

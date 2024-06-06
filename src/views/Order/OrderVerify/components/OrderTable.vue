@@ -1,31 +1,24 @@
 <template>
   <el-table :data="currentPageData" style="width: 100%">
-    <el-table-column label="Id" width="180">
+    <el-table-column label="summary_id" width="180">
       <template #default="scope">
         <div style="display: flex; align-items: center">
-          <span style="margin-left: 10px">{{ scope.row.id }}</span>
+          <span style="margin-left: 10px">{{ scope.row.summary_id }}</span>
         </div>
       </template>
     </el-table-column>
-    <el-table-column :label="$t('messages.name')" width="180">
+    <el-table-column label="user_id" width="180">
       <template #default="scope">
         <div style="display: flex; align-items: center">
-          <span style="margin-left: 10px">{{ scope.row.name }}</span>
+          <span style="margin-left: 10px">{{ scope.row.user_id }}</span>
         </div>
       </template>
     </el-table-column>
-    <el-table-column :label="$t('messages.account')" width="180">
-      <template #default="scope">
-        <div style="display: flex; align-items: center">
-          <span style="margin-left: 10px">{{ scope.row.account }}</span>
-        </div>
-      </template>
-    </el-table-column>
-    <el-table-column :label="$t('messages.summaryTime')" width="280">
+    <el-table-column :label="$t('messages.summaryTime')" width="300">
       <template #default="scope">
         <div style="display: flex; align-items: center">
           <el-icon><timer /></el-icon>
-          <span style="margin-left: 10px">{{ scope.row.time }}</span>
+          <span style="margin-left: 10px">{{ scope.row.formattedBuildTime }}</span>
         </div>
       </template>
     </el-table-column>
@@ -94,7 +87,7 @@ const tableData = ref([])
 
 const handleDelete = async (row) => {
   await OrderStore.deleteSummaryList(row.id)
-  ElMessage({ type: 'success', message: `成功删除订单：${row.id} !` })
+  ElMessage({ type: 'success', message: `成功删除订单：${row.summary_id} !` })
 }
 
 watch(

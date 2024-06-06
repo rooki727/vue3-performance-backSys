@@ -14,7 +14,7 @@ watch(
   () => ListValue.value,
   (newVal) => {
     getcategoryList.value = newVal.map((item) => {
-      return { value: item.value, name: item.name }
+      return { value: item.value, name: item.category }
     })
 
     // 数据更新后重新渲染图表

@@ -18,7 +18,7 @@
     <el-input
       v-model="searchInput"
       style="width: 16rem; margin-left: 1rem"
-      :placeholder="$t('messages.searchName_input')"
+      :placeholder="$t('messages.user_idInput')"
       @input="handleSearch"
       clearable
     ></el-input>
@@ -103,9 +103,9 @@ const handleSearch = (inputvalue) => {
     // 根据输入值过滤数据
     let filteredData
     if (filteredOrders.value.length > 0) {
-      filteredData = filteredOrders.value.filter((item) => item.name.includes(inputvalue))
+      filteredData = filteredOrders.value.filter((item) => item.user_id == inputvalue)
     } else {
-      filteredData = originList.value.filter((item) => item.name.includes(inputvalue))
+      filteredData = originList.value.filter((item) => item.user_id == inputvalue)
     }
     orderList.value = filteredData
     // 更新表格数据
@@ -116,12 +116,12 @@ const getDateChoose = (value) => {
     searchInputState.value = ''
     if (filteredOrders.value.length > 0) {
       filteredOrders.value = filteredOrders.value.filter((order) => {
-        const orderDate = new Date(order.time) // 将订单时间转换为日期对象
+        const orderDate = new Date(order.formattedBuildTime) // 将订单时间转换为日期对象
         return orderDate.getTime() >= value[0] && orderDate.getTime() <= value[1] // 比较时间戳是否相等
       })
     } else {
       filteredOrders.value = originList.value.filter((order) => {
-        const orderDate = new Date(order.time) // 将订单时间转换为日期对象
+        const orderDate = new Date(order.formattedBuildTime) // 将订单时间转换为日期对象
         return orderDate.getTime() >= value[0] && orderDate.getTime() <= value[1] // 比较时间戳是否相等
       })
     }
@@ -151,7 +151,7 @@ const handleSearchState = (inputvalue2) => {
 
     valueDate.value = [new Date(2023, 0, 1, 10, 10, 10), new Date()]
     let filteredData
-    filteredData = originList.value.filter((item) => item.state.includes(inputvalue2))
+    filteredData = originList.value.filter((item) => item.order_status.includes(inputvalue2))
     orderList.value = filteredData
     // 更新表格数据
   }
@@ -172,7 +172,7 @@ const changeDialogVisible = (value) => {
   dialogFormVisible.value = value
 }
 
-// 点击打开添加表单
+// 点击打开汇总表单
 const dialogTitle = ref('')
 const handleSummary = () => {
   dialogTitle.value = t('messages.summary')

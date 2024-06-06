@@ -10,15 +10,19 @@
   <div>
     <el-table :data="currentPageData" style="width: 100%" @selection-change="handleSelectionChange">
       <el-table-column width="40" type="selection" />
-      <el-table-column fixed prop="id" label="id" width="150" />
+      <el-table-column fixed prop="book_id" label="book_id" width="150" />
 
-      <el-table-column fixed prop="book_name" :label="$t('messages.book_name')" width="150" />
+      <el-table-column fixed prop="book_name" :label="$t('messages.book_name')" width="200" />
 
-      <el-table-column prop="author" :label="$t('messages.author')" width="200" />
-      <el-table-column prop="category" :label="$t('messages.category')" width="200" />
-      <el-table-column prop="price" :label="$t('messages.price')" width="200" />
-      <el-table-column prop="stock_quantity" :label="$t('messages.stock_quantity')" width="210" />
-
+      <el-table-column prop="author" :label="$t('messages.author')" width="120" />
+      <el-table-column prop="category" :label="$t('messages.category')" width="120" />
+      <el-table-column prop="price" :label="$t('messages.price')" width="120" />
+      <el-table-column prop="status" :label="$t('messages.book_status')" width="120" />
+      <el-table-column
+        prop="formattedBuildTime"
+        :label="$t('messages.book_build_time')"
+        width="250"
+      />
       <el-table-column fixed="right" :label="$t('messages.operations')" width="280">
         <template #default="scope">
           <el-button link type="primary" size="small" @click="handleEdit(scope.row)">{{
@@ -93,6 +97,7 @@ watch(
     deep: true
   }
 )
+
 // 获取选择框的内容
 const multipleSelection = ref([])
 const emit = defineEmits(['getDelTable'])
@@ -102,7 +107,7 @@ const handleSelectionChange = (val) => {
   multipleSelection.value = val
   if (multipleSelection.value.length > 0) {
     // 使用map方法遍历multipleSelection.value数组，并将每个选中项的id存储到一个新的数组中
-    const selectedIds = multipleSelection.value.map((item) => item.id)
+    const selectedIds = multipleSelection.value.map((item) => item.book_id)
 
     // 将所选数据提供给父组件
     emit('getDelTable', selectedIds)
@@ -120,9 +125,14 @@ const handleEdit = (row) => {
 const handleDelete = async (row) => {
   // 在这里使用 row 数据执行删除操作
   // api服务器删除后重新获取列表
-  await BookStore.deleteBookList(row.id)
-  // 如果 deleteBookList 没有报错，则执行成功提示
-  ElMessage({ type: 'success', message: '删除成功' })
+  await BookStore.deleteBookList(row.book_id)
+    .then(() => {
+      // 如果 deleteBookList 没有报错，则执行成功提示
+      ElMessage({ type: 'success', message: '删除成功' })
+    })
+    .catch(() => {
+      ElMessage({ type: 'error', message: '删除失败' })
+    })
 }
 </script>
 

@@ -14,18 +14,6 @@ export const checkLoginStatusAPI = () => {
     method: 'GET'
   })
 }
-// 验证账号密码登录并且返回数据
-export const checkFormLoginAPI = (account, password) => {
-  return httpInstance({
-    url: `/loginer/?account=${account}&password=${password}`,
-    method: 'GET',
-    data: {
-      account,
-      password
-    }
-  })
-}
-
 // 获取电话号码短信
 export const getPhoneCodeAPI = () => {
   return httpInstance({
@@ -33,7 +21,6 @@ export const getPhoneCodeAPI = () => {
     method: 'Get'
   })
 }
-
 // 通过号码获取用户信息
 export const getLoginerPhoneAPI = (phone) => {
   return httpInstance({
@@ -41,21 +28,36 @@ export const getLoginerPhoneAPI = (phone) => {
     method: 'GET'
   })
 }
+// 验证账号密码登录并且返回数据
+export const checkFormLoginAPI = (account, password) => {
+  return httpInstance({
+    url: 'user/login',
+    method: 'POST',
+    data: {
+      account,
+      password
+    }
+  })
+}
 
 // 根据id重新获取Loginer
 export const getNewLoginerAPI = (id) => {
   return httpInstance({
-    url: '/loginer/' + id,
-    method: 'GET'
+    url: '/user/getLoginById',
+    method: 'POST',
+    data: {
+      id: id
+    }
   })
 }
 
-// 修改name
+// 修改name, phone, email
 export const updateBaseAPI = (id, name, phone, email) => {
   return httpInstance({
-    url: '/loginer/' + id,
-    method: 'PATCH',
+    url: '/user/updateAdmin',
+    method: 'POST',
     data: {
+      id: id,
       name: name,
       phone: phone,
       email: email
@@ -66,9 +68,10 @@ export const updateBaseAPI = (id, name, phone, email) => {
 // 修改头像
 export const uploadAvatarAPI = (id, awatar) => {
   return httpInstance({
-    url: '/loginer/' + id,
-    method: 'PATCH',
+    url: '/user/uploadAvatar',
+    method: 'POST',
     data: {
+      id: id,
       awatar: awatar
     }
   })
@@ -77,9 +80,10 @@ export const uploadAvatarAPI = (id, awatar) => {
 //更新密码
 export const updatePasswordAPI = (id, password) => {
   return httpInstance({
-    url: '/loginer/' + id,
-    method: 'PATCH',
+    url: '/user/updatePassword',
+    method: 'POST',
     data: {
+      id: id,
       password: password
     }
   })

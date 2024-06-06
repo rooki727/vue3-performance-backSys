@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { reactive } from 'vue'
+import { ref } from 'vue'
 import {
   checkFormLoginAPI,
   getLoginerPhoneAPI,
@@ -11,24 +11,32 @@ export const useLoginerStore = defineStore(
   'userLogin',
   () => {
     // 定义登陆用户对象
-    const userInfo = reactive({})
+    const userInfo = ref({})
 
     // 写api请求登陆人信息请求
     const getLoginerForm = async (account, password) => {
       // 假设获取的是res
       const res = await checkFormLoginAPI(account, password)
-      Object.assign(userInfo, res[0])
+      userInfo.value = res
+      // 获取响应头中的token
+      // const token = res.headers['authorization']
+      // console.log(token)
+      // 将token追加到userInfo对象中
+      // userInfo.value.token = token
 
+      console.log(userInfo.value)
       // 合并 res 的属性到 userInfo
     }
     // 清空函数
     const clearUser = () => {
       // 使用 Object.keys() 和 delete 关键字删除 userInfo 对象的所有属性
-      Object.keys(userInfo).forEach((key) => {
-        delete userInfo[key]
-      })
+      userInfo.value = {}
     }
-
+    // 重新获取该登录者的信息
+    const getNewLoginer = async (id) => {
+      const res = await getNewLoginerAPI(id)
+      userInfo.value = res
+    }
     // // check验证码，并且返回值部分，实际应用应放到loginerStore里
     // const checkLoginStatus = async () => {
     //   const res = await checkLoginStatusAPI()
@@ -60,12 +68,6 @@ export const useLoginerStore = defineStore(
       await uploadAvatarAPI(id, awatar)
 
       getNewLoginer(id)
-    }
-
-    // 重新获取该登录者的信息
-    const getNewLoginer = async (id) => {
-      const res = await getNewLoginerAPI(id)
-      Object.assign(userInfo, res)
     }
 
     return {

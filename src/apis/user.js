@@ -3,7 +3,7 @@ import httpInstance from '@/utils/http'
 // 获取概要user
 export const getUserListAPI = () => {
   return httpInstance({
-    url: '/users',
+    url: '/user/getUserState',
     method: 'GET'
   })
 }
@@ -11,32 +11,43 @@ export const getUserListAPI = () => {
 // 获取管理员列表
 export const getAdminListAPI = () => {
   return httpInstance({
-    url: '/adminList',
+    url: '/user/findAllAdmin',
     method: 'GET'
   })
 }
 
 // 添加管理员
-export const addAdminListAPI = (name, account, verify, gender, phone, email) => {
+export const addAdminListAPI = (
+  name,
+  account,
+  password,
+  verify,
+  gender,
+  phone,
+  email,
+  buildTime
+) => {
   return httpInstance({
-    url: '/adminList',
+    url: '/user/addAdmin',
     method: 'POST',
     data: {
       name: name,
       account: account,
+      password: password,
       verify: verify,
       gender: gender,
       phone: phone,
-      email: email
+      email: email,
+      buildTime: buildTime
     }
   })
 }
 
 // 修改管理员
-export const updateAdminListAPI = (id, name, account, verify, gender, phone, email) => {
+export const updateAdminListAPI = (id, name, account, verify, gender, phone, email, password) => {
   return httpInstance({
-    url: '/adminList/' + id,
-    method: 'PATCH',
+    url: '/user/updateAdmin',
+    method: 'POST',
     data: {
       id: id,
       name: name,
@@ -44,15 +55,19 @@ export const updateAdminListAPI = (id, name, account, verify, gender, phone, ema
       verify: verify,
       gender: gender,
       phone: phone,
-      email: email
+      email: email,
+      password: password
     }
   })
 }
 // 删除管理员
 export const deleteAdminAPI = (id) => {
   return httpInstance({
-    url: `/adminList/${id}`,
-    method: 'DELETE'
+    url: '/user/deleteAdmin',
+    method: 'POST',
+    data: {
+      id: id
+    }
   })
 }
 
@@ -60,36 +75,57 @@ export const deleteAdminAPI = (id) => {
 // 获取普通用户列表
 export const getCommonUserAPI = () => {
   return httpInstance({
-    url: '/commonUserList',
+    url: '/user/findAllUser',
     method: 'GET'
   })
 }
 
 // 添加普通用户
-export const addCommonUserAPI = (name, account, verify, gender, phone, email) => {
+export const addCommonUserAPI = (
+  name,
+  account,
+  password,
+  verify,
+  gender,
+  phone,
+  email,
+  buildTime
+) => {
   return httpInstance({
-    url: '/commonUserList',
+    url: '/user/addUser',
     method: 'POST',
     data: {
       name: name,
       account: account,
+      password: password,
       verify: verify,
       gender: gender,
       phone: phone,
-      email: email
+      email: email,
+      buildTime: buildTime
     }
   })
 }
 
 // 修改普通用户
-export const updateCommonUserAPI = (id, name, account, verify, gender, phone, email) => {
+export const updateCommonUserAPI = (
+  user_id,
+  name,
+  account,
+  password,
+  verify,
+  gender,
+  phone,
+  email
+) => {
   return httpInstance({
-    url: '/commonUserList/' + id,
-    method: 'PATCH',
+    url: '/user/updateUser',
+    method: 'POST',
     data: {
-      id: id,
+      user_id: user_id,
       name: name,
       account: account,
+      password: password,
       verify: verify,
       gender: gender,
       phone: phone,
@@ -98,9 +134,20 @@ export const updateCommonUserAPI = (id, name, account, verify, gender, phone, em
   })
 }
 // 删除普通用户
-export const deleteCommonUserAPI = (id) => {
+export const deleteCommonUserAPI = (user_id) => {
   return httpInstance({
-    url: `/commonUserList/${id}`,
-    method: 'DELETE'
+    url: '/user/deleteUser',
+    method: 'POST',
+    data: {
+      user_id: user_id
+    }
+  })
+}
+
+// 获取验证码
+export const getCaptchaAPI = () => {
+  return httpInstance({
+    url: '/user/generateCaptcha',
+    method: 'GET'
   })
 }

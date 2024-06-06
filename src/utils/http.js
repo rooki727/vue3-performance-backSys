@@ -5,7 +5,7 @@ import router from '@/router'
 import { useLoginerStore } from '@/stores/LoginerStore'
 import { computed } from 'vue'
 const httpInstance = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: 'http://localhost:8080/library_ssm',
   timeout: 5000
 })
 
@@ -16,7 +16,7 @@ httpInstance.interceptors.request.use(
     const LoginerStore = useLoginerStore()
     const token = computed(() => LoginerStore.userInfo.token)
     if (!token.value) {
-      router.push('/login')
+      // router.push('/login')
     }
     return config
   },

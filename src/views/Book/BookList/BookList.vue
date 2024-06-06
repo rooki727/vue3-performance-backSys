@@ -102,11 +102,11 @@ const exportToExcel = () => {
   // 创建一个Workbook对象
   const wb = XLSX.utils.book_new()
   // 将数据转换为Excel格式
-  const wsData = [['书名', '作者', '分类', '价格', '库存', 'id']]
+  const wsData = [['书名', '作者', '分类', '价格', '状态', 'book_id', '入库时间']]
   // 将JSON数据转换为CSV格式设置一个分隔符，然后将得到的字符串重新切割为数组
   const csvData = BookList.value
     .map((book) => {
-      return `${book.book_name},${book.author},${book.category},${book.price},${book.stock_quantity},${book.id}`
+      return `${book.book_name},${book.author},${book.category},${book.price},${book.status},${book.book_id},${book.formattedBuildTime}`
     })
     .join('、')
   const LastArray = ref([])

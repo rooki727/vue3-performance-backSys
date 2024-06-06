@@ -3,7 +3,6 @@ import { computed, ref } from 'vue'
 import {
   getOrderAPI,
   getOrderListAPI,
-  getMonthSaleListAPI,
   updateOrderStateAPI,
   deleteOrderAPI,
   getSummaryListAPI,
@@ -13,7 +12,7 @@ import {
 } from '@/apis/order'
 export const useOrderStore = defineStore('order', () => {
   const order = ref({})
-  const MonthSaleList = ref([])
+
   const orderList = ref([])
   const summaryList = ref([])
   const getOrder = async () => {
@@ -24,33 +23,16 @@ export const useOrderStore = defineStore('order', () => {
   const getOrderList = async () => {
     const res = await getOrderListAPI()
     orderList.value = res
-    const perOrderMoney = ref([])
-    orderList.value.forEach((item) => {
-      perOrderMoney.value.push(
-        item.books.reduce(
-          (total, itemBook) => total + parseInt(itemBook.price) * parseInt(itemBook.count),
-          0
-        )
-      )
-    })
-    // 将 perOrderMoney 中的值赋值给 orderList 数组中每个对象的一个新属性
-    orderList.value.forEach((order, index) => {
-      order.perOrderMoney = perOrderMoney.value[index]
-    })
-  }
-  const getMonthSaleList = async () => {
-    const res = await getMonthSaleListAPI()
-    MonthSaleList.value = res
   }
 
   // updateOrderStateAPI
-  const updateOrderState = async (id, state) => {
-    await updateOrderStateAPI(id, state)
+  const updateOrderState = async (order_id, order_status) => {
+    await updateOrderStateAPI(order_id, order_status)
     getOrderList()
   }
   // deleteOrderAPI
-  const deleteOrder = async (id) => {
-    await deleteOrderAPI(id)
+  const deleteOrder = async (order_id) => {
+    await deleteOrderAPI(order_id)
     getOrderList()
   }
   // 获取汇总列表
@@ -59,13 +41,13 @@ export const useOrderStore = defineStore('order', () => {
     summaryList.value = res
   }
   // 添加汇总
-  const addSummaryList = async (name, account, time, totalMoney, totalCount) => {
-    await addSummaryListAPI(name, account, time, totalMoney, totalCount)
+  const addSummaryList = async (user_id, buildTime, totalMoney, totalCount) => {
+    await addSummaryListAPI(user_id, buildTime, totalMoney, totalCount)
     getSummaryList()
   }
   // 修改汇总状态
-  const updateOrderSummaryState = async (id, summaryState) => {
-    await updateOrderSummaryStateAPI(id, summaryState)
+  const updateOrderSummaryState = async (order_id, summary_status) => {
+    await updateOrderSummaryStateAPI(order_id, summary_status)
     getOrderList()
   }
   // 删除汇总信息
@@ -73,26 +55,16 @@ export const useOrderStore = defineStore('order', () => {
     await deleteSummaryListAPI(id)
     getSummaryList()
   }
-  const monthSale = computed(() =>
-    MonthSaleList.value.reduce((total, item) => total + parseInt(item.count), 0)
-  )
-  const monthMoney = computed(() =>
-    MonthSaleList.value.reduce((total, item) => total + parseInt(item.totalMoney), 0)
-  )
 
   const totalCount = computed(() => orderList.value.length)
 
   return {
     order,
-    monthSale,
-    MonthSaleList,
     orderList,
-    monthMoney,
     totalCount,
     summaryList,
     getOrder,
     getOrderList,
-    getMonthSaleList,
     updateOrderState,
     deleteOrder,
     getSummaryList,

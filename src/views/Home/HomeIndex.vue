@@ -17,7 +17,7 @@ const getTableForm = () => {
   BookStore.getbooks()
   BookStore.getbookList()
   BookStore.getcategoryList()
-  OrderStore.getMonthSaleList()
+  BookStore.getMonthSaleList()
   OrderStore.getOrder()
   OrderStore.getOrderList()
 }
@@ -27,11 +27,7 @@ const bookMonthAdd = computed(() => BookStore.book.monthAdd)
 const bookMonthOut = computed(() => BookStore.book.monthOut)
 
 // 计算属性：计算 stock_quantity 的总量
-const totalStockQuantity = computed(() => {
-  return BookStore.bookList.reduce((total, book) => {
-    return total + book.stock_quantity
-  }, 0)
-})
+const bookCount = computed(() => BookStore.bookList.length)
 onMounted(() => getTableForm())
 </script>
 
@@ -52,7 +48,7 @@ onMounted(() => getTableForm())
       ></totalItem>
       <totalItem
         :title="$t('messages.book')"
-        :count="totalStockQuantity"
+        :count="bookCount"
         :message="$t('messages.bookMessage')"
         :todayCount="BookStore.book?.todayAdd"
         style="background-image: linear-gradient(to right, rgb(220, 220, 35), rgb(36, 224, 39))"
@@ -79,8 +75,8 @@ onMounted(() => getTableForm())
             :title="$t('messages.MonthUserTitle')"
             :message="$t('messages.MonthUserMessage1')"
             :message2="$t('messages.MonthUserMessage2')"
-            :data="userStore.user.monthVisit"
-            :data2="userStore.user.perPurchase"
+            :data="userStore.user.monthAdd"
+            :data2="userStore.user.userBuy"
           ></MonthItem>
           <MonthItem
             :title="$t('messages.MonthBookTitle')"
@@ -93,8 +89,8 @@ onMounted(() => getTableForm())
             :title="$t('messages.MonthOrderTitle')"
             :message="$t('messages.MonthOrderMessage1')"
             :message2="$t('messages.MonthOrderMessage2')"
-            :data="OrderStore.monthSale"
-            :data2="OrderStore.monthMoney"
+            :data="OrderStore.order?.monthSaleCount"
+            :data2="OrderStore.order?.monthMoney"
           ></MonthItem>
         </div>
       </div>

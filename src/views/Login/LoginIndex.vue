@@ -31,7 +31,8 @@ const notices = [
 ]
 const loginerForm = reactive({
   account: '',
-  password: ''
+  password: '',
+  verify: ''
 })
 const formRef = ref(null)
 // 账号密码登录规则
@@ -247,6 +248,7 @@ const submitPhoneForm = (formPhoneRef) => {
               show-password
             ></el-input>
           </el-form-item>
+
           <el-form-item>
             <el-dropdown @command="handleCommand">
               <span class="el-dropdown-link" style="color: #409eff; cursor: pointer">

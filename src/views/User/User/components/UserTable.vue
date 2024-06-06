@@ -10,11 +10,12 @@
   <div>
     <el-table :data="currentPageData" style="width: 100%" @selection-change="handleSelectionChange">
       <el-table-column width="40" type="selection" />
-      <el-table-column fixed prop="id" label="id" width="100" />
+      <el-table-column fixed prop="user_id" label="user_id" width="100" />
 
       <el-table-column fixed prop="name" :label="$t('messages.name')" width="150" />
 
-      <el-table-column prop="account" :label="$t('messages.account')" width="200" />
+      <el-table-column prop="account" :label="$t('messages.account')" width="150" />
+      <el-table-column prop="password" :label="$t('messages.Password')" width="200" />
       <el-table-column prop="gender" :label="$t('messages.gender')" width="120" />
       <el-table-column property="verify" prop="verify" :label="$t('messages.verify')" width="120" />
       <el-table-column prop="phone" :label="$t('messages.phone')" width="210" />
@@ -108,7 +109,7 @@ const handleSelectionChange = (val) => {
   multipleSelection.value = val
   if (multipleSelection.value.length > 0) {
     // 使用map方法遍历multipleSelection.value数组，并将每个选中项的id存储到一个新的数组中
-    const selectedIds = multipleSelection.value.map((item) => item.id)
+    const selectedIds = multipleSelection.value.map((item) => item.user_id)
     // 将所选数据提供给父组件
     emit('getDelTable', selectedIds)
   }
@@ -125,9 +126,16 @@ const handleEdit = (row) => {
 const handleDelete = async (row) => {
   // 在这里使用 row 数据执行删除操作
   // api服务器删除后重新获取列表
-  userStore.deleteCommonUser(row.id)
-  // 如果 addUser 没有报错，则执行成功提示
-  ElMessage({ type: 'success', message: '删除成功' })
+  userStore
+    .deleteCommonUser(row.user_id)
+    .then(() => {
+      ElMessage({ type: 'success', message: '删除成功' })
+    })
+    .catch((error) => {
+      // 处理请求失败的情况
+      ElMessage({ type: 'erro', message: error })
+      // 在此处可以添加相应的错误处理逻辑，例如提示用户登录失败等
+    })
 }
 </script>
 

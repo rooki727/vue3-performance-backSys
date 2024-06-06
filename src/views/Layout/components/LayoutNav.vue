@@ -1,9 +1,6 @@
 <script setup>
 import { onMounted } from 'vue'
 
-onMounted(() => {
-  removeActive()
-})
 const props = defineProps(['isCollapse'])
 
 //封装函数给点击首页时去除所有的is-active
@@ -13,6 +10,9 @@ const removeActive = () => {
     item.classList.remove('is-active')
   })
 }
+onMounted(() => {
+  removeActive()
+})
 defineExpose({ removeActive })
 </script>
 
