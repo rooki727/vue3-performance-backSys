@@ -3,7 +3,6 @@ import { ElMessage } from 'element-plus'
 import 'element-plus/theme-chalk/el-message.css'
 import router from '@/router'
 import { useLoginerStore } from '@/stores/LoginerStore'
-import { computed } from 'vue'
 const httpInstance = axios.create({
   baseURL: 'http://localhost:8080/library_ssm',
   timeout: 5000
@@ -14,9 +13,14 @@ const httpInstance = axios.create({
 httpInstance.interceptors.request.use(
   (config) => {
     const LoginerStore = useLoginerStore()
-    const token = computed(() => LoginerStore.userInfo.token)
-    if (!token.value) {
-      // router.push('/login')
+    const token = LoginerStore.userInfo.token
+    if (!token && config.url !== '/login') {
+      router.push('/login')
+    } else {
+      // 在请求头中添加 token
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`
+      }
     }
     return config
   },

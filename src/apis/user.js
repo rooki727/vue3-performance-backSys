@@ -16,6 +16,28 @@ export const getAdminListAPI = () => {
   })
 }
 
+// 检验添加的管理account是否存在
+export const checkAdminAccountAPI = (account) => {
+  return httpInstance({
+    url: '/user/selectByAccount',
+    method: 'POST',
+    data: {
+      account: account
+    }
+  })
+}
+
+// 检验添加的用户account是否存在
+export const checkUserAccountAPI = (account) => {
+  return httpInstance({
+    url: '/user/selectByAccountUser',
+    method: 'POST',
+    data: {
+      account: account
+    }
+  })
+}
+
 // 添加管理员
 export const addAdminListAPI = (
   name,

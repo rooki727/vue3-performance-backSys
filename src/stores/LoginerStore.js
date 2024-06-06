@@ -18,14 +18,6 @@ export const useLoginerStore = defineStore(
       // 假设获取的是res
       const res = await checkFormLoginAPI(account, password)
       userInfo.value = res
-      // 获取响应头中的token
-      // const token = res.headers['authorization']
-      // console.log(token)
-      // 将token追加到userInfo对象中
-      // userInfo.value.token = token
-
-      console.log(userInfo.value)
-      // 合并 res 的属性到 userInfo
     }
     // 清空函数
     const clearUser = () => {

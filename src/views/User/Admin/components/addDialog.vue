@@ -3,6 +3,7 @@ import { reactive, computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/stores/userStore'
+import { checkAdminAccountAPI } from '@/apis/user'
 const userStore = useUserStore()
 // 获取t方法才可以在js代码里使用
 const { t } = useI18n()
@@ -25,6 +26,9 @@ const addform = reactive({
   phone: null,
   email: ''
 })
+// 判断账号存在是否
+const accountExists = ref(false)
+
 const rules = {
   name: [
     {
@@ -43,6 +47,11 @@ const rules = {
     {
       min: 5,
       message: t('messages.account_min'),
+      trigger: 'blur'
+    },
+    {
+      pattern: /^[0-9]+$/, // 使用正则表达式限制输入只能为数字字符
+      message: t('messages.base_accountNum'), // 自定义提示消息
       trigger: 'blur'
     }
   ],
@@ -105,7 +114,7 @@ const changeDialogVisible = () => {
 
 const submitadd = (addForm) => {
   addForm.validate((valid) => {
-    if (valid) {
+    if (valid && accountExists.value === false) {
       // api数据请求，添加该用户的信息
       emit('changeDialogVisible', false)
       const date = new Date()
@@ -126,12 +135,30 @@ const submitadd = (addForm) => {
         })
         .catch(() => {
           // 处理请求失败的情况
-          ElMessage({ type: 'erro', message: '添加失败！请检查输入信息' })
+          ElMessage({ type: 'error', message: '添加失败！请检查输入信息' })
           // 在此处可以添加相应的错误处理逻辑，例如提示用户登录失败等
         })
     } else {
       // 如果表单验证不通过，提醒
       ElMessage({ type: 'error', message: '添加失败！请检查输入信息' })
+    }
+  })
+}
+
+// 检查是否存在account
+
+const checkAccountExist = async () => {
+  // 判断单个检验
+  addForm.value.validateField(['account'], async (valid) => {
+    if (valid) {
+      const res = await checkAdminAccountAPI(parseInt(addform.account))
+      if (res == 'account存在') {
+        accountExists.value = true
+        ElMessage({ type: 'error', message: '该账号已存在' })
+      } else {
+        accountExists.value = false
+        ElMessage({ type: 'success', message: '该账号可用' })
+      }
     }
   })
 }
@@ -152,7 +179,7 @@ const submitadd = (addForm) => {
         <el-input v-model="addform.name" autocomplete="off" />
       </el-form-item>
       <el-form-item :label="$t('messages.account')" label-width="8.75rem" prop="account">
-        <el-input v-model="addform.account" autocomplete="off" />
+        <el-input v-model="addform.account" autocomplete="off" @blur="checkAccountExist" />
       </el-form-item>
       <el-form-item :label="$t('messages.Password')" label-width="8.75rem" prop="password">
         <el-input v-model="addform.password" autocomplete="off" />

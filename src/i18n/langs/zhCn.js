@@ -74,6 +74,7 @@ export default {
     base_phoneinput: '请输入电话号码',
     base_phonerule: '电话号码最小长度为11',
     base_digitsonly: '电话号码只能为阿拉伯数字',
+    base_accountNum: '账号只能为阿拉伯数字',
     email_required: '请输入email信息',
     email_invalid: '请输入正确的email',
     Captcha: '验证码',
@@ -159,6 +160,7 @@ export default {
     totalCount: '总订单总数量',
     book_build_time: '首次入库时间',
     book_status: '库存状态',
-    user_idInput: '根据输入的user_id搜索'
+    user_idInput: '根据输入的user_id搜索',
+    account_exists: '账号已存在'
   }
 }
