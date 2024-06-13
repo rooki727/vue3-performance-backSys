@@ -50,15 +50,13 @@ export const useLoginerStore = defineStore(
       Object.assign(userInfo, res[0])
     }
     // 修改基本资料
-    const updateupdateBase = async (id, name, phone, email) => {
-      await updateBaseAPI(id, name, phone, email)
-
+    const updateupdateBase = async (id, name, gender, phone, email) => {
+      await updateBaseAPI(id, name, gender, phone, email)
       getNewLoginer(id)
     }
     // 更新头像
     const uploadAvatar = async (id, awatar) => {
       await uploadAvatarAPI(id, awatar)
-
       getNewLoginer(id)
     }
 

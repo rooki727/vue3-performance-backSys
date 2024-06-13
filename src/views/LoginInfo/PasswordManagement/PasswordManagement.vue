@@ -18,7 +18,6 @@ const router = useRouter()
 const LoginerStore = useLoginerStore()
 const LoginerId = computed(() => LoginerStore.userInfo.id)
 const LoginerOriPassword = computed(() => LoginerStore.userInfo.password)
-console.log(LoginerOriPassword.value)
 // 图片验证码
 const getcaptcha = ref([])
 const captchaString = computed(() => getcaptcha.value.map((item) => item.value).join(''))

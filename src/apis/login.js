@@ -51,14 +51,15 @@ export const getNewLoginerAPI = (id) => {
   })
 }
 
-// 修改name, phone, email
-export const updateBaseAPI = (id, name, phone, email) => {
+// 修改name, phone, email,gender
+export const updateBaseAPI = (id, name, gender, phone, email) => {
   return httpInstance({
     url: '/user/updateAdmin',
     method: 'POST',
     data: {
       id: id,
       name: name,
+      gender: gender,
       phone: phone,
       email: email
     }

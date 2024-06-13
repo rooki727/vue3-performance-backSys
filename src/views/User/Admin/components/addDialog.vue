@@ -132,6 +132,7 @@ const submitadd = (addForm) => {
         )
         .then(() => {
           ElMessage({ type: 'success', message: '添加成功' })
+          resetForm()
         })
         .catch(() => {
           // 处理请求失败的情况

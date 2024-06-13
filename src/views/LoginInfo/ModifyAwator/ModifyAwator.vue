@@ -32,7 +32,7 @@ const centerDialogVisible = ref(false)
 const uploadSave = () => {
   if (currentAwator.value != '') {
     LoginerStore.userInfo.awatar = currentAwator.value
-    console.log(currentAwator.value)
+
     // 调用上传头像的方法 uploadAvatar
     LoginerStore.uploadAvatar(LoginerId.value, currentAwator.value)
     ElMessage({

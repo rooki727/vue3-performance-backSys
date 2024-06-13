@@ -62,6 +62,7 @@ const submitForm = (formRef) => {
       LoginerStore.updateupdateBase(
         userForm.id,
         userForm.name,
+        userForm.gender,
         parseInt(userForm.phone),
         userForm.email
       ).then(() => {
@@ -90,6 +91,7 @@ const resetForm = () => {
   userForm.name = ''
   userForm.phone = null
   userForm.email = ''
+  userForm.gender = ''
 }
 onMounted(() => {
   // Object.assign() 或扩展运算符来创建一个新的对象，从而确保不会直接修改 store 中的值
