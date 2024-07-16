@@ -1,11 +1,12 @@
 <script setup>
-import { watch, ref, onMounted, inject } from 'vue'
+import { watch, ref, onMounted, inject, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { ArrowRight } from '@element-plus/icons-vue'
 import LanguageChange from '@/components/languageChange.vue'
 import { useLoginerStore } from '@/stores/LoginerStore'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import { resetAdminTokenAPI } from '@/apis/user'
 // 获取t方法才可以在js代码里使用
 const { t } = useI18n()
 const Router = useRouter()
@@ -98,10 +99,12 @@ const cancelExit = () => {
   dialogVisible.value = false
   // 取消退出操作
 }
-const confirmExit = () => {
+const confirmExit = async () => {
   // 执行退出登录操作，例如清除登录信息等
   dialogVisible.value = false
   // 确认退出操作
+  const id = computed(() => LoginerStore.userInfo.id)
+  await resetAdminTokenAPI(id.value)
   LoginerStore.clearUser()
   Router.push('/login')
 }

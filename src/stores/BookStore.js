@@ -38,13 +38,57 @@ export const useBookStore = defineStore('book', () => {
   }
 
   // 添加bookList
-  const addBookList = async (book_name, author, category, price, status, buildTime) => {
-    await addBookListAPI(book_name, author, category, price, status, buildTime)
+  const addBookList = async (
+    book_name,
+    author,
+    category,
+    price,
+
+    buildTime,
+    picture,
+    main_picture,
+    introduce,
+    stock
+  ) => {
+    await addBookListAPI(
+      book_name,
+      author,
+      category,
+      price,
+
+      buildTime,
+      picture,
+      main_picture,
+      introduce,
+      stock
+    )
     getbookList()
   }
   // 修改bookList信息
-  const updateBookList = async (book_id, book_name, author, category, price, status) => {
-    await updateBookListAPI(book_id, book_name, author, category, price, status)
+  const updateBookList = async (
+    book_id,
+    book_name,
+    author,
+    category,
+    price,
+    picture,
+    main_picture,
+    introduce,
+    stock,
+    sale_number
+  ) => {
+    await updateBookListAPI(
+      book_id,
+      book_name,
+      author,
+      category,
+      price,
+      picture,
+      main_picture,
+      introduce,
+      stock,
+      sale_number
+    )
     getbookList()
   }
   // 删除bookList

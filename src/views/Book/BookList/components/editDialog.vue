@@ -6,11 +6,6 @@ import { useBookStore } from '@/stores/BookStore'
 const BookStore = useBookStore()
 const categoryListComputed = computed(() => BookStore.categoryList)
 const categoryList = ref([])
-const statusList = [
-  { id: 1, status: '未出库' },
-  { id: 2, status: '已出库' },
-  { id: 3, status: '待出库' }
-]
 watch(
   () => categoryListComputed.value,
   (newVal) => {
@@ -35,7 +30,11 @@ const addform = reactive({
   author: '',
   category: '',
   price: null,
-  status: ''
+  stock: null,
+  sale_number: null,
+  picture: '',
+  main_picture: '',
+  introduce: ''
 })
 
 const rules = {
@@ -61,10 +60,53 @@ const rules = {
     }
   ],
   price: [{ required: true, message: t('messages.book_priceinput'), trigger: 'blur' }],
-  status: [
+
+  picture: [
     {
       required: true,
-      message: t('messages.book_categoryinput'), // 如果未输入电子邮件地址，则显示此消息
+      message: t('messages.book_pictureinput'), // 如果未输入picture，则显示此消息
+      trigger: 'blur'
+    }
+  ],
+
+  main_picture: [
+    {
+      required: true,
+      message: t('messages.book_main_pictureinput'), // 如果未输入main_picture，则显示此消息
+      trigger: 'blur'
+    }
+  ],
+
+  introduce: [
+    {
+      required: true,
+      message: t('messages.book_introduceinput'), // 如果未输入introduce，则显示此消息
+      trigger: 'blur'
+    }
+  ],
+  stock: [
+    {
+      required: true,
+      message: t('messages.book_stock_quantityinput'),
+      trigger: 'blur'
+    },
+
+    {
+      pattern: /^[0-9]+$/, // 使用正则表达式限制输入只能为数字字符
+      message: t('messages.base_numberdigitsonly'), // 自定义提示消息
+      trigger: 'blur'
+    }
+  ],
+  sale_number: [
+    {
+      required: true,
+      message: t('messages.book_sale_number'),
+      trigger: 'blur'
+    },
+
+    {
+      pattern: /^[0-9]+$/, // 使用正则表达式限制输入只能为数字字符
+      message: t('messages.base_numberdigitsonly'), // 自定义提示消息
       trigger: 'blur'
     }
   ]
@@ -87,7 +129,11 @@ const submitadd = (addForm) => {
         addform.author,
         addform.category,
         parseInt(addform.price),
-        addform.status
+        addform.picture,
+        addform.main_picture,
+        addform.introduce,
+        parseInt(addform.stock),
+        parseInt(addform.sale_number)
       )
         .then(() => {
           // 如果 addUser 没有报错，则执行成功提示
@@ -146,15 +192,40 @@ watch(
       <el-form-item :label="$t('messages.price')" label-width="8.75rem" prop="price">
         <el-input v-model="addform.price" autocomplete="off" />
       </el-form-item>
-      <el-form-item :label="$t('messages.book_status')" label-width="8.75rem" prop="status">
-        <el-select v-model="addform.status" :placeholder="$t('messages.please_Choose')">
-          <el-option
-            v-for="item in statusList"
-            :key="item.id"
-            :label="item.status"
-            :value="item.status"
-          />
-        </el-select>
+      <el-form-item :label="$t('messages.picture')" label-width="8.75rem" prop="picture">
+        <el-input
+          v-model="addform.picture"
+          :placeholder="$t('messages.book_pictureinput')"
+          autocomplete="off"
+        />
+      </el-form-item>
+      <el-form-item :label="$t('messages.main_picture')" label-width="8.75rem" prop="main_picture">
+        <el-input
+          v-model="addform.main_picture"
+          :placeholder="$t('messages.book_main_pictureinput')"
+          autocomplete="off"
+        />
+      </el-form-item>
+      <el-form-item :label="$t('messages.introduce')" label-width="8.75rem" prop="introduce">
+        <el-input
+          v-model="addform.introduce"
+          :placeholder="$t('messages.book_introduceinput')"
+          autocomplete="off"
+        />
+      </el-form-item>
+      <el-form-item :label="$t('messages.stock_quantity')" label-width="8.75rem" prop="stock">
+        <el-input
+          v-model="addform.stock"
+          :placeholder="$t('messages.stock_quantity')"
+          autocomplete="off"
+        />
+      </el-form-item>
+      <el-form-item :label="$t('messages.sale_number')" label-width="8.75rem" prop="sale_number">
+        <el-input
+          v-model="addform.sale_number"
+          :placeholder="$t('messages.book_sale_number')"
+          autocomplete="off"
+        />
       </el-form-item>
     </el-form>
     <template #footer>

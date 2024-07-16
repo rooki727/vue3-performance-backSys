@@ -17,7 +17,8 @@
       <el-table-column prop="author" :label="$t('messages.author')" width="120" />
       <el-table-column prop="category" :label="$t('messages.category')" width="120" />
       <el-table-column prop="price" :label="$t('messages.price')" width="120" />
-      <el-table-column prop="status" :label="$t('messages.book_status')" width="120" />
+      <el-table-column prop="stock" :label="$t('messages.stock_quantity')" width="120" />
+      <el-table-column prop="sale_number" :label="$t('messages.sale_number')" width="120" />
       <el-table-column
         prop="formattedBuildTime"
         :label="$t('messages.book_build_time')"

@@ -149,7 +149,7 @@ const checkAccountExist = async () => {
   addForm.value.validateField(['account'], async (valid) => {
     if (valid) {
       const res = await checkUserAccountAPI(parseInt(addform.account))
-      if (res == 'account存在') {
+      if (res.result == 'account存在') {
         accountExists.value = true
         ElMessage({ type: 'error', message: '该账号已存在' })
       } else {

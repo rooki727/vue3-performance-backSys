@@ -24,7 +24,17 @@ export const getcategoryListAPI = () => {
 }
 
 // 添加bookList
-export const addBookListAPI = (book_name, author, category, price, status, buildTime) => {
+export const addBookListAPI = (
+  book_name,
+  author,
+  category,
+  price,
+  buildTime,
+  picture,
+  main_picture,
+  introduce,
+  stock
+) => {
   return httpInstance({
     url: '/book/addBook',
     method: 'POST',
@@ -33,14 +43,28 @@ export const addBookListAPI = (book_name, author, category, price, status, build
       author: author,
       category: category,
       price: price,
-      status: status,
-      buildTime: buildTime
+      buildTime: buildTime,
+      picture: picture,
+      main_picture: main_picture,
+      introduce: introduce,
+      stock: stock
     }
   })
 }
 
 // 修改bookList
-export const updateBookListAPI = (book_id, book_name, author, category, price, status) => {
+export const updateBookListAPI = (
+  book_id,
+  book_name,
+  author,
+  category,
+  price,
+  picture,
+  main_picture,
+  introduce,
+  stock,
+  sale_number
+) => {
   return httpInstance({
     url: '/book/updateBook',
     method: 'POST',
@@ -50,7 +74,11 @@ export const updateBookListAPI = (book_id, book_name, author, category, price, s
       author: author,
       category: category,
       price: price,
-      status: status
+      picture: picture,
+      main_picture: main_picture,
+      introduce: introduce,
+      stock: stock,
+      sale_number: sale_number
     }
   })
 }

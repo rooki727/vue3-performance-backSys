@@ -93,6 +93,18 @@ export const deleteAdminAPI = (id) => {
   })
 }
 
+// 重置管理员token
+export const resetAdminTokenAPI = (id) => {
+  return httpInstance({
+    url: '/user/resetAdminToken',
+    method: 'POST',
+    data: {
+      id: id,
+      token: ''
+    }
+  })
+}
+
 // 普通用户部分
 // 获取普通用户列表
 export const getCommonUserAPI = () => {

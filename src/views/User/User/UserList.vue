@@ -2,14 +2,13 @@
 import UserTable from './components/UserTable.vue'
 import { ref, onMounted, watch, computed } from 'vue'
 import addDialog from './components/addDialog.vue'
-import { useLoginerStore } from '@/stores/LoginerStore'
 import { useUserStore } from '@/stores/userStore'
 import { useI18n } from 'vue-i18n'
 import { ElMessage } from 'element-plus'
 
 // 获取t方法才可以在js代码里使用
 const { t } = useI18n()
-const LoginerStore = useLoginerStore()
+
 const UserStore = useUserStore()
 // 搜索功能变量
 const searchInput = ref('')
@@ -117,14 +116,10 @@ onMounted(() => {
   </div>
   <el-divider border-style="dashed" />
   <div class="opTable">
-    <el-button
-      @click="openAddDialog"
-      type="warning"
-      style="margin-left: 2rem"
-      :disabled="LoginerStore.userInfo.verify !== 'first'"
+    <el-button @click="openAddDialog" type="warning" style="margin-left: 2rem"
       ><el-icon><Plus /></el-icon>{{ $t('messages.addUser') }}</el-button
     >
-    <el-button type="danger" :disabled="LoginerStore.userInfo.verify !== 'first'" @click="blukDel"
+    <el-button type="danger" @click="blukDel"
       ><el-icon><DeleteFilled /></el-icon>{{ $t('messages.bluk_del') }}</el-button
     >
   </div>

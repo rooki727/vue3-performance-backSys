@@ -24,7 +24,7 @@ export const useUserStore = defineStore('user', () => {
   const getAdminList = async () => {
     const res = await getAdminListAPI()
     // 使用深拷贝函数将 res 的内容复制到 adminList 中
-    adminList.value = res
+    adminList.value = res.result
   }
   // 添加管理员
   const addAdmin = async (name, account, password, verify, gender, phone, email, buildTime) => {
@@ -45,7 +45,7 @@ export const useUserStore = defineStore('user', () => {
   // 普通用户部分
   const getCommonUser = async () => {
     const res = await getCommonUserAPI()
-    commonUserList.value = res
+    commonUserList.value = res.result
   }
 
   // 添加普通用户

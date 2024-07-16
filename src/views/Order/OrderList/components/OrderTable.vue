@@ -101,9 +101,10 @@ const OrderStore = useOrderStore()
 const stateOptions = [
   {
     id: 1,
-    value: t('messages.finish'),
-    label: t('messages.finish')
+    value: t('messages.waitPay'),
+    label: t('messages.waitPay')
   },
+
   {
     id: 2,
     value: t('messages.notFinish'),
@@ -111,6 +112,11 @@ const stateOptions = [
   },
   {
     id: 3,
+    value: t('messages.finish'),
+    label: t('messages.finish')
+  },
+  {
+    id: 4,
     value: t('messages.refunded'),
     label: t('messages.refunded')
   }
@@ -152,7 +158,7 @@ const checkBtnUse = (row) => {
   const timeDiff = currentDate.getTime() - rowTime.getTime()
   // 将时间差转换为天数
   const daysDiff = timeDiff / (1000 * 3600 * 24)
-  if (daysDiff > 30 && row.order_status === '已完成') {
+  if (daysDiff > 30 && row.order_status === '待评价') {
     return false
   } else {
     return true

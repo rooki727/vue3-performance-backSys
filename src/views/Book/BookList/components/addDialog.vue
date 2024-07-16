@@ -6,7 +6,6 @@ import { useBookStore } from '@/stores/BookStore'
 const BookStore = useBookStore()
 const categoryListComputed = computed(() => BookStore.categoryList)
 const categoryList = ref([])
-const statusList = [{ id: 1, status: '未出库' }]
 watch(
   () => categoryListComputed.value,
   (newVal) => {
@@ -30,7 +29,10 @@ const addform = reactive({
   author: '',
   category: '',
   price: null,
-  status: ''
+  stock_quantity: null,
+  picture: '',
+  main_picture: '',
+  introduce: ''
 })
 const rules = {
   book_name: [
@@ -64,7 +66,31 @@ const rules = {
 
     {
       pattern: /^[0-9]+$/, // 使用正则表达式限制输入只能为数字字符
-      message: t('messages.base_digitsonly'), // 自定义提示消息
+      message: t('messages.base_numberdigitsonly'), // 自定义提示消息
+      trigger: 'blur'
+    }
+  ],
+
+  picture: [
+    {
+      required: true,
+      message: t('messages.book_pictureinput'), // 如果未输入picture，则显示此消息
+      trigger: 'blur'
+    }
+  ],
+
+  main_picture: [
+    {
+      required: true,
+      message: t('messages.book_main_pictureinput'), // 如果未输入main_picture，则显示此消息
+      trigger: 'blur'
+    }
+  ],
+
+  introduce: [
+    {
+      required: true,
+      message: t('messages.book_introduceinput'), // 如果未输入introduce，则显示此消息
       trigger: 'blur'
     }
   ]
@@ -76,7 +102,10 @@ const resetForm = () => {
   addform.author = ''
   addform.category = ''
   addform.price = null
-  addform.status = ''
+  addform.stock_quantity = null
+  addform.picture = ''
+  addform.main_picture = ''
+  addform.introduce = ''
 }
 const changeDialogVisible = () => {
   emit('changeDialogVisible', false)
@@ -88,13 +117,17 @@ const submitadd = (addForm) => {
       const date = new Date()
       // api数据请求，添加该book
       emit('changeDialogVisible', false)
+      console.log(addform)
       BookStore.addBookList(
         addform.book_name,
         addform.author,
         addform.category,
         parseInt(addform.price),
-        addform.status,
-        date
+        date,
+        addform.picture,
+        addform.main_picture,
+        addform.introduce,
+        parseInt(addform.stock_quantity)
       )
         .then(() => {
           // 如果 addBookList 没有报错，则执行成功提示
@@ -145,15 +178,38 @@ const submitadd = (addForm) => {
       <el-form-item :label="$t('messages.price')" label-width="8.75rem" prop="price">
         <el-input v-model="addform.price" autocomplete="off" />
       </el-form-item>
-      <el-form-item :label="$t('messages.book_status')" label-width="8.75rem" prop="status">
-        <el-select v-model="addform.status" :placeholder="$t('messages.please_Choose')">
-          <el-option
-            v-for="item in statusList"
-            :key="item.id"
-            :label="item.status"
-            :value="item.status"
-          />
-        </el-select>
+
+      <el-form-item :label="$t('messages.picture')" label-width="8.75rem" prop="picture">
+        <el-input
+          v-model="addform.picture"
+          :placeholder="$t('messages.book_pictureinput')"
+          autocomplete="off"
+        />
+      </el-form-item>
+      <el-form-item :label="$t('messages.main_picture')" label-width="8.75rem" prop="main_picture">
+        <el-input
+          v-model="addform.main_picture"
+          :placeholder="$t('messages.book_main_pictureinput')"
+          autocomplete="off"
+        />
+      </el-form-item>
+      <el-form-item :label="$t('messages.introduce')" label-width="8.75rem" prop="introduce">
+        <el-input
+          v-model="addform.introduce"
+          :placeholder="$t('messages.book_introduceinput')"
+          autocomplete="off"
+        />
+      </el-form-item>
+      <el-form-item
+        :label="$t('messages.stock_quantity')"
+        label-width="8.75rem"
+        prop="stock_quantity"
+      >
+        <el-input
+          v-model="addform.stock_quantity"
+          :placeholder="$t('messages.stock_quantity')"
+          autocomplete="off"
+        />
       </el-form-item>
     </el-form>
     <template #footer>

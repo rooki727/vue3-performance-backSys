@@ -20,6 +20,7 @@ const getTableForm = () => {
   BookStore.getMonthSaleList()
   OrderStore.getOrder()
   OrderStore.getOrderList()
+  console.log(bookCount.value)
 }
 const adminCount = computed(() => userStore.adminList.length)
 const commonUserCount = computed(() => userStore.commonUserList.length)

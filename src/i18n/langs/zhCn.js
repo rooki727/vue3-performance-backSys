@@ -123,10 +123,14 @@ export default {
     price: '单价',
     count: '数量',
     stock_quantity: '库存',
+    sale_number: '销量',
     book_nameinput: '请输入书名',
     book_authorinput: '请输入作者',
     book_categoryinput: '请输入分类',
     book_priceinput: '请输入单价',
+    book_sale_number: '请输入销量',
+
+    base_numberdigitsonly: '请输入数字',
     book_stock_quantityinput: '请输入数量',
     addBook: '添加新书',
     searchBook_input: '根据输入书名、作者或分类搜索',
@@ -151,9 +155,10 @@ export default {
     order_status: '订单状态',
     summaryState: '汇总状态',
     detail: '详情',
-    finish: '已完成',
-    notFinish: '未完成',
-    refunded: '已退货',
+    finish: '待评价',
+    notFinish: '待发货',
+    waitPay: '待付款',
+    refunded: '已退款',
     following_order_Choose: '以下是可汇总的订单选择',
     summaryTime: '汇总时间',
     totalMoney: '总订单金额',
@@ -161,6 +166,12 @@ export default {
     book_build_time: '首次入库时间',
     book_status: '库存状态',
     user_idInput: '根据输入的user_id搜索',
-    account_exists: '账号已存在'
+    account_exists: '账号已存在',
+    book_pictureinput: '请输入至少三张书籍图片链接，以逗号隔开',
+    book_main_pictureinput: '请输入一张封面图片',
+    book_introduceinput: '请输入书本介绍',
+    picture: '简介图片',
+    main_picture: '封面',
+    introduce: '介绍'
   }
 }
