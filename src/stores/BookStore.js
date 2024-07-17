@@ -7,22 +7,22 @@ import {
   addBookListAPI,
   updateBookListAPI,
   deleteBookListAPI,
-  getMonthSaleListAPI
+  getCategorySaleListAPI
 } from '@/apis/book'
 export const useBookStore = defineStore('book', () => {
   const book = ref({})
   const bookList = ref([])
   const categoryList = ref([])
-  const monthSaleList = ref([])
+  const categorySaleList = ref([])
   // 获取book月概要
   const getbooks = async () => {
     const res = await getbooksAPI()
     book.value = res
   }
   // 获取分类销售榜
-  const getMonthSaleList = async () => {
-    const res = await getMonthSaleListAPI()
-    monthSaleList.value = res
+  const getCategorySaleList = async () => {
+    const res = await getCategorySaleListAPI()
+    categorySaleList.value = res
   }
 
   // 获取bookList
@@ -101,13 +101,13 @@ export const useBookStore = defineStore('book', () => {
     book,
     bookList,
     categoryList,
-    monthSaleList,
+    categorySaleList,
     getbooks,
     getbookList,
     getcategoryList,
     addBookList,
     updateBookList,
     deleteBookList,
-    getMonthSaleList
+    getCategorySaleList
   }
 })

@@ -9,7 +9,7 @@ const { t } = useI18n()
 const BookStore = useBookStore()
 // store来的数据，如果需要在script使用，需要使用计算书写拿过来再用
 const monthList = ref([])
-const computedMonthList = computed(() => BookStore.monthSaleList)
+const computedMonthList = computed(() => BookStore.categorySaleList)
 watch(
   () => computedMonthList.value,
   (newVal) => {

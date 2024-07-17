@@ -94,9 +94,9 @@ export const deleteBookListAPI = (book_id) => {
 }
 
 // 获取MonthSaleList
-export const getMonthSaleListAPI = () => {
+export const getCategorySaleListAPI = () => {
   return httpInstance({
-    url: '/book/getMonthSaleList',
+    url: '/book/getCategorySaleList',
     method: 'GET'
   })
 }

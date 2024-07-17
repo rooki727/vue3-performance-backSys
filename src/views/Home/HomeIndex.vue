@@ -17,7 +17,7 @@ const getTableForm = () => {
   BookStore.getbooks()
   BookStore.getbookList()
   BookStore.getcategoryList()
-  BookStore.getMonthSaleList()
+  BookStore.getCategorySaleList()
   OrderStore.getOrder()
   OrderStore.getOrderList()
   console.log(bookCount.value)
