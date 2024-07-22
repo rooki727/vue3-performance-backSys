@@ -129,7 +129,6 @@ export default {
     book_categoryinput: '请输入分类',
     book_priceinput: '请输入单价',
     book_sale_number: '请输入销量',
-
     base_numberdigitsonly: '请输入数字',
     book_stock_quantityinput: '请输入数量',
     addBook: '添加新书',

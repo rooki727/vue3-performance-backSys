@@ -25,7 +25,7 @@
       <template #default="scope">
         <div style="display: flex; align-items: center">
           <el-icon><timer /></el-icon>
-          <span style="margin-left: 10px">{{ scope.row.formattedBuildTime }}</span>
+          <span style="margin-left: 10px">{{ scope.row.buildTime }}</span>
         </div>
       </template>
     </el-table-column>
@@ -33,6 +33,13 @@
       <template #default="scope">
         <div style="display: flex; align-items: center">
           <span style="margin-left: 10px">￥{{ scope.row.price }}</span>
+        </div>
+      </template>
+    </el-table-column>
+    <el-table-column :label="$t('messages.count')" width="100">
+      <template #default="scope">
+        <div style="display: flex; align-items: center">
+          <span style="margin-left: 10px">{{ scope.row.count }}</span>
         </div>
       </template>
     </el-table-column>
@@ -153,7 +160,7 @@ const changeSlecet = async (row) => {
 const checkBtnUse = (row) => {
   const currentDate = new Date()
   // 将指定时间字符串转换为日期对象
-  const rowTime = new Date(row.formattedBuildTime)
+  const rowTime = new Date(row.buildTime)
   // 计算两个日期对象之间的时间差（以毫秒为单位）
   const timeDiff = currentDate.getTime() - rowTime.getTime()
   // 将时间差转换为天数

@@ -64,9 +64,9 @@ const originList = ref([])
 const searchInput = ref('')
 const searchInputState = ref('')
 
-const oringDate = [new Date(2023, 0, 1, 10, 10, 10), new Date()]
+const oringDate = [new Date(2013, 0, 1, 10, 10, 10), new Date()]
 //
-const valueDate = ref([new Date(2023, 0, 1, 10, 10, 10), new Date()]) // 从2023年1月1日到当前日期
+const valueDate = ref([new Date(2013, 0, 1, 10, 10, 10), new Date()]) // 从2013年1月1日到当前日期
 watch(
   () => orderListComputed.value,
   (newVal) => {
@@ -116,12 +116,12 @@ const getDateChoose = (value) => {
     searchInputState.value = ''
     if (filteredOrders.value.length > 0) {
       filteredOrders.value = filteredOrders.value.filter((order) => {
-        const orderDate = new Date(order.formattedBuildTime) // 将订单时间转换为日期对象
+        const orderDate = new Date(order.buildTime) // 将订单时间转换为日期对象
         return orderDate.getTime() >= value[0] && orderDate.getTime() <= value[1] // 比较时间戳是否相等
       })
     } else {
       filteredOrders.value = originList.value.filter((order) => {
-        const orderDate = new Date(order.formattedBuildTime) // 将订单时间转换为日期对象
+        const orderDate = new Date(order.buildTime) // 将订单时间转换为日期对象
         return orderDate.getTime() >= value[0] && orderDate.getTime() <= value[1] // 比较时间戳是否相等
       })
     }
@@ -129,7 +129,7 @@ const getDateChoose = (value) => {
     orderList.value = filteredOrders.value
   } else {
     filteredOrders.value = []
-    valueDate.value = [new Date(2023, 0, 1, 10, 10, 10), new Date()]
+    valueDate.value = [new Date(2013, 0, 1, 10, 10, 10), new Date()]
     if (searchInput.value) {
       handleSearch(searchInput.value)
     } else {
@@ -149,7 +149,7 @@ const handleSearchState = (inputvalue2) => {
     searchInput.value = ''
     filteredOrders.value = []
 
-    valueDate.value = [new Date(2023, 0, 1, 10, 10, 10), new Date()]
+    valueDate.value = [new Date(2013, 0, 1, 10, 10, 10), new Date()]
     let filteredData
     filteredData = originList.value.filter((item) => item.order_status.includes(inputvalue2))
     orderList.value = filteredData
@@ -164,7 +164,7 @@ const handleReset = () => {
   searchInput.value = ''
   orderList.value = originList.value
   filteredOrders.value = []
-  valueDate.value = [new Date(2023, 0, 1, 10, 10, 10), new Date()]
+  valueDate.value = [new Date(2013, 0, 1, 10, 10, 10), new Date()]
 }
 // 添加对话框
 const dialogFormVisible = ref(false)
