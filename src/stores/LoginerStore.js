@@ -5,7 +5,7 @@ import {
   getLoginerPhoneAPI,
   updateBaseAPI,
   getNewLoginerAPI,
-  uploadAvatarAPI
+  updateAvatarAPI
 } from '@/apis/login'
 export const useLoginerStore = defineStore(
   'userLogin',
@@ -56,7 +56,7 @@ export const useLoginerStore = defineStore(
     }
     // 更新头像
     const uploadAvatar = async (id, awatar) => {
-      await uploadAvatarAPI(id, awatar)
+      await updateAvatarAPI(id, awatar)
       getNewLoginer(id)
     }
 

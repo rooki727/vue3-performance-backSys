@@ -67,9 +67,9 @@ export const updateBaseAPI = (id, name, gender, phone, email) => {
 }
 
 // 修改头像
-export const uploadAvatarAPI = (id, awatar) => {
+export const updateAvatarAPI = (id, awatar) => {
   return httpInstance({
-    url: '/user/uploadAvatar',
+    url: '/user/updateAvatar',
     method: 'POST',
     data: {
       id: id,

@@ -19,7 +19,7 @@ const summaryDate = ref([])
 const checkBtnUse = (row) => {
   const currentDate = new Date()
   // 将指定时间字符串转换为日期对象
-  const rowTime = new Date(row.formattedBuildTime)
+  const rowTime = new Date(row.buildTime)
   // 计算两个日期对象之间的时间差（以毫秒为单位）
   const timeDiff = currentDate.getTime() - rowTime.getTime()
   // 将时间差转换为天数
@@ -82,8 +82,11 @@ const rules = {
 // 根据选择获取数据表
 const updateAccountOptions = () => {
   summaryDate.value = chooseAll.value.filter((item) => item.user_id === addform.user_id)
-  addform.totalMoney = summaryDate.value.reduce((total, item) => total + parseInt(item.price), 0)
-  addform.totalCount = summaryDate.value.length
+  addform.totalMoney = summaryDate.value.reduce(
+    (total, item) => total + parseInt(item.order_money),
+    0
+  )
+  addform.totalCount = summaryDate.value.reduce((total, item) => total + parseInt(item.number), 0)
   const date = new Date()
   addform.time = date
 }

@@ -81,6 +81,8 @@ export default {
     generate_captcha: '获取验证码',
     captcha_input: '请输入验证码',
     captcha_check: '请校验输入验证码',
+    book_pressinput: '请输入出版社',
+    press: '出版社',
     Unbinding_debinding: '解绑/注销',
     debinding_reason: '请输入你的注销账号的原因',
     seven_major_book_categories: '七大图书类别销量月榜',
@@ -154,7 +156,7 @@ export default {
     order_status: '订单状态',
     summaryState: '汇总状态',
     detail: '详情',
-    finish: '待评价',
+    finish: '已完成',
     notFinish: '待发货',
     waitPay: '待付款',
     refunded: '已退款',
@@ -166,11 +168,12 @@ export default {
     book_status: '库存状态',
     user_idInput: '根据输入的user_id搜索',
     account_exists: '账号已存在',
-    book_pictureinput: '请输入至少三张书籍图片链接，以逗号隔开',
+    book_pictureinput: '请输入至少三张书籍图片链接，以、隔开',
     book_main_pictureinput: '请输入一张封面图片',
     book_introduceinput: '请输入书本介绍',
     picture: '简介图片',
     main_picture: '封面',
-    introduce: '介绍'
+    introduce: '介绍',
+    comment: '待评价'
   }
 }

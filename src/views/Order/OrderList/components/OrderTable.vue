@@ -7,13 +7,7 @@
         </div>
       </template>
     </el-table-column>
-    <el-table-column label="book_id" width="130">
-      <template #default="scope">
-        <div style="display: flex; align-items: center">
-          <span style="margin-left: 10px">{{ scope.row.book_id }}</span>
-        </div>
-      </template>
-    </el-table-column>
+
     <el-table-column label="user_id" width="160">
       <template #default="scope">
         <div style="display: flex; align-items: center">
@@ -32,14 +26,14 @@
     <el-table-column :label="$t('messages.perOrderMoney')" width="160">
       <template #default="scope">
         <div style="display: flex; align-items: center">
-          <span style="margin-left: 10px">￥{{ scope.row.price }}</span>
+          <span style="margin-left: 10px">￥{{ scope.row.order_money }}</span>
         </div>
       </template>
     </el-table-column>
     <el-table-column :label="$t('messages.count')" width="100">
       <template #default="scope">
         <div style="display: flex; align-items: center">
-          <span style="margin-left: 10px">{{ scope.row.count }}</span>
+          <span style="margin-left: 10px">{{ scope.row.number }}</span>
         </div>
       </template>
     </el-table-column>
@@ -119,13 +113,18 @@ const stateOptions = [
   },
   {
     id: 3,
-    value: t('messages.finish'),
-    label: t('messages.finish')
+    value: t('messages.comment'),
+    label: t('messages.comment')
   },
   {
     id: 4,
     value: t('messages.refunded'),
     label: t('messages.refunded')
+  },
+  {
+    id: 5,
+    value: t('messages.finish'),
+    label: t('messages.finish')
   }
 ]
 // 分页功能
@@ -165,7 +164,7 @@ const checkBtnUse = (row) => {
   const timeDiff = currentDate.getTime() - rowTime.getTime()
   // 将时间差转换为天数
   const daysDiff = timeDiff / (1000 * 3600 * 24)
-  if (daysDiff > 30 && row.order_status === '待评价') {
+  if (daysDiff > 30 && row.order_status === '已完成') {
     return false
   } else {
     return true

@@ -43,24 +43,24 @@ export const useBookStore = defineStore('book', () => {
     author,
     category,
     price,
-
     buildTime,
     picture,
     main_picture,
     introduce,
-    stock
+    stock,
+    press
   ) => {
     await addBookListAPI(
       book_name,
       author,
       category,
       price,
-
       buildTime,
       picture,
       main_picture,
       introduce,
-      stock
+      stock,
+      press
     )
     getbookList()
   }
@@ -75,7 +75,8 @@ export const useBookStore = defineStore('book', () => {
     main_picture,
     introduce,
     stock,
-    sale_number
+    sale_number,
+    press
   ) => {
     await updateBookListAPI(
       book_id,
@@ -87,7 +88,8 @@ export const useBookStore = defineStore('book', () => {
       main_picture,
       introduce,
       stock,
-      sale_number
+      sale_number,
+      press
     )
     getbookList()
   }

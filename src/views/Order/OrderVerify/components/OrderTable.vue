@@ -86,7 +86,7 @@ const computedOrderList = computed(() => props.orderList)
 const tableData = ref([])
 
 const handleDelete = async (row) => {
-  await OrderStore.deleteSummaryList(row.id)
+  await OrderStore.deleteSummaryList(row.summary_id)
   ElMessage({ type: 'success', message: `成功删除订单：${row.summary_id} !` })
 }
 

@@ -33,7 +33,8 @@ export const addBookListAPI = (
   picture,
   main_picture,
   introduce,
-  stock
+  stock,
+  press
 ) => {
   return httpInstance({
     url: '/book/addBook',
@@ -47,7 +48,8 @@ export const addBookListAPI = (
       picture: picture,
       main_picture: main_picture,
       introduce: introduce,
-      stock: stock
+      stock: stock,
+      press: press
     }
   })
 }
@@ -63,7 +65,8 @@ export const updateBookListAPI = (
   main_picture,
   introduce,
   stock,
-  sale_number
+  sale_number,
+  press
 ) => {
   return httpInstance({
     url: '/book/updateBook',
@@ -78,7 +81,8 @@ export const updateBookListAPI = (
       main_picture: main_picture,
       introduce: introduce,
       stock: stock,
-      sale_number: sale_number
+      sale_number: sale_number,
+      press: press
     }
   })
 }

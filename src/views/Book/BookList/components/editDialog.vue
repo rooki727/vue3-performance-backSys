@@ -3,6 +3,7 @@ import { reactive, computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { ElMessage } from 'element-plus'
 import { useBookStore } from '@/stores/BookStore'
+import axios from 'axios'
 const BookStore = useBookStore()
 const categoryListComputed = computed(() => BookStore.categoryList)
 const categoryList = ref([])
@@ -34,7 +35,8 @@ const addform = reactive({
   sale_number: null,
   picture: '',
   main_picture: '',
-  introduce: ''
+  introduce: '',
+  press: ''
 })
 
 const rules = {
@@ -109,6 +111,13 @@ const rules = {
       message: t('messages.base_numberdigitsonly'), // 自定义提示消息
       trigger: 'blur'
     }
+  ],
+  press: [
+    {
+      required: true,
+      message: t('messages.book_pressinput'), // 如果未输入press，则显示此消息
+      trigger: 'blur'
+    }
   ]
 }
 
@@ -117,7 +126,33 @@ const changeDialogVisible = () => {
   emit('updateClickRow', {}) // 发送事件给父组件，请求修改props.clickRow的值为null
   emit('changeDialogVisible', false)
 }
-
+// 处理文件变化事件
+const handleFileChange = (event) => {
+  const file = event.target.files[0]
+  console.log(file)
+  const formData = new FormData()
+  formData.append('image', file)
+  // 调用上传头像的方法 uploadAvatar
+  axios
+    .post(`http://localhost:8080/library_ssm/file/uploadBookMainPicture`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    .then((response) => {
+      // 使用后端返回的路径
+      addform.main_picture = response.data.result
+      console.log(addform.main_picture)
+    })
+    .catch((error) => {
+      console.error('Error uploading file: ', error)
+    })
+  ElMessage({
+    message: '修改成功',
+    type: 'success',
+    plain: true
+  })
+}
 const submitadd = (addForm) => {
   addForm.validate((valid) => {
     if (valid) {
@@ -133,7 +168,8 @@ const submitadd = (addForm) => {
         addform.main_picture,
         addform.introduce,
         parseInt(addform.stock),
-        parseInt(addform.sale_number)
+        parseInt(addform.sale_number),
+        addform.press
       )
         .then(() => {
           // 如果 addUser 没有报错，则执行成功提示
@@ -178,6 +214,13 @@ watch(
       <el-form-item :label="$t('messages.author')" label-width="8.75rem" prop="author">
         <el-input v-model="addform.author" autocomplete="off" />
       </el-form-item>
+      <el-form-item :label="$t('messages.press')" label-width="8.75rem" prop="press">
+        <el-input
+          v-model="addform.press"
+          :placeholder="$t('messages.book_pressinput')"
+          autocomplete="off"
+        />
+      </el-form-item>
       <!-- 使用下拉框选择分类 -->
       <el-form-item :label="$t('messages.category')" label-width="8.75rem" prop="category">
         <el-select v-model="addform.category" :placeholder="$t('messages.please_Choose')">
@@ -199,12 +242,37 @@ watch(
           autocomplete="off"
         />
       </el-form-item>
-      <el-form-item :label="$t('messages.main_picture')" label-width="8.75rem" prop="main_picture">
-        <el-input
-          v-model="addform.main_picture"
-          :placeholder="$t('messages.book_main_pictureinput')"
-          autocomplete="off"
-        />
+      <!-- 图片上传区 -->
+      <el-form-item
+        :label="$t('messages.main_picture')"
+        label-width="8.75rem"
+        prop="main_picture"
+        class="mainPicturePart"
+      >
+        <div class="mainPictureDiv" @click="handClickPicture">
+          <el-image
+            class="mainPicture"
+            :src="addform.main_picture"
+            @error="handleError('填写后端传来的图片加载失败messages')"
+          >
+            <template #error>
+              <div class="image-slot">
+                <el-icon><icon-picture /></el-icon>
+              </div>
+            </template>
+          </el-image>
+        </div>
+        <div class="uploadDiv">
+          <button id="upload-btn">
+            <input
+              id="fileInput"
+              ref="fileInput"
+              type="file"
+              @change="handleFileChange"
+              accept="image/*"
+            />
+          </button>
+        </div>
       </el-form-item>
       <el-form-item :label="$t('messages.introduce')" label-width="8.75rem" prop="introduce">
         <el-input
@@ -240,3 +308,48 @@ watch(
 </template>
 
 
+<style lang="scss" scoped>
+/* 上传 */
+#upload-btn {
+  margin-left: 10px;
+  margin-top: 8px;
+  position: relative;
+  width: 100px;
+  height: 100px;
+  background-color: #ccc;
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+}
+#upload-btn input[type='file'] {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+#upload-btn::before {
+  content: '+';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 36px;
+  color: #fff;
+}
+.mainPictureDiv {
+  width: 100px;
+  height: 100px;
+  cursor: pointer;
+  .mainPicture {
+    display: block;
+    width: 100px;
+    height: 100px;
+  }
+}
+.mainPicturePart {
+  display: flex;
+}
+</style>

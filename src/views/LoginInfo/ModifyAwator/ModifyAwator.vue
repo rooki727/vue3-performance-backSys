@@ -4,9 +4,11 @@ import { useLoginerStore } from '@/stores/LoginerStore'
 import { Picture as IconPicture } from '@element-plus/icons-vue'
 import { computed, ref } from 'vue'
 import { ElMessage } from 'element-plus'
+import axios from 'axios'
 const LoginerStore = useLoginerStore()
 const currentAwator = ref('')
 const LoginerId = computed(() => LoginerStore.userInfo.id)
+
 // 捕获错误信息
 const handleError = (error) => {
   let errorMessage = error.message || 'An unknown error occurred'
@@ -25,21 +27,36 @@ const openFilePicker = () => {
 // 处理文件变化事件
 const handleFileChange = (event) => {
   const file = event.target.files[0]
-  currentAwator.value = URL.createObjectURL(file)
+  // currentAwator.value = URL.createObjectURL(file)
+  const formData = new FormData()
+  formData.append('image', file)
+  // 调用上传头像的方法 uploadAvatar
+  axios
+    .post(`http://localhost:8080/library_ssm/user/uploadAvatar`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    .then((response) => {
+      // 原本因需要使用后端返回的路径。无服务器而不用
+      currentAwator.value = response.data.result
+      console.log(currentAwator.value)
+    })
+    .catch((error) => {
+      console.error('Error uploading file: ', error)
+    })
+  ElMessage({
+    message: '修改成功',
+    type: 'success',
+    plain: true
+  })
 }
 
 const centerDialogVisible = ref(false)
-const uploadSave = () => {
+const uploadSave = async () => {
   if (currentAwator.value != '') {
     LoginerStore.userInfo.awatar = currentAwator.value
-
-    // 调用上传头像的方法 uploadAvatar
     LoginerStore.uploadAvatar(LoginerId.value, currentAwator.value)
-    ElMessage({
-      message: '修改成功',
-      type: 'success',
-      plain: true
-    })
     currentAwator.value = ''
   } else {
     centerDialogVisible.value = true

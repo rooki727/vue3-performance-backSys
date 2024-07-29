@@ -72,9 +72,10 @@ export const addSummaryListAPI = (user_id, buildTime, totalMoney, totalCount) =>
 }
 
 // 删除汇总订单
-export const deleteSummaryListAPI = (id) => {
+export const deleteSummaryListAPI = (summary_id) => {
   return httpInstance({
-    url: `/SummaryList/${id}`,
-    method: 'POST'
+    url: '/summary/deleteSummary',
+    method: 'POST',
+    data: { summary_id: summary_id }
   })
 }
