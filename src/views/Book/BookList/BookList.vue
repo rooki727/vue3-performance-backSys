@@ -67,9 +67,9 @@ const handleSearch = (inputvalue) => {
     // 根据输入值过滤数据
     const filteredData = originalData.filter((item) => {
       return (
-        item.book_name.includes(inputvalue) ||
-        item.author.includes(inputvalue) ||
-        item.category.includes(inputvalue)
+        item?.book_name?.includes(inputvalue) ||
+        item?.author?.includes(inputvalue) ||
+        item?.category?.includes(inputvalue)
       )
     })
     // 更新表格数据

@@ -55,6 +55,7 @@ const resetSearch = () => {
 // 监听输入框的 input 事件，触发搜索功能
 const handleSearch = (inputvalue) => {
   // 进行搜索操作，可以在这里触发相应的搜索逻辑
+  console.log(111)
   // 备份原始数据
   const originalData = [...originaltableCommonUser.value]
 
@@ -63,7 +64,7 @@ const handleSearch = (inputvalue) => {
     tableCommonUser.value = [...originaltableCommonUser.value]
   } else {
     // 根据输入值过滤数据
-    const filteredData = originalData.filter((item) => item.name.includes(inputvalue))
+    const filteredData = originalData.filter((item) => item?.name?.includes(inputvalue))
     // 更新表格数据
     tableCommonUser.value = filteredData
   }

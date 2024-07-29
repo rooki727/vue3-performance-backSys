@@ -64,7 +64,7 @@ const handleSearch = (inputvalue) => {
     tableformAdmin.value = [...originalTableformAdmin.value]
   } else {
     // 根据输入值过滤数据
-    const filteredData = originalData.filter((item) => item.name.includes(inputvalue))
+    const filteredData = originalData.filter((item) => item?.name?.includes(inputvalue))
     // 更新表格数据
     tableformAdmin.value = filteredData
   }
