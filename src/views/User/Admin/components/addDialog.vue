@@ -187,7 +187,7 @@ const checkAccountExist = async () => {
       </el-form-item>
       <!-- 使用下拉框选择权限 -->
       <el-form-item :label="$t('messages.verify')" label-width="8.75rem" prop="verify">
-        <el-select v-model="addform.verify" placeholder="请选择类型">
+        <el-select v-model="addform.verify" :placeholder="$t('messages.please_Choose')">
           <el-option
             v-for="item in verifyChoose"
             :key="item.id"

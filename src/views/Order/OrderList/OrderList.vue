@@ -22,7 +22,9 @@
       @input="handleSearch"
       clearable
     ></el-input>
-    <el-button type="primary" round style="margin-left: 3rem" @click="handleReset">重置</el-button>
+    <el-button type="primary" round style="margin-left: 3rem" @click="handleReset">{{
+      $t('messages.reset')
+    }}</el-button>
   </div>
   <div style="margin-top: 1.1rem; margin-left: 0.2rem">
     <el-input

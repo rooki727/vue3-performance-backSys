@@ -157,9 +157,11 @@ export default {
     summaryState: '汇总状态',
     detail: '详情',
     finish: '已完成',
-    notFinish: '待发货',
+    DaiFaHuo: '待发货',
     waitPay: '待付款',
     refunded: '已退款',
+    DaiShouHuo: '待收货',
+    comment: '待评价',
     following_order_Choose: '以下是可汇总的订单选择',
     summaryTime: '汇总时间',
     totalMoney: '总订单金额',
@@ -173,7 +175,6 @@ export default {
     book_introduceinput: '请输入书本介绍',
     picture: '简介图片',
     main_picture: '封面',
-    introduce: '介绍',
-    comment: '待评价'
+    introduce: '介绍'
   }
 }

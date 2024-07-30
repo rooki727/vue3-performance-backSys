@@ -108,21 +108,27 @@ const stateOptions = [
 
   {
     id: 2,
-    value: t('messages.notFinish'),
-    label: t('messages.notFinish')
+    value: t('messages.DaiFaHuo'),
+    label: t('messages.DaiFaHuo')
   },
+
   {
     id: 3,
+    value: t('messages.DaiShouHuo'),
+    label: t('messages.DaiShouHuo')
+  },
+  {
+    id: 4,
     value: t('messages.comment'),
     label: t('messages.comment')
   },
   {
-    id: 4,
+    id: 5,
     value: t('messages.refunded'),
     label: t('messages.refunded')
   },
   {
-    id: 5,
+    id: 6,
     value: t('messages.finish'),
     label: t('messages.finish')
   }
