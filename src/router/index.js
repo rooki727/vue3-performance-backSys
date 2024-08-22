@@ -15,6 +15,7 @@ import BasicInfo from '@/views/LoginInfo/BasicInfo/BasicInfo.vue'
 import CancelAccount from '@/views/LoginInfo/CancelAccount/CancelAccount.vue'
 import ModifyAwator from '@/views/LoginInfo/ModifyAwator/ModifyAwator.vue'
 import PasswordManagement from '@/views/LoginInfo/PasswordManagement/PasswordManagement.vue'
+import OrderLogistics from '@/views/Order/OrderLogistics/OrderLogistics.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
@@ -105,6 +106,11 @@ const router = createRouter({
               path: 'orderverify',
               component: OrderVerify,
               name: OrderVerify
+            },
+            {
+              path: 'orderLogistics',
+              component: OrderLogistics,
+              name: OrderLogistics
             }
           ]
         }

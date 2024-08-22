@@ -3,7 +3,10 @@ import { reactive, computed, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/stores/userStore'
+import { useLoginerStore } from '@/stores/LoginerStore'
 const userStore = useUserStore()
+const LoginerStore = useLoginerStore()
+const login_id = computed(() => LoginerStore.userInfo.id)
 // 获取t方法才可以在js代码里使用
 const { t } = useI18n()
 // 弹框功能设置
@@ -108,16 +111,7 @@ const submitadd = (addForm) => {
       // api数据请求，添加该用户的信息
       emit('changeDialogVisible', false)
       userStore
-        .updateAdmin(
-          addform.id,
-          addform.name,
-          parseInt(addform.account),
-          addform.verify,
-          addform.gender,
-          parseInt(addform.phone),
-          addform.email,
-          addform.password
-        )
+        .updateAdmin(addform, login_id.value)
         .then(() => {
           // 如果 addUser 没有报错，则执行成功提示
           ElMessage({ type: 'success', message: '修改成功' })

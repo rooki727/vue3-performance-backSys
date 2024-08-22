@@ -53,6 +53,10 @@ const changeBreadName = () => {
         secondBreadName.value = t('messages.order_manage')
         thitdBreadName.value = t('messages.order_check')
         break
+      case '/order/orderLogistics':
+        secondBreadName.value = t('messages.order_manage')
+        thitdBreadName.value = t('messages.orderLogistics')
+        break
       case '/loginInfo/basicinfo':
         secondBreadName.value = t('messages.LoginerInfo')
         thitdBreadName.value = t('messages.Basic_information')

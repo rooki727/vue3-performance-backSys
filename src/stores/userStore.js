@@ -27,18 +27,18 @@ export const useUserStore = defineStore('user', () => {
     adminList.value = res.result
   }
   // 添加管理员
-  const addAdmin = async (name, account, password, verify, gender, phone, email, buildTime) => {
-    await addAdminListAPI(name, account, password, verify, gender, phone, email, buildTime)
+  const addAdmin = async (admin, login_id) => {
+    await addAdminListAPI(admin, login_id)
     getAdminList()
   }
   // 修改管理员信息
-  const updateAdmin = async (id, name, account, verify, gender, phone, email, password) => {
-    await updateAdminListAPI(id, name, account, verify, gender, phone, email, password)
+  const updateAdmin = async (admin, login_id) => {
+    await updateAdminListAPI(admin, login_id)
     getAdminList()
   }
   // 删除管理员
-  const deleteAdmin = async (id) => {
-    await deleteAdminAPI(id)
+  const deleteAdmin = async (admin, login_id) => {
+    await deleteAdminAPI(admin, login_id)
     getAdminList()
   }
 

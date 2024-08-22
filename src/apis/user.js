@@ -39,56 +39,36 @@ export const checkUserAccountAPI = (account) => {
 }
 
 // 添加管理员
-export const addAdminListAPI = (
-  name,
-  account,
-  password,
-  verify,
-  gender,
-  phone,
-  email,
-  buildTime
-) => {
+export const addAdminListAPI = (admin, login_id) => {
   return httpInstance({
     url: '/user/addAdmin',
     method: 'POST',
     data: {
-      name: name,
-      account: account,
-      password: password,
-      verify: verify,
-      gender: gender,
-      phone: phone,
-      email: email,
-      buildTime: buildTime
+      admin: admin,
+      login_id: login_id
     }
   })
 }
 
 // 修改管理员
-export const updateAdminListAPI = (id, name, account, verify, gender, phone, email, password) => {
+export const updateAdminListAPI = (admin, login_id) => {
   return httpInstance({
-    url: '/user/updateAdmin',
+    url: '/user/updateAdminById',
     method: 'POST',
     data: {
-      id: id,
-      name: name,
-      account: account,
-      verify: verify,
-      gender: gender,
-      phone: phone,
-      email: email,
-      password: password
+      admin: admin,
+      login_id: login_id
     }
   })
 }
 // 删除管理员
-export const deleteAdminAPI = (id) => {
+export const deleteAdminAPI = (admin, login_id) => {
   return httpInstance({
     url: '/user/deleteAdmin',
     method: 'POST',
     data: {
-      id: id
+      admin: admin,
+      login_id: login_id
     }
   })
 }

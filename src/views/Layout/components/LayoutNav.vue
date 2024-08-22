@@ -100,6 +100,12 @@ defineExpose({ removeActive })
         :class="{ 'is-active': $route.path === '/order/orderverify' }"
         >{{ $t('messages.order_check') }}</el-menu-item
       >
+      <el-menu-item
+        id="removeAcitve"
+        index="/order/orderLogistics"
+        :class="{ 'is-active': $route.path === '/order/orderLogistics' }"
+        >{{ $t('messages.orderLogistics') }}</el-menu-item
+      >
     </el-sub-menu>
   </el-menu>
 </template>

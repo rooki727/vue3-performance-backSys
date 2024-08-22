@@ -69,7 +69,7 @@ export default {
     Password: '密码',
     Confirm_Password: '确认密码',
     passSubmit_tip: '请填写符合要求的信息',
-    base_nameinput: '请输入user_id',
+    base_nameinput: '请输入昵称',
     base_namerule: '昵称最小长度为5',
     base_phoneinput: '请输入电话号码',
     base_phonerule: '电话号码最小长度为11',
@@ -175,6 +175,19 @@ export default {
     book_introduceinput: '请输入书本介绍',
     picture: '简介图片',
     main_picture: '封面',
-    introduce: '介绍'
+    introduce: '介绍',
+    orderLogistics: '物流管理',
+    following_Logistics: '以下是物流信息',
+    order_idInput: '根据输入的order_id搜索',
+    company_name: '物流公司',
+    company_tel: '物流电话',
+    text: '物流信息',
+    time: '物流时间',
+    logistics_number: '物流单号',
+    upadateLogisticsDetail: '更新物流',
+    newLogisticsDetail: '新建物流',
+    inputNewLogistics: '输入新物流信息',
+    TimeForNewLogistics: '新物流信息的时间',
+    chooseTimeForNewLogistics: '选择新物流信息的时间'
   }
 }

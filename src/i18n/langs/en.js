@@ -178,6 +178,19 @@ export default {
     book_introduceinput: 'Please enter a book introduction',
     picture: 'Introductory image',
     main_picture: 'cover',
-    introduce: 'introduce'
+    introduce: 'introduce',
+    orderLogistics: 'Logistics management',
+    following_Logistics: 'The following is the logistics information',
+    order_idInput: 'Search based on the order_id entered',
+    company_name: 'Logistics companies',
+    company_tel: 'Logistics calls',
+    text: 'Logistics information',
+    time: 'Logistical time',
+    logistics_number: 'Tracking number',
+    upadateLogisticsDetail: 'Update logistics',
+    newLogisticsDetail: 'New logistics',
+    inputNewLogistics: 'Enter the new tracking information',
+    TimeForNewLogistics: 'The time of the new logistics information',
+    chooseTimeForNewLogistics: 'Select the time for the new logistics information'
   }
 }

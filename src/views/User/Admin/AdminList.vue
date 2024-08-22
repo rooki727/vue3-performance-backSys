@@ -10,6 +10,7 @@ import { ElMessage } from 'element-plus'
 // 获取t方法才可以在js代码里使用
 const { t } = useI18n()
 const LoginerStore = useLoginerStore()
+const login_id = computed(() => LoginerStore.userInfo.id)
 const UserStore = useUserStore()
 // 搜索功能变量
 const searchInput = ref('')
@@ -71,17 +72,21 @@ const handleSearch = (inputvalue) => {
 }
 
 // 批量删除功能
-const delTableId = ref([])
+const delTable = ref([])
 const getDelTable = (value) => {
-  delTableId.value = value
+  delTable.value = value
 }
 const blukDel = () => {
-  if (delTableId.value.length > 0) {
+  if (delTable.value.length > 0) {
     // 执行请求操作
-    delTableId.value.forEach((item) => UserStore.deleteAdmin(item))
+    delTable.value.forEach((item) => {
+      setTimeout(() => {
+        UserStore.deleteAdmin(item, login_id.value)
+      }, 400)
+    })
     ElMessage({ type: 'success', message: '批量删除成功' })
     // 删除完后清空数据
-    delTableId.value = []
+    delTable.value = []
   } else {
     ElMessage({
       type: 'error',

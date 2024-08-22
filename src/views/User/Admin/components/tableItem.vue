@@ -123,13 +123,13 @@ const handleSelectionChange = (val) => {
   multipleSelection.value = val
   if (multipleSelection.value.length > 0) {
     // 使用map方法遍历multipleSelection.value数组，并将每个选中项的id存储到一个新的数组中
-    const selectedIds = multipleSelection.value.map((item) => item.id)
+    // const selectedIds = multipleSelection.value.map((item) => item.id)
     // 将所选数据提供给父组件
-    emit('getDelTable', selectedIds)
+    emit('getDelTable', multipleSelection.value)
   }
 }
 const loginerVerify = computed(() => LoginerStore.userInfo?.verify)
-
+const login_id = computed(() => LoginerStore.userInfo.id)
 const checkSelectable = (row) => {
   // 根据特定条件判断复选框是否可用
   if (row.verify === 'first' || loginerVerify.value !== 'first') {
@@ -146,12 +146,13 @@ const handleEdit = (row) => {
   // 在这里使用 row 数据执行编辑操作
   clickRow.value = row
 }
-
+// 删除
 const handleDelete = async (row) => {
   // 在这里使用 row 数据执行删除操作
+
   // api服务器删除后重新获取列表
   userStore
-    .deleteAdmin(row.id)
+    .deleteAdmin(row, login_id.value)
     .then(() => {
       ElMessage({ type: 'success', message: '删除成功' })
     })

@@ -5,6 +5,7 @@ import router from '@/router'
 import { useLoginerStore } from '@/stores/LoginerStore'
 const httpInstance = axios.create({
   baseURL: 'http://175.178.187.126:8888/library_ssm',
+  // baseURL: 'http://localhost:8080/library_ssm',
   timeout: 5000
 })
 
@@ -38,7 +39,7 @@ httpInstance.interceptors.response.use(
     ElMessage({
       type: 'warning',
       // 具体可写后端提供的错误信息
-      message: '请求错误'
+      message: '请检查您的网络或请求信息是否有误'
     })
     // 401token失效处理
     if (error.response && error.response.data && error.response.data.error === 'Unauthorized') {

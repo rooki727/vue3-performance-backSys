@@ -4,7 +4,10 @@ import { useI18n } from 'vue-i18n'
 import { ElMessage } from 'element-plus'
 import { useUserStore } from '@/stores/userStore'
 import { checkAdminAccountAPI } from '@/apis/user'
+import { useLoginerStore } from '@/stores/LoginerStore'
 const userStore = useUserStore()
+const LoginerStore = useLoginerStore()
+const login_id = computed(() => LoginerStore.userInfo.id)
 // 获取t方法才可以在js代码里使用
 const { t } = useI18n()
 // 弹框功能设置
@@ -118,21 +121,16 @@ const submitadd = (addForm) => {
       // api数据请求，添加该用户的信息
       emit('changeDialogVisible', false)
       const date = new Date()
-      console.log(date)
+      addform.buildTime = date
       userStore
-        .addAdmin(
-          addform.name,
-          parseInt(addform.account),
-          addform.password,
-          addform.verify,
-          addform.gender,
-          addform.phone,
-          addform.email,
-          date
-        )
-        .then(() => {
-          ElMessage({ type: 'success', message: '添加成功' })
-          resetForm()
+        .addAdmin(addform, login_id.value)
+        .then((res) => {
+          if (res.result) {
+            ElMessage({ type: 'success', message: '添加成功' })
+            resetForm()
+          } else {
+            ElMessage({ type: 'success', message: '请确认您的权限或信息' })
+          }
         })
         .catch(() => {
           // 处理请求失败的情况
