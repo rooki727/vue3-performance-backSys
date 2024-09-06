@@ -16,10 +16,11 @@ import CancelAccount from '@/views/LoginInfo/CancelAccount/CancelAccount.vue'
 import ModifyAwator from '@/views/LoginInfo/ModifyAwator/ModifyAwator.vue'
 import PasswordManagement from '@/views/LoginInfo/PasswordManagement/PasswordManagement.vue'
 import OrderLogistics from '@/views/Order/OrderLogistics/OrderLogistics.vue'
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory } from 'vue-router'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHashHistory(),
+
   routes: [
     {
       path: '/',

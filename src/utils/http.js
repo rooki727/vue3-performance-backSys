@@ -4,7 +4,7 @@ import 'element-plus/theme-chalk/el-message.css'
 import router from '@/router'
 import { useLoginerStore } from '@/stores/LoginerStore'
 const httpInstance = axios.create({
-  baseURL: 'http://175.178.187.126:8888/library_ssm',
+  baseURL: 'http://119.29.168.176:8080/library_ssm',
   // baseURL: 'http://localhost:8080/library_ssm',
   timeout: 5000
 })
