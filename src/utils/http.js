@@ -41,8 +41,15 @@ httpInstance.interceptors.response.use(
       // 具体可写后端提供的错误信息
       message: '请检查您的网络或请求信息是否有误'
     })
-    // 401token失效处理
-    if (error.response && error.response.data && error.response.data.error === 'Unauthorized') {
+    // 401 token失效处理
+    if (error.response && error.response.status === 401) {
+      ElMessage({
+        type: 'warning',
+        // 具体可写后端提供的错误信息
+        message: '身份信息过期或验证信息有误'
+      })
+      const loginerStore = useLoginerStore()
+      loginerStore.clearUser()
       router.push('/login')
     }
     return Promise.reject(error)

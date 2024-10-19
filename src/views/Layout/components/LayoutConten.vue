@@ -73,7 +73,10 @@ const changeBreadName = () => {
         secondBreadName.value = t('messages.LoginerInfo')
         thitdBreadName.value = t('messages.Cancel_account')
         break
-
+      case '/chat/chatservice':
+        secondBreadName.value = t('messages.chatManager')
+        thitdBreadName.value = t('messages.chatService')
+        break
       default:
         // 默认情况下的处理逻辑
         break

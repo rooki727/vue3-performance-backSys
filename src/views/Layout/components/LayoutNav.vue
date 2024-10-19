@@ -107,6 +107,22 @@ defineExpose({ removeActive })
         >{{ $t('messages.orderLogistics') }}</el-menu-item
       >
     </el-sub-menu>
+    <el-sub-menu
+      index="/chat"
+      :class="{ 'is-active': $route.path.startsWith('/chat') }"
+      id="removeAcitve"
+    >
+      <template #title>
+        <el-icon><Location /></el-icon>
+        <span>{{ $t('messages.chatManager') }}</span>
+      </template>
+      <el-menu-item
+        id="removeAcitve"
+        index="/chat/chatservice"
+        :class="{ 'is-active': $route.path === '/chat/chatservice' }"
+        >{{ $t('messages.chatService') }}</el-menu-item
+      >
+    </el-sub-menu>
   </el-menu>
 </template>
 

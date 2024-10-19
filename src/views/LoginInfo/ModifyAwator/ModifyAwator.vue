@@ -32,24 +32,21 @@ const handleFileChange = (event) => {
   formData.append('image', file)
   // 调用上传头像的方法 uploadAvatar
   axios
-    .post(`http://localhost:8080/library_ssm/user/uploadAvatar`, formData, {
+    .post(`http://119.29.168.176:8080/library_ssm/file/uploadPicture`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     })
     .then((response) => {
-      // 原本因需要使用后端返回的路径。无服务器而不用
       currentAwator.value = response.data.result
-      console.log(currentAwator.value)
+      ElMessage.success({
+        message: '上传成功',
+        type: 'success'
+      })
     })
     .catch((error) => {
       console.error('Error uploading file: ', error)
     })
-  ElMessage({
-    message: '修改成功',
-    type: 'success',
-    plain: true
-  })
 }
 
 const centerDialogVisible = ref(false)

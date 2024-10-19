@@ -188,6 +188,8 @@ export default {
     newLogisticsDetail: '新建物流',
     inputNewLogistics: '输入新物流信息',
     TimeForNewLogistics: '新物流信息的时间',
-    chooseTimeForNewLogistics: '选择新物流信息的时间'
+    chooseTimeForNewLogistics: '选择新物流信息的时间',
+    chatService: '客服服务',
+    chatManager: '客服管理'
   }
 }

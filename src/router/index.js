@@ -16,6 +16,8 @@ import CancelAccount from '@/views/LoginInfo/CancelAccount/CancelAccount.vue'
 import ModifyAwator from '@/views/LoginInfo/ModifyAwator/ModifyAwator.vue'
 import PasswordManagement from '@/views/LoginInfo/PasswordManagement/PasswordManagement.vue'
 import OrderLogistics from '@/views/Order/OrderLogistics/OrderLogistics.vue'
+import ChatIndex from '@/views/Chat/ChatIndex.vue'
+import ChatService from '@/views/Chat/ChatService/ChatService.vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 
 const router = createRouter({
@@ -112,6 +114,18 @@ const router = createRouter({
               path: 'orderLogistics',
               component: OrderLogistics,
               name: OrderLogistics
+            }
+          ]
+        },
+        {
+          path: '/chat',
+          component: ChatIndex,
+          name: ChatIndex,
+          children: [
+            {
+              path: 'chatservice',
+              component: ChatService,
+              name: ChatService
             }
           ]
         }

@@ -3,7 +3,7 @@ import { useLoginerStore } from '@/stores/LoginerStore'
 import { ref, reactive, onMounted } from 'vue'
 import DialogTip from '@/components/DialogTip.vue'
 import { useI18n } from 'vue-i18n'
-import { ElMessage } from 'element-plus'
+
 // 获取t方法才可以在js代码里使用
 const { t } = useI18n()
 const LoginerStore = useLoginerStore()
@@ -65,15 +65,7 @@ const submitForm = (formRef) => {
         userForm.gender,
         parseInt(userForm.phone),
         userForm.email
-      ).then(() => {
-        ElMessage({
-          message: '修改成功',
-          type: 'success',
-          plain: true
-        })
-        Object.assign(userForm, LoginerStore.userInfo)
-        resetForm()
-      })
+      )
     } else {
       // 如果表单验证不通过，出现dialog并且提醒
       centerDialogVisible.value = true

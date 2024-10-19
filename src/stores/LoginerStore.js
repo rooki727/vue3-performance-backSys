@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
+import { ElMessage } from 'element-plus'
 import {
   checkFormLoginAPI,
   getLoginerPhoneAPI,
@@ -51,8 +52,16 @@ export const useLoginerStore = defineStore(
     }
     // 修改基本资料
     const updateupdateBase = async (id, name, gender, phone, email) => {
-      await updateBaseAPI(id, name, gender, phone, email)
-      getNewLoginer(id)
+      await updateBaseAPI(id, name, gender, phone, email).then((res) => {
+        if (res.result) {
+          ElMessage({
+            message: '修改成功',
+            type: 'success',
+            plain: true
+          })
+          getNewLoginer(id)
+        }
+      })
     }
     // 更新头像
     const uploadAvatar = async (id, awatar) => {
