@@ -25,7 +25,7 @@
             <div class="profileImg">
               <img
                 class="profileImg"
-                :src="msg.admin_id ? profile.awatar : '../../../../public/favico.jpg'"
+                :src="msg.admin_id ? profile.awatar : '/avatar.jpg'"
                 mode="aspectFit"
               />
             </div>

@@ -53,7 +53,7 @@ export const useLoginerStore = defineStore(
     // 修改基本资料
     const updateupdateBase = async (id, name, gender, phone, email) => {
       await updateBaseAPI(id, name, gender, phone, email).then((res) => {
-        if (res.result) {
+        if (res?.result) {
           ElMessage({
             message: '修改成功',
             type: 'success',
