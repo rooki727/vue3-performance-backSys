@@ -31,7 +31,13 @@ provide('getRmove', getRmove)
   top: 0;
   left: 0;
   bottom: 0;
-  background-color: rgb(17, 17, 137);
+  background: linear-gradient(
+    to bottom,
+    rgb(203, 183, 234),
+    rgb(234, 183, 232),
+    rgb(183, 213, 234),
+    rgb(171, 190, 235)
+  ) !important;
 }
 .content {
   padding-left: 12.5rem;

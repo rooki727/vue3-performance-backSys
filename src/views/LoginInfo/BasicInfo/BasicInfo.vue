@@ -2,10 +2,7 @@
 import { useLoginerStore } from '@/stores/LoginerStore'
 import { ref, reactive, onMounted } from 'vue'
 import DialogTip from '@/components/DialogTip.vue'
-import { useI18n } from 'vue-i18n'
-
 // 获取t方法才可以在js代码里使用
-const { t } = useI18n()
 const LoginerStore = useLoginerStore()
 const userForm = reactive({
   name: '',

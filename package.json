@@ -1,5 +1,5 @@
 {
-  "name": "vue3-backsystem-rooki",
+  "name": "vue-music-cj",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -17,14 +17,12 @@
     "dayjs": "^1.11.13",
     "echarts": "^5.5.0",
     "element-plus": "^2.6.3",
-    "flower3d": "^0.2.2",
     "jquery": "^3.7.1",
     "lodash": "^4.17.21",
     "normalize.css": "^8.0.1",
     "pinia": "^2.1.7",
     "pinia-plugin-persistedstate": "^3.2.1",
     "vue": "^3.4.21",
-    "vue-i18n": "^9.10.2",
     "vue-router": "^4.3.0",
     "xlsx": "^0.18.5"
   },

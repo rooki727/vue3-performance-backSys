@@ -12,28 +12,28 @@
       <el-table-column width="40" type="selection" />
       <el-table-column fixed prop="user_id" label="user_id" width="100" />
 
-      <el-table-column fixed prop="name" :label="$t('messages.name')" width="150" />
+      <el-table-column fixed prop="name" label="$t('messages.name')" width="150" />
 
-      <el-table-column prop="account" :label="$t('messages.account')" width="150" />
-      <el-table-column prop="password" :label="$t('messages.Password')" width="200" />
-      <el-table-column prop="gender" :label="$t('messages.gender')" width="120" />
-      <el-table-column property="verify" prop="verify" :label="$t('messages.verify')" width="120" />
-      <el-table-column prop="phone" :label="$t('messages.phone')" width="210" />
+      <el-table-column prop="account" label="$t('messages.account')" width="150" />
+      <el-table-column prop="password" label="$t('messages.Password')" width="200" />
+      <el-table-column prop="gender" label="$t('messages.gender')" width="120" />
+      <el-table-column property="verify" prop="verify" label="$t('messages.verify')" width="120" />
+      <el-table-column prop="phone" label="$t('messages.phone')" width="210" />
       <el-table-column
         prop="email"
-        :label="$t('messages.email')"
+        label="$t('messages.email')"
         show-overflow-tooltip
         width="250"
       />
-      <el-table-column fixed="right" :label="$t('messages.operations')" width="280">
+      <el-table-column fixed="right" label="$t('messages.operations')" width="280">
         <template #default="scope">
           <el-button link type="primary" size="small" @click="handleEdit(scope.row)">{{
             $t('messages.edit')
           }}</el-button>
 
-          <el-popconfirm :title="$t('messages.confirmToDetele')" @confirm="handleDelete(scope.row)">
+          <el-popconfirm title="$t('messages.confirmToDetele')" @confirm="handleDelete(scope.row)">
             <template #reference>
-              <el-button link type="primary" size="small">{{ $t('messages.delete') }}</el-button>
+              <el-button link type="primary" size="small">删除</el-button>
             </template>
           </el-popconfirm>
         </template>
@@ -57,13 +57,11 @@
 <script setup>
 import editDialog from './editDialog.vue'
 import { computed, ref, watch } from 'vue'
-import { useI18n } from 'vue-i18n'
-import { useUserStore } from '@/stores/userStore'
-import { ElMessage } from 'element-plus'
+
+// import { ElMessage } from 'element-plus'
 // 获取t方法才可以在js代码里使用
-const { t } = useI18n()
+
 // 添加对话框
-const userStore = useUserStore()
 const dialogTitle = ref('')
 const dialogFormVisible = ref(false)
 const clickRow = ref({})
@@ -117,25 +115,26 @@ const handleSelectionChange = (val) => {
 
 // 编辑
 const handleEdit = (row) => {
-  dialogTitle.value = t('messages.edit')
+  dialogTitle.value = '编辑'
   changeDialogVisible(true)
   // 在这里使用 row 数据执行编辑操作
   clickRow.value = row
 }
 
 const handleDelete = async (row) => {
+  console.log(row)
+
   // 在这里使用 row 数据执行删除操作
   // api服务器删除后重新获取列表
-  userStore
-    .deleteCommonUser(row.user_id)
-    .then(() => {
-      ElMessage({ type: 'success', message: '删除成功' })
-    })
-    .catch((error) => {
-      // 处理请求失败的情况
-      ElMessage({ type: 'erro', message: error })
-      // 在此处可以添加相应的错误处理逻辑，例如提示用户登录失败等
-    })
+  // deleteCommonUser(row.user_id)
+  //   .then(() => {
+  //     ElMessage({ type: 'success', message: '删除成功' })
+  //   })
+  //   .catch((error) => {
+  //     // 处理请求失败的情况
+  //     ElMessage({ type: 'erro', message: error })
+  //     // 在此处可以添加相应的错误处理逻辑，例如提示用户登录失败等
+  //   })
 }
 </script>
 

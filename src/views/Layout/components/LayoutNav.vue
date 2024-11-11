@@ -18,46 +18,32 @@ defineExpose({ removeActive })
 
 <template>
   <el-menu
-    active-text-color="orange"
-    background-color="rgb(25, 25, 130)"
     class="el-menu-vertical-demo"
     default-active="$route.path"
     router
     :collapse="props.isCollapse"
     text-color="#fff"
   >
-    <el-menu-item>
-      <span>{{ $t('messages.title') }}</span>
+    <!-- 标题 -->
+    <el-menu-item class="logo">
+      <span>CJ音乐平台后台管理</span>
     </el-menu-item>
-    <el-menu-item index="/" :class="{ 'is-active': $route.path === '/' }">
+    <!-- 首页 -->
+    <el-menu-item index="/" id="removeAcitve" :class="{ 'is-active': $route.path === '/' }">
       <el-icon><House /></el-icon>
       <template #title>
-        <span>{{ $t('messages.home') }}</span>
+        <span>首页</span>
       </template>
     </el-menu-item>
-    <el-sub-menu
-      index="/user"
-      :class="{ 'is-active': $route.path.startsWith('/user') }"
-      id="removeAcitve"
-    >
+    <!-- 用户管理 -->
+
+    <el-menu-item index="/user" id="removeAcitve" :class="{ 'is-active': $route.path === '/user' }">
+      <el-icon><User /></el-icon>
       <template #title>
-        <el-icon><Location /></el-icon>
-        <span>{{ $t('messages.user_manage') }}</span>
+        <span>用户管理</span>
       </template>
-      <el-menu-item
-        index="/user/adminlist"
-        id="removeAcitve"
-        :class="{ 'is-active': $route.path === '/user/adminlist' }"
-        >{{ $t('messages.admin_list') }}</el-menu-item
-      >
-      <el-menu-item
-        id="removeAcitve"
-        index="/user/userlist"
-        :class="{ 'is-active': $route.path === '/user/userlist' }"
-        >{{ $t('messages.user_list') }}</el-menu-item
-      >
-    </el-sub-menu>
-    <el-sub-menu
+    </el-menu-item>
+    <!-- <el-sub-menu
       index="/book"
       :class="{ 'is-active': $route.path.startsWith('/book') }"
       id="removeAcitve"
@@ -78,51 +64,7 @@ defineExpose({ removeActive })
         :class="{ 'is-active': $route.path === '/book/bookcategory' }"
         >{{ $t('messages.book_catetory') }}</el-menu-item
       >
-    </el-sub-menu>
-    <el-sub-menu
-      index="/order"
-      :class="{ 'is-active': $route.path.startsWith('/order') }"
-      id="removeAcitve"
-    >
-      <template #title>
-        <el-icon><Location /></el-icon>
-        <span>{{ $t('messages.order_manage') }}</span>
-      </template>
-      <el-menu-item
-        id="removeAcitve"
-        index="/order/orderlist"
-        :class="{ 'is-active': $route.path === '/order/orderlist' }"
-        >{{ $t('messages.order_list') }}</el-menu-item
-      >
-      <el-menu-item
-        id="removeAcitve"
-        index="/order/orderverify"
-        :class="{ 'is-active': $route.path === '/order/orderverify' }"
-        >{{ $t('messages.order_check') }}</el-menu-item
-      >
-      <el-menu-item
-        id="removeAcitve"
-        index="/order/orderLogistics"
-        :class="{ 'is-active': $route.path === '/order/orderLogistics' }"
-        >{{ $t('messages.orderLogistics') }}</el-menu-item
-      >
-    </el-sub-menu>
-    <el-sub-menu
-      index="/chat"
-      :class="{ 'is-active': $route.path.startsWith('/chat') }"
-      id="removeAcitve"
-    >
-      <template #title>
-        <el-icon><Location /></el-icon>
-        <span>{{ $t('messages.chatManager') }}</span>
-      </template>
-      <el-menu-item
-        id="removeAcitve"
-        index="/chat/chatservice"
-        :class="{ 'is-active': $route.path === '/chat/chatservice' }"
-        >{{ $t('messages.chatService') }}</el-menu-item
-      >
-    </el-sub-menu>
+    </el-sub-menu> -->
   </el-menu>
 </template>
 
@@ -131,10 +73,21 @@ defineExpose({ removeActive })
 <style scoped lang="scss">
 .el-menu {
   border-right: none;
+  background-color: transparent;
+
   .is-active {
-    background-color: rgb(112, 202, 238);
-    color: white;
+    background-color: rgb(203, 228, 241);
+    color: rgb(43, 133, 207);
   }
+}
+.logo {
+  font-weight: 700;
+  height: 100px;
+  font-size: 19px;
+  cursor: default;
+}
+.logo:hover {
+  background-color: transparent;
 }
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 12.5rem;

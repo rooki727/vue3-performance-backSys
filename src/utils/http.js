@@ -5,8 +5,7 @@ import router from '@/router'
 import { useLoginerStore } from '@/stores/LoginerStore'
 import { refreshTokenAPI } from '@/apis/token'
 const httpInstance = axios.create({
-  baseURL: 'http://119.29.168.176:8080/library_ssm',
-  // baseURL: 'http://localhost:8080/library_ssm',
+  baseURL: '',
   timeout: 5000
 })
 

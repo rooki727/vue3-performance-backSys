@@ -2,16 +2,12 @@
 import { watch, ref, onMounted, inject, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { ArrowRight } from '@element-plus/icons-vue'
-import LanguageChange from '@/components/languageChange.vue'
 import { useLoginerStore } from '@/stores/LoginerStore'
 import { useRouter } from 'vue-router'
-import { useI18n } from 'vue-i18n'
-import { resetAdminTokenAPI } from '@/apis/user'
-// 获取t方法才可以在js代码里使用
-const { t } = useI18n()
+
 const Router = useRouter()
 const LoginerStore = useLoginerStore()
-const circleUrl = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
+const circleUrl = '/public/avatar.jpg'
 const route = useRoute()
 const props = defineProps(['isCollapse'])
 const emit = defineEmits(['changeCollapse'])
@@ -29,53 +25,24 @@ const changeBreadName = () => {
     // 导航switch ，也可以采用数组渲染形式，v-for,这样还能实现国际化
     // （实现国际化借助route里的name，在数组上加上对应的name  $t(`messages.${v-name}`)）
     switch (route.path) {
-      case '/user/adminlist':
-        secondBreadName.value = t('messages.user_manage')
-        thitdBreadName.value = t('messages.admin_list')
-        break
-      case '/user/userlist':
-        secondBreadName.value = t('messages.user_manage')
-        thitdBreadName.value = t('messages.user_list')
-        break
-      case '/book/booklist':
-        secondBreadName.value = t('messages.book_manage')
-        thitdBreadName.value = t('messages.book_List')
-        break
-      case '/book/bookcategory':
-        secondBreadName.value = t('messages.book_manage')
-        thitdBreadName.value = t('messages.book_catetory')
-        break
-      case '/order/orderlist':
-        secondBreadName.value = t('messages.order_manage')
-        thitdBreadName.value = t('messages.order_list')
-        break
-      case '/order/orderverify':
-        secondBreadName.value = t('messages.order_manage')
-        thitdBreadName.value = t('messages.order_check')
-        break
-      case '/order/orderLogistics':
-        secondBreadName.value = t('messages.order_manage')
-        thitdBreadName.value = t('messages.orderLogistics')
+      case '/user':
+        secondBreadName.value = '用户管理'
         break
       case '/loginInfo/basicinfo':
-        secondBreadName.value = t('messages.LoginerInfo')
-        thitdBreadName.value = t('messages.Basic_information')
+        secondBreadName.value = '个人信息'
+        thitdBreadName.value = '基础信息'
         break
       case '/loginInfo/modifyawator':
-        secondBreadName.value = t('messages.LoginerInfo')
-        thitdBreadName.value = t('messages.Modify_Awator')
+        secondBreadName.value = '个人信息'
+        thitdBreadName.value = '修改头像'
         break
       case '/loginInfo/passwordmanagement':
-        secondBreadName.value = t('messages.LoginerInfo')
-        thitdBreadName.value = t('messages.Password_management')
+        secondBreadName.value = '个人信息'
+        thitdBreadName.value = '修改密码'
         break
       case '/loginInfo/cancelaccount':
-        secondBreadName.value = t('messages.LoginerInfo')
-        thitdBreadName.value = t('messages.Cancel_account')
-        break
-      case '/chat/chatservice':
-        secondBreadName.value = t('messages.chatManager')
-        thitdBreadName.value = t('messages.chatService')
+        secondBreadName.value = '个人信息'
+        thitdBreadName.value = '注销账号'
         break
       default:
         // 默认情况下的处理逻辑
@@ -111,7 +78,9 @@ const confirmExit = async () => {
   dialogVisible.value = false
   // 确认退出操作
   const id = computed(() => LoginerStore.userInfo.id)
-  await resetAdminTokenAPI(id.value)
+  console.log(id.value)
+
+  // await resetAdminTokenAPI(id.value)
   LoginerStore.clearUser()
   Router.push('/login')
 }
@@ -124,12 +93,12 @@ onMounted(() => {
 
 <template>
   <!-- 对话框确定栏 -->
-  <el-dialog v-model="dialogVisible" :title="$t('messages.Warning')" width="350">
-    <span>{{ $t('messages.Confirm_Exit') }}</span>
+  <el-dialog v-model="dialogVisible" title="提醒" width="350">
+    <span>您确认退出要当前登录吗？</span>
     <template #footer>
       <div class="dialog-footer">
-        <el-button @click="cancelExit">{{ $t('messages.Cancel') }}</el-button>
-        <el-button type="primary" @click="confirmExit"> {{ $t('messages.Confirm') }} </el-button>
+        <el-button @click="cancelExit">取消</el-button>
+        <el-button type="primary" @click="confirmExit"> 确认 </el-button>
       </div>
     </template>
   </el-dialog>
@@ -148,46 +117,40 @@ onMounted(() => {
       <div class="right">
         <div class="isLogin" v-if="LoginerStore.userInfo?.id">
           <div class="uerinfo">
-            <el-dropdown size="small" split-button type="primary" style="background-color: skyblue">
-              <!-- 增加头像 -->
-              <el-avatar
-                size="small"
-                :src="LoginerStore.userInfo?.awatar ? LoginerStore.userInfo?.awatar : circleUrl"
-              />
-              <span style="margin-left: 0.1875rem">
-                {{ LoginerStore.userInfo.name }}
-              </span>
+            <el-dropdown size="small" style="background-color: transparent">
+              <!-- 增加头像和id -->
+              <div class="avatarName">
+                <el-avatar
+                  size="small"
+                  :src="LoginerStore.userInfo?.awatar ? LoginerStore.userInfo?.awatar : circleUrl"
+                />
+                <span style="margin-left: 0.5rem">
+                  {{ LoginerStore.userInfo.name }}
+                </span>
+              </div>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item @click="$router.push('/loginInfo/basicinfo')">{{
-                    $t('messages.LoginerInfo')
-                  }}</el-dropdown-item>
+                  <el-dropdown-item @click="$router.push('/loginInfo/basicinfo')"
+                    >个人信息</el-dropdown-item
+                  >
 
-                  <el-dropdown-item @click="showPopoverConfirm">{{
-                    $t('messages.Exit_Login')
-                  }}</el-dropdown-item>
+                  <el-dropdown-item @click="showPopoverConfirm">退出登录</el-dropdown-item>
                 </el-dropdown-menu>
               </template>
             </el-dropdown>
           </div>
           <el-divider direction="vertical" style="height: 24px" />
-          <LanguageChange></LanguageChange>
         </div>
         <div class="noLogin" v-else>
-          <RouterLink to="/login" style="text-decoration: none; color: white">{{
-            $t('messages.pleaseLogin')
-          }}</RouterLink>
+          <RouterLink to="/login" style="text-decoration: none; color: white">请先登录</RouterLink>
           <el-divider direction="vertical" style="height: 24px" />
-          <LanguageChange></LanguageChange>
         </div>
       </div>
     </el-col>
   </el-row>
 
   <el-breadcrumb :separator-icon="ArrowRight" style="margin-top: 8px">
-    <el-breadcrumb-item :to="{ path: '/' }" @click="clickRemove">{{
-      $t('messages.home')
-    }}</el-breadcrumb-item>
+    <el-breadcrumb-item :to="{ path: '/' }" @click="clickRemove">首页</el-breadcrumb-item>
     <el-breadcrumb-item v-show="secondBread">{{ secondBreadName }}</el-breadcrumb-item>
     <el-breadcrumb-item v-show="secondBread">{{ thitdBreadName }}</el-breadcrumb-item>
   </el-breadcrumb>
@@ -199,12 +162,20 @@ onMounted(() => {
 
 <style scoped lang="scss">
 .header {
-  background-color: #409eff;
+  background: linear-gradient(
+    to right,
+    rgb(203, 183, 234),
+    rgb(234, 183, 232),
+    rgb(183, 213, 234),
+    rgb(171, 190, 235)
+  ) !important;
+
   position: relative;
   .right {
     position: absolute;
     top: 0.5rem;
     right: 3rem;
+
     .isLogin {
       display: flex;
     }
@@ -219,7 +190,12 @@ onMounted(() => {
     line-height: 1.6rem;
   }
 }
-
+.avatarName {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
 .example-showcase .el-dropdown-link {
   cursor: pointer;
   color: var(--el-color-primary);
