@@ -6,15 +6,17 @@
         v-model="textarea"
         :rows="8"
         type="textarea"
-        :placeholder="$t('messages.debinding_reason')"
+        placeholder="请输入注销理由"
       />
     </el-form-item>
 
     <el-form-item class="buttonDiv"
-      ><el-button @click="resetForm">{{ $t('messages.reset') }}</el-button>
-      <el-button type="primary" @click="submitForm">{{
-        $t('messages.Unbinding_debinding')
-      }}</el-button>
+      ><el-button @click="resetForm">重置</el-button>
+      <el-button
+        style="background-color: rgba(200, 83, 83, 0.504); color: white"
+        @click="submitForm"
+        >提交</el-button
+      >
     </el-form-item>
   </el-form>
 </template>

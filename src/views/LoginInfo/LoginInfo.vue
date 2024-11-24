@@ -1,9 +1,9 @@
 <template>
   <div class="userheader">
-    <el-icon color="blue" size="4.6rem"><UserFilled /></el-icon>
-    <span>{{ $t('messages.LoginerInfo') }}</span>
+    <el-icon color="rgba(200, 83, 83, 0.604)" size="4.6rem"><UserFilled /></el-icon>
+    <span style="color: gray">用户个人信息</span>
   </div>
-  <el-divider content-position="left">{{ $t('messages.FollowTips') }}</el-divider>
+  <el-divider content-position="center">以下为各项信息详情</el-divider>
   <div class="userInfoForm">
     <el-menu
       ellipsis
@@ -17,22 +17,22 @@
       <el-menu-item
         index="/loginInfo/basicinfo"
         :class="{ 'is-active': $route.path === '/loginInfo/basicinfo' }"
-        >{{ $t('messages.Basic_information') }}</el-menu-item
+        >基本信息</el-menu-item
       >
       <el-menu-item
         index="/loginInfo/modifyawator"
         :class="{ 'is-active': $route.path === '/loginInfo/modifyawator' }"
-        >{{ $t('messages.Modify_Awator') }}</el-menu-item
+        >修改头像</el-menu-item
       >
       <el-menu-item
         index="/loginInfo/passwordmanagement"
         :class="{ 'is-active': $route.path === '/loginInfo/passwordmanagement' }"
-        >{{ $t('messages.Password_management') }}</el-menu-item
+        >修改密码</el-menu-item
       >
       <el-menu-item
         index="/loginInfo/cancelaccount"
         :class="{ 'is-active': $route.path === '/loginInfo/cancelaccount' }"
-        >{{ $t('messages.Cancel_account') }}</el-menu-item
+        >注销账号</el-menu-item
       >
     </el-menu>
   </div>

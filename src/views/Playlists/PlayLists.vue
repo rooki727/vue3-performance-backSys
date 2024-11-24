@@ -1,5 +1,5 @@
 <script setup>
-import UserTable from './components/UserTable.vue'
+import playListTable from './components/playListTable.vue'
 import { ref, onMounted } from 'vue'
 import addDialog from './components/addDialog.vue'
 import { ElMessage } from 'element-plus'
@@ -10,31 +10,21 @@ import { ElMessage } from 'element-plus'
 const searchInput = ref('')
 const dialogTitle = ref('')
 // 表格内容
-const tableCommonUser = ref([
+const playList = ref([
   {
-    user_id: 1,
-    avatar:
-      'http://119.29.168.176:8080/library_ssm/static/86b3855f-56ab-4723-ad50-2d3ca4097225_awatar11.jpg',
-    name: '张三',
-    gender: '男',
-    account: '12345678901',
-    password: '12345678901a',
-    phone: '12345678901',
-    email: '12345678901@qq.com',
-    birthday: '2000-01-01',
-    signature: '我太帅咯'
+    playList_id: 1,
+    playList_img:
+      'http://119.29.168.176:8080/library_ssm/static/5dbdd384-b94e-4727-80ac-632a931b0eea_th.jpg',
+    title: '歌单1',
+    style: '欧美',
+    introduction: '我太帅咯'
   },
   {
-    user_id: 2,
-    avatar: '',
-    name: '李四',
-    gender: '男',
-    account: '12345678901',
-    password: '12345678901a',
-    phone: '12345678901',
-    email: '12345678901@qq.com',
-    birthday: '2000-01-01',
-    signature: '我太帅咯'
+    playList_id: 2,
+    playList_img: '',
+    title: '歌单2',
+    style: '古风',
+    introduction: '我太帅咯'
   }
 ])
 
@@ -51,16 +41,16 @@ const changeDialogVisible = (value) => {
 
 // 点击打开添加表单
 const openAddDialog = () => {
-  dialogTitle.value = '添加用户'
+  dialogTitle.value = '添加歌手'
   changeDialogVisible(true)
 }
 
 // 搜索功能
 // 备份原始数据
-const originalData = [...tableCommonUser.value]
+const originalData = [...playList.value]
 const resetSearch = () => {
   searchInput.value = ''
-  tableCommonUser.value = [...originalData]
+  playList.value = [...originalData]
 }
 let debounceTimer = null // 在函数外部定义定时器变量，以保证它在多个调用之间是共享的
 
@@ -73,14 +63,14 @@ const handleSearch = (inputvalue) => {
   debounceTimer = setTimeout(() => {
     // 如果输入为空，恢复原始数据
     if (inputvalue === '') {
-      tableCommonUser.value = [...originalData]
+      playList.value = [...originalData]
     } else {
       // 根据输入值过滤数据
-      const filteredData = originalData.filter((item) => item?.name?.includes(inputvalue))
+      const filteredData = originalData.filter((item) => item?.title?.includes(inputvalue))
       // 更新表格数据
-      tableCommonUser.value = filteredData
+      playList.value = filteredData
     }
-  }, 500) // 500毫秒后触发搜索，可以根据需要调整
+  }, 300) // 300毫秒后触发搜索，可以根据需要调整
 }
 
 // 批量删除功能
@@ -121,7 +111,7 @@ onMounted(() => {
       label="search"
       v-model="searchInput"
       style="width: 33rem; margin-left: 1rem"
-      placeholder="根据name搜索"
+      placeholder="根据歌单标题搜索"
       @input="handleSearch"
       clearable
     ></el-input>
@@ -130,7 +120,7 @@ onMounted(() => {
   <el-divider border-style="dashed" />
   <div class="opTable">
     <el-button @click="openAddDialog" type="warning" style="margin-left: 2rem"
-      ><el-icon><Plus /></el-icon>添加用户</el-button
+      ><el-icon><Plus /></el-icon>添加歌单</el-button
     >
     <el-button type="danger" @click="blukDel"
       ><el-icon><DeleteFilled /></el-icon>批量删除</el-button
@@ -140,7 +130,7 @@ onMounted(() => {
   <el-divider border-style="dashed" />
   <div class="table">
     <div class="taleDiv">
-      <UserTable :tableCommonUser="tableCommonUser" @getDelTable="getDelTable"></UserTable>
+      <playListTable :playList="playList" @getDelTable="getDelTable"></playListTable>
     </div>
   </div>
 </template>

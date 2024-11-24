@@ -20,75 +20,72 @@ const addform = ref({
 })
 
 // 判断账号存在是否
-const accountExists = ref(false)
-const verifyChoose = [{ id: 1, verify: 'common' }]
+const accountExists = ref(true)
 const rules = {
   name: [
     {
       required: true,
-      message: '',
+      message: '请输入用户名',
       trigger: 'blur'
-    },
-    { min: 5, message: '', trigger: 'blur' }
+    }
   ],
   account: [
     {
       required: true,
-      message: '',
+      message: '请输入账号',
       trigger: 'blur'
     },
     {
-      min: 5,
-      message: '',
+      min: 6,
+      max: 10,
+      message: '最少6位阿拉伯数字,最大10位',
       trigger: 'blur'
     },
     {
       pattern: /^[0-9]+$/, // 使用正则表达式限制输入只能为数字字符
-      message: '', // 自定义提示消息
-      trigger: 'blur'
+      message: '账号必须为纯数字', // 自定义提示消息
+      trigger: ['blur', 'change']
     }
   ],
   password: [
     {
       required: true,
-      message: '',
+      message: '请输入密码',
       trigger: 'blur'
     },
     {
       pattern: /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
-      message: '',
+      message: '密码为至少8位，包含字母和数字',
       trigger: 'blur'
     }
   ],
-  gender: [{ required: true }],
-  verify: [{ required: true }],
+  gender: [{ required: true, message: '请选择性别', trigger: 'blur' }],
   phone: [
     {
       required: true,
-      message: '',
+      message: '请输入手机号',
       trigger: 'blur'
     },
-    { min: 11, message: '', trigger: 'blur' },
+    { min: 11, max: 11, message: '手机号必须为11位数字', trigger: 'blur' },
     {
       pattern: /^[0-9]+$/, // 使用正则表达式限制输入只能为数字字符
-      message: '', // 自定义提示消息
-      trigger: 'blur'
+      message: '手机号必须为纯数字', // 自定义提示消息
+      trigger: ['blur', 'change']
     }
   ],
   email: [
     {
       required: true,
-      message: '', // 如果未输入电子邮件地址，则显示此消息
+      message: '请输入电子邮件地址', // 如果未输入电子邮件地址，则显示此消息
       trigger: 'blur'
     },
     {
       type: 'email',
-      message: '', // 如果输入的电子邮件地址格式不正确，则显示此消息
+      message: '请输入有效的电子邮件地址', // 如果输入的电子邮件地址格式不正确，则显示此消息
       trigger: ['blur', 'change']
     }
   ]
 }
-
 // 重置表单函数
 const resetForm = () => {
   addform.value.name = ''
@@ -167,36 +164,26 @@ const checkAccountExist = async () => {
     :close-on-click-modal="false"
   >
     <el-form :model="addform" :rules="rules" ref="addForm">
-      <el-form-item label="$t('messages.name')" label-width="8.75rem" prop="name">
+      <el-form-item label="用户名" label-width="8.75rem" prop="name">
         <el-input v-model="addform.name" autocomplete="off" />
       </el-form-item>
-      <el-form-item label="$t('messages.account')" label-width="8.75rem" prop="account">
+      <el-form-item label="账号" label-width="8.75rem" prop="account">
         <el-input v-model="addform.account" autocomplete="off" @blur="checkAccountExist" />
       </el-form-item>
-      <el-form-item label="$t('messages.Password')" label-width="8.75rem" prop="password">
-        <el-input v-model="addform.password" autocomplete="off" />
+      <el-form-item label="密码" label-width="8.75rem" prop="password">
+        <el-input v-model="addform.password" autocomplete="off" type="password" />
       </el-form-item>
-      <!-- 使用下拉框选择权限 -->
-      <el-form-item label="$t('messages.verify')" label-width="8.75rem" prop="verify">
-        <el-select v-model="addform.verify" placeholder="$t('messages.please_Choose')">
-          <el-option
-            v-for="item in verifyChoose"
-            :key="item.id"
-            :label="item.verify"
-            :value="item.verify"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="$t('messages.gender')" label-width="8.75rem" prop="gender">
+
+      <el-form-item label="性别" label-width="8.75rem" prop="gender">
         <el-radio-group v-model="addform.gender">
           <el-radio value="男">男</el-radio>
           <el-radio value="女">女</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="$t('messages.phone')" label-width="8.75rem" prop="phone">
+      <el-form-item label="电话" label-width="8.75rem" prop="phone">
         <el-input v-model="addform.phone" autocomplete="off" />
       </el-form-item>
-      <el-form-item label="$t('messages.email')" label-width="8.75rem" prop="email">
+      <el-form-item label="邮箱" label-width="8.75rem" prop="email">
         <el-input type="email" v-model="addform.email" autocomplete="off" />
       </el-form-item>
     </el-form>

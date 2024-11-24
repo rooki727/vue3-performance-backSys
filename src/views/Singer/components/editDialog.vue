@@ -13,72 +13,42 @@ const changeDialogVisible = () => {
 }
 const addForm = ref(null)
 const addform = reactive({
-  user_id: null,
+  singer_id: null,
+  singer_img: '',
   name: '',
-  account: null,
-  password: '',
-  verify: '',
+  country: '',
   gender: '',
-  phone: null,
-  email: ''
+  birthday: '',
+  introduction: ''
 })
 const rules = {
   name: [
     {
       required: true,
-      message: '请输入用户名',
-      trigger: 'blur'
-    }
-  ],
-  account: [
-    {
-      required: true,
-      message: '请输入账号',
-      trigger: 'blur'
-    },
-    {
-      type: Number,
-      min: 6,
-      message: '最少6位阿拉伯数字',
-      trigger: 'blur'
-    }
-  ],
-  password: [
-    {
-      required: true,
-      message: '请输入密码',
-      trigger: 'blur'
-    },
-    {
-      pattern: /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
-      message: '密码为至少8位，包含字母和数字',
+      message: '请输入歌手名字',
       trigger: 'blur'
     }
   ],
   gender: [{ required: true, message: '请选择性别', trigger: 'blur' }],
-  phone: [
+  country: [
     {
       required: true,
-      message: '请输入手机号',
-      trigger: 'blur'
-    },
-    { type: Number, min: 11, message: '手机号必须为11位数字', trigger: 'blur' },
-    {
-      pattern: /^[0-9]+$/, // 使用正则表达式限制输入只能为数字字符
-      message: '手机号必须为数字', // 自定义提示消息
+      message: '请输入国籍',
       trigger: 'blur'
     }
   ],
-  email: [
+  birthday: [
     {
       required: true,
-      message: '请输入电子邮件地址', // 如果未输入电子邮件地址，则显示此消息
+      message: '请选择生日',
       trigger: 'blur'
-    },
+    }
+  ],
+  introduction: [
     {
-      type: 'email',
-      message: '请输入有效的电子邮件地址', // 如果输入的电子邮件地址格式不正确，则显示此消息
-      trigger: ['blur', 'change']
+      required: true,
+      message: '请输入歌手简介', // 如果未输入电子邮件地址，则显示此消息
+      trigger: 'blur'
     }
   ]
 }
@@ -89,15 +59,14 @@ const submitadd = (addForm) => {
 
       // api数据请求，添加该用户的信息
       emit('changeDialogVisible', false)
-      //  updateCommonUser(
-      //       addform.user_id,
+      //  updateSinger(
+      //       addform.singer_id,
+      //       addform.singer_img,
       //       addform.name,
-      //       parseInt(addform.account),
-      //       addform.password,
-      //       addform.verify,
+      //       addform.country,
       //       addform.gender,
-      //       parseInt(addform.phone),
-      //       addform.email
+      //       addform.birthday
+      //       addform.introduction
       //     )
       //     .then(() => {
       //       // 如果 addUser 没有报错，则执行成功提示
@@ -114,7 +83,19 @@ const submitadd = (addForm) => {
     }
   })
 }
-
+// 上传图片
+const handleAvatarSuccess = (response) => {
+  addform.singer_img = response.result
+}
+// 上传图片前的校验
+const beforeUpload = (file) => {
+  const isImage = file.type.startsWith('image/')
+  if (!isImage) {
+    this.$message.error('只能上传图片')
+  }
+  return isImage // 确保文件是图片
+}
+// watch
 watch(
   () => clickRow.value,
   (oldVal) => {
@@ -134,17 +115,32 @@ watch(
     :close-on-click-modal="false"
   >
     <el-form :model="addform" :rules="rules" ref="addForm">
-      <el-form-item label="user_id" label-width="8.75rem" prop="user_id">
-        <el-input v-model="addform.user_id" autocomplete="off" :disabled="cannotInpId" />
+      <el-form-item label="singer_id" label-width="8.75rem" prop="singer_id">
+        <el-input v-model="addform.singer_id" autocomplete="off" :disabled="cannotInpId" />
       </el-form-item>
-      <el-form-item label="用户名" label-width="8.75rem" prop="name">
+      <el-form-item label="歌手图片" label-width="8.75rem" prop="singer_img">
+        <!-- 增加修改图标 -->
+        <div style="display: flex">
+          <img
+            style="width: 80px; height: 80px"
+            v-if="addform.singer_img"
+            :src="addform.singer_img"
+            alt=""
+          />
+          <el-upload
+            class="avatar-uploader"
+            action="http://119.29.168.176:8080/library_ssm/file/uploadPicture"
+            :show-file-list="false"
+            :on-success="handleAvatarSuccess"
+            :before-upload="beforeUpload"
+            name="image"
+          >
+            <el-icon><Plus /></el-icon>
+          </el-upload>
+        </div>
+      </el-form-item>
+      <el-form-item label="歌手" label-width="8.75rem" prop="name">
         <el-input v-model="addform.name" autocomplete="off" />
-      </el-form-item>
-      <el-form-item label="账号" label-width="8.75rem" prop="account">
-        <el-input v-model="addform.account" autocomplete="off" />
-      </el-form-item>
-      <el-form-item label="密码" label-width="8.75rem" prop="password">
-        <el-input v-model="addform.password" autocomplete="off" />
       </el-form-item>
       <el-form-item label="性别" label-width="8.75rem" prop="gender">
         <el-radio-group v-model="addform.gender">
@@ -152,11 +148,19 @@ watch(
           <el-radio value="女">女</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="电话" label-width="8.75rem" prop="phone">
-        <el-input v-model="addform.phone" autocomplete="off" />
+      <el-form-item label="生日" label-width="8.75rem" prop="birthday">
+        <el-date-picker
+          v-model="addform.birthday"
+          type="date"
+          placeholder="Pick a day"
+          size="default"
+        />
       </el-form-item>
-      <el-form-item label="邮箱" label-width="8.75rem" prop="email">
-        <el-input type="email" v-model="addform.email" autocomplete="off" />
+      <el-form-item label="地区" label-width="8.75rem" prop="country">
+        <el-input v-model="addform.country" autocomplete="off" />
+      </el-form-item>
+      <el-form-item label="简介" label-width="8.75rem" prop="introduction">
+        <el-input v-model="addform.introduction" autocomplete="off" type="textarea" />
       </el-form-item>
     </el-form>
     <template #footer>
@@ -169,3 +173,25 @@ watch(
 </template>
 
 
+<style scoped>
+.avatar-uploader {
+  width: 80px;
+  height: 80px;
+  margin-left: 10px;
+  border: 1px solid gainsboro;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.avatar-uploader .el-icon {
+  font-size: 50px;
+  color: #8c939d;
+}
+
+.avatar-uploader .el-icon:hover {
+  color: #409eff;
+}
+</style>

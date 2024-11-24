@@ -13,7 +13,7 @@ const changeDialogVisible = () => {
 <template>
   <el-dialog
     :model-value="centerDialogVisible"
-    :title="$t('messages.Warning')"
+    title="提醒"
     width="500"
     align-center
     :show-close="false"
@@ -23,9 +23,7 @@ const changeDialogVisible = () => {
     <span>{{ props.TipMessage }}</span>
     <template #footer>
       <div class="dialog-footer">
-        <el-button type="primary" @click="changeDialogVisible">{{
-          $t('messages.Confirm')
-        }}</el-button>
+        <el-button type="primary" @click="changeDialogVisible">确认</el-button>
       </div>
     </template>
   </el-dialog>

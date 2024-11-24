@@ -1,13 +1,11 @@
 <script setup>
 import { ref, reactive, computed, onMounted } from 'vue'
-import { useI18n } from 'vue-i18n'
 import { useLoginerStore } from '@/stores/LoginerStore'
-import { updatePasswordAPI } from '@/apis/login'
+// import { updatePasswordAPI } from '@/apis/login'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
-import { getCaptchaAPI } from '@/apis/user'
+// import { getCaptchaAPI } from '@/apis/user'
 // 获取t方法才可以在js代码里使用
-const { t } = useI18n()
 const ruleForm = reactive({
   Oripass: '',
   pass: '',
@@ -16,7 +14,7 @@ const ruleForm = reactive({
 })
 const router = useRouter()
 const LoginerStore = useLoginerStore()
-const LoginerId = computed(() => LoginerStore.userInfo.id)
+// const LoginerId = computed(() => LoginerStore.userInfo.id)
 const LoginerOriPassword = computed(() => LoginerStore.userInfo.password)
 // 图片验证码
 const getcaptcha = ref([])
@@ -26,9 +24,9 @@ const ruleFormRef = ref()
 // 确定密码函数
 const validateConfirm = (rule, value, callback) => {
   if (value === '') {
-    callback(new Error(t('messages.input_again')))
+    callback(new Error('请再次输入密码'))
   } else if (value !== ruleForm.pass) {
-    callback(new Error(t('messages.checkpass_match')))
+    callback(new Error('两次输入密码不一致'))
   } else {
     callback()
   }
@@ -45,7 +43,7 @@ const submitForm = (formRef) => {
       // 如果表单验证通过，可以继续执行提交逻辑
       // 进行api提交
       if (ruleForm.Oripass === LoginerOriPassword.value) {
-        await updatePasswordAPI(LoginerId.value, ruleForm.pass)
+        // await updatePasswordAPI(LoginerId.value, ruleForm.pass)
         ElMessage({
           message: '修改密码成功',
           type: 'success',
@@ -71,27 +69,27 @@ const resetForm = (formEl) => {
   formEl.resetFields()
 }
 const rules = {
-  Oripass: [{ required: true, message: t('messages.input_originPass_required'), trigger: 'blur' }],
+  Oripass: [{ required: true, message: '请输入原密码', trigger: 'blur' }],
   pass: [
-    { required: true, message: t('messages.input_pass'), trigger: 'blur' },
-    { min: 8, message: t('messages.pass_rule'), trigger: 'blur' },
+    { required: true, message: '请输入新密码', trigger: 'blur' },
+    { min: 8, message: '长度至少8个字符', trigger: 'blur' },
     {
       // 正则表达式
       pattern: /^(?=.*[a-zA-Z])(?=.*\d).+$/,
-      message: t('messages.pass_rele_second'),
+      message: '密码必须包含字母和数字',
       trigger: 'blur'
     }
   ],
   checkPass: [
-    { required: true, message: t('messages.checkpass_input'), trigger: 'blur' },
+    { required: true, message: '请确认新密码', trigger: 'blur' },
     { validator: validateConfirm, trigger: 'blur' }
   ],
   captcha: [
-    { required: true, message: t('messages.captcha_input'), trigger: 'blur' },
+    { required: true, message: '请输入验证码', trigger: 'blur' },
     {
       validator: (rule, value, callback) => {
         if (value !== captchaString.value) {
-          callback(new Error(t('messages.captcha_check')))
+          callback(new Error('验证码错误'))
         } else {
           callback()
         }
@@ -104,8 +102,8 @@ const rules = {
 // 假设一个验证功能：具体得用后端的接口提供的验证码
 
 const generateCaptcha = async () => {
-  const res = await getCaptchaAPI()
-  getcaptcha.value = res
+  // const res = await getCaptchaAPI()
+  // getcaptcha.value = res
 }
 
 onMounted(() => generateCaptcha())
@@ -113,7 +111,7 @@ onMounted(() => generateCaptcha())
 
 <template>
   <DialogTip
-    :TipMessage="$t('messages.passSubmit_tip')"
+    TipMessage="请输入正确的信息"
     :centerDialogVisible="centerDialogVisible"
     @changeDialogVisible="changeDialogVisible"
   ></DialogTip>
@@ -127,36 +125,32 @@ onMounted(() => generateCaptcha())
       label-width="auto"
       class="demo-ruleForm"
     >
-      <el-form-item :label="$t('messages.Original_password')" prop="Oripass">
+      <el-form-item label="原密码" prop="Oripass">
         <el-input
           v-model="ruleForm.Oripass"
           type="password"
           autocomplete="off"
-          :placeholder="$t('messages.input_originPass_required')"
+          placeholder="请输入原密码"
         />
       </el-form-item>
-      <el-form-item :label="$t('messages.Password')" prop="pass">
+      <el-form-item label="新密码" prop="pass">
         <el-input
           v-model="ruleForm.pass"
           type="password"
           autocomplete="off"
-          :placeholder="$t('messages.input_pass')"
+          placeholder="请输入新密码"
         />
       </el-form-item>
-      <el-form-item :label="$t('messages.Confirm_Password')" prop="checkPass">
+      <el-form-item label="确认密码" prop="checkPass">
         <el-input
           v-model="ruleForm.checkPass"
           type="password"
           autocomplete="off"
-          :placeholder="$t('messages.checkpass_input')"
+          placeholder="请再次输入密码"
         />
       </el-form-item>
-      <el-form-item :label="$t('messages.Captcha')" prop="captcha">
-        <el-input
-          v-model="ruleForm.captcha"
-          style="width: 7rem"
-          :placeholder="$t('messages.captcha_input')"
-        />
+      <el-form-item label="验证码" prop="captcha">
+        <el-input v-model="ruleForm.captcha" style="width: 7rem" placeholder="请输入验证码" />
         <el-button class="captcha-box" @click="generateCaptcha">
           <el-link
             v-for="(char, index) in getcaptcha"
@@ -170,10 +164,12 @@ onMounted(() => generateCaptcha())
         </el-button>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="submitForm(ruleFormRef)">{{
-          $t('messages.update')
-        }}</el-button>
-        <el-button @click="resetForm(ruleFormRef)">{{ $t('messages.reset') }}</el-button>
+        <el-button
+          style="background-color: rgba(200, 83, 83, 0.504); color: white"
+          @click="submitForm(ruleFormRef)"
+          >更新</el-button
+        >
+        <el-button @click="resetForm(ruleFormRef)">重置</el-button>
       </el-form-item>
     </el-form>
   </div>

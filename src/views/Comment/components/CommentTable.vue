@@ -1,42 +1,15 @@
 <template>
-  <editDialog
-    :cannotInpId="cannotInpId"
-    :clickRow="clickRow"
-    :title="dialogTitle"
-    :dialogFormVisible="dialogFormVisible"
-    @updateClickRow="updateClickRow"
-    @changeDialogVisible="changeDialogVisible"
-  ></editDialog>
   <div>
     <el-table :data="currentPageData" style="width: 100%" @selection-change="handleSelectionChange">
       <el-table-column width="40" type="selection" />
-      <el-table-column fixed prop="user_id" label="user_id" width="100" />
-
-      <el-table-column prop="avatar" label="头像" width="113">
+      <el-table-column fixed prop="comment_id" label="comment_id" width="150" />
+      <el-table-column prop="user_id" label="用户id" width="200" />
+      <el-table-column prop="content" label="内容" width="860" />
+      <el-table-column fixed="right" label="操作" width="200">
         <template #default="scope">
-          <img
-            :src="scope.row.avatar || '/public/avatar.jpg'"
-            alt=""
-            style="width: 100px; height: 100px"
-          />
-        </template>
-      </el-table-column>
-      <el-table-column prop="name" label="用户名" width="120" />
-      <el-table-column prop="gender" label="性别" width="60" />
-      <el-table-column prop="account" label="账号" width="150" />
-      <el-table-column prop="phone" label="电话" width="210" />
-      <el-table-column prop="email" label="邮箱" show-overflow-tooltip width="220" />
-      <el-table-column prop="birthday" label="生日" width="180" />
-      <el-table-column prop="signature" label="个性签名" show-overflow-tooltip width="250" />
-      <el-table-column fixed="right" label="操作" width="130">
-        <template #default="scope">
-          <el-button link type="primary" size="small" @click="handleEdit(scope.row)"
-            ><el-icon size="20px"><EditPen /></el-icon
-          ></el-button>
-
-          <el-popconfirm title="确认删除本行数据吗" @confirm="handleDelete(scope.row)">
+          <el-popconfirm title="确认删除该评论吗" @confirm="handleDelete(scope.row)">
             <template #reference>
-              <el-button link type="primary" size="small"
+              <el-button link type="primary" size="default"
                 ><el-icon style="color: red" size="20px"><Delete /></el-icon
               ></el-button>
             </template>
@@ -60,26 +33,10 @@
 </template>
 
 <script setup>
-import editDialog from './editDialog.vue'
 import { computed, ref } from 'vue'
 
-// import { ElMessage } from 'element-plus'
-// 获取t方法才可以在js代码里使用
-
-// 添加对话框
-const dialogTitle = ref('')
-const dialogFormVisible = ref(false)
-const clickRow = ref({})
-const cannotInpId = ref(true)
-const changeDialogVisible = (value) => {
-  dialogFormVisible.value = value
-}
-// 取消按钮时重置点击行
-const updateClickRow = (newValue) => {
-  clickRow.value = newValue
-}
 const props = defineProps({
-  tableCommonUser: {
+  commentList: {
     type: Array
   }
 })
@@ -91,13 +48,12 @@ const background = ref(false)
 const disabled = ref(false)
 const currentPage = ref(1)
 // 将代码table监听获值
-const computedtable = computed(() => props.tableCommonUser)
-
+const computedtable = computed(() => props.commentList)
 const totalRowSize = computed(() => computedtable.value?.length)
 const currentPageData = computed(() => {
   const startIndex = (currentPage.value - 1) * pageSize.value
   const endIndex = startIndex + pageSize.value
-  return computedtable.value.slice(startIndex, endIndex)
+  return computedtable.value?.slice(startIndex, endIndex)
 })
 // watch(
 //   () => computedtable.value,
@@ -118,26 +74,18 @@ const handleSelectionChange = (val) => {
   multipleSelection.value = val
   if (multipleSelection.value.length > 0) {
     // 使用map方法遍历multipleSelection.value数组，并将每个选中项的id存储到一个新的数组中
-    const selectedIds = multipleSelection.value.map((item) => item.user_id)
+    const selectedIds = multipleSelection.value.map((item) => item.comment_id)
     // 将所选数据提供给父组件
     emit('getDelTable', selectedIds)
   }
 }
 
-// 编辑
-const handleEdit = (row) => {
-  dialogTitle.value = '编辑'
-  changeDialogVisible(true)
-  // 在这里使用 row 数据执行编辑操作
-  clickRow.value = row
-}
-
 const handleDelete = async (row) => {
-  console.log(row.user_id)
+  console.log(row.comment_id)
 
   // 在这里使用 row 数据执行删除操作
   // api服务器删除后重新获取列表
-  // deleteCommonUser(row.user_id)
+  // deleteCommonUser(row.comment_id)
   //   .then(() => {
   //     ElMessage({ type: 'success', message: '删除成功' })
   //   })

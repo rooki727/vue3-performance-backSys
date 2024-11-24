@@ -1,40 +1,28 @@
 <script setup>
-import UserTable from './components/UserTable.vue'
+import CommentTable from './components/CommentTable.vue'
 import { ref, onMounted } from 'vue'
-import addDialog from './components/addDialog.vue'
-import { ElMessage } from 'element-plus'
 
+import { ElMessage } from 'element-plus'
+import { useRoute } from 'vue-router'
+import router from '@/router'
+const route = useRoute()
+// 取消按钮时重置点击行
+const song_id = route.query.song_id
 // 获取t方法才可以在js代码里使用
 
 // 搜索功能变量
 const searchInput = ref('')
-const dialogTitle = ref('')
 // 表格内容
-const tableCommonUser = ref([
+const commentList = ref([
   {
+    comment_id: 1,
     user_id: 1,
-    avatar:
-      'http://119.29.168.176:8080/library_ssm/static/86b3855f-56ab-4723-ad50-2d3ca4097225_awatar11.jpg',
-    name: '张三',
-    gender: '男',
-    account: '12345678901',
-    password: '12345678901a',
-    phone: '12345678901',
-    email: '12345678901@qq.com',
-    birthday: '2000-01-01',
-    signature: '我太帅咯'
+    content: '评论1'
   },
   {
+    comment_id: 2,
     user_id: 2,
-    avatar: '',
-    name: '李四',
-    gender: '男',
-    account: '12345678901',
-    password: '12345678901a',
-    phone: '12345678901',
-    email: '12345678901@qq.com',
-    birthday: '2000-01-01',
-    signature: '我太帅咯'
+    content: '评论2'
   }
 ])
 
@@ -43,24 +31,12 @@ const getTableForm = async () => {
   // 请求接口
 }
 
-// 添加对话框
-const dialogFormVisible = ref(false)
-const changeDialogVisible = (value) => {
-  dialogFormVisible.value = value
-}
-
-// 点击打开添加表单
-const openAddDialog = () => {
-  dialogTitle.value = '添加用户'
-  changeDialogVisible(true)
-}
-
 // 搜索功能
 // 备份原始数据
-const originalData = [...tableCommonUser.value]
+const originalData = [...commentList.value]
 const resetSearch = () => {
   searchInput.value = ''
-  tableCommonUser.value = [...originalData]
+  commentList.value = [...originalData]
 }
 let debounceTimer = null // 在函数外部定义定时器变量，以保证它在多个调用之间是共享的
 
@@ -73,14 +49,14 @@ const handleSearch = (inputvalue) => {
   debounceTimer = setTimeout(() => {
     // 如果输入为空，恢复原始数据
     if (inputvalue === '') {
-      tableCommonUser.value = [...originalData]
+      commentList.value = [...originalData]
     } else {
       // 根据输入值过滤数据
-      const filteredData = originalData.filter((item) => item?.name?.includes(inputvalue))
+      const filteredData = originalData.filter((item) => item?.user_id == inputvalue)
       // 更新表格数据
-      tableCommonUser.value = filteredData
+      commentList.value = filteredData
     }
-  }, 500) // 500毫秒后触发搜索，可以根据需要调整
+  }, 300) // 300毫秒后触发搜索，可以根据需要调整
 }
 
 // 批量删除功能
@@ -103,7 +79,10 @@ const blukDel = () => {
     })
   }
 }
-
+// 返回
+const goBack = () => {
+  router.back()
+}
 // 加载网页加载数据
 onMounted(() => {
   getTableForm()
@@ -111,17 +90,18 @@ onMounted(() => {
 </script>
 
 <template>
-  <addDialog
-    :title="dialogTitle"
-    :dialogFormVisible="dialogFormVisible"
-    @changeDialogVisible="changeDialogVisible"
-  ></addDialog>
+  <div class="commentHeader">
+    <button @click="goBack" class="backBtn">
+      <el-icon><DArrowLeft /></el-icon>返回
+    </button>
+    <span class="commentTitle">歌曲song_id为：{{ song_id }}的评论信息</span>
+  </div>
   <div class="search">
     <el-input
       label="search"
       v-model="searchInput"
       style="width: 33rem; margin-left: 1rem"
-      placeholder="根据name搜索"
+      placeholder="根据用户id搜索"
       @input="handleSearch"
       clearable
     ></el-input>
@@ -129,10 +109,7 @@ onMounted(() => {
   </div>
   <el-divider border-style="dashed" />
   <div class="opTable">
-    <el-button @click="openAddDialog" type="warning" style="margin-left: 2rem"
-      ><el-icon><Plus /></el-icon>添加用户</el-button
-    >
-    <el-button type="danger" @click="blukDel"
+    <el-button type="danger" @click="blukDel" style="margin-left: 1rem"
       ><el-icon><DeleteFilled /></el-icon>批量删除</el-button
     >
   </div>
@@ -140,11 +117,37 @@ onMounted(() => {
   <el-divider border-style="dashed" />
   <div class="table">
     <div class="taleDiv">
-      <UserTable :tableCommonUser="tableCommonUser" @getDelTable="getDelTable"></UserTable>
+      <CommentTable :commentList="commentList" @getDelTable="getDelTable"></CommentTable>
     </div>
   </div>
 </template>
 
 
 <style scoped lang="scss">
+.commentHeader {
+  display: flex;
+  align-items: center;
+  margin: 1rem 0;
+  .backBtn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin-right: 1rem;
+    background-color: transparent;
+    border: none;
+    color: rgb(3, 178, 247);
+    font-size: 14px;
+  }
+  .backBtn:hover {
+    color: rgb(167, 219, 239);
+  }
+  .commentTitle {
+    display: inline-block;
+    margin-left: 2rem;
+    font-size: 17px;
+    font-weight: 600;
+    color: rgb(130, 126, 126);
+  }
+}
 </style>

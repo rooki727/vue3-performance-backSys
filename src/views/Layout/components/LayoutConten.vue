@@ -1,10 +1,9 @@
 <script setup>
-import { watch, ref, onMounted, inject, computed } from 'vue'
+import { watch, ref, onMounted, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { ArrowRight } from '@element-plus/icons-vue'
 import { useLoginerStore } from '@/stores/LoginerStore'
 import { useRouter } from 'vue-router'
-
 const Router = useRouter()
 const LoginerStore = useLoginerStore()
 const circleUrl = '/public/avatar.jpg'
@@ -15,7 +14,6 @@ const changeOpen = () => {
   emit('changeCollapse')
 }
 const secondBreadName = ref('')
-const thitdBreadName = ref('')
 const secondBread = ref(true)
 const changeBreadName = () => {
   if (route.path === '/') {
@@ -29,21 +27,30 @@ const changeBreadName = () => {
         secondBreadName.value = '用户管理'
         break
       case '/loginInfo/basicinfo':
-        secondBreadName.value = '个人信息'
-        thitdBreadName.value = '基础信息'
+        secondBreadName.value = '基础信息'
         break
       case '/loginInfo/modifyawator':
-        secondBreadName.value = '个人信息'
-        thitdBreadName.value = '修改头像'
+        secondBreadName.value = '修改头像'
         break
       case '/loginInfo/passwordmanagement':
-        secondBreadName.value = '个人信息'
-        thitdBreadName.value = '修改密码'
+        secondBreadName.value = '修改密码'
         break
       case '/loginInfo/cancelaccount':
-        secondBreadName.value = '个人信息'
-        thitdBreadName.value = '注销账号'
+        secondBreadName.value = '注销账号'
         break
+      case '/singer':
+        secondBreadName.value = '歌手管理'
+        break
+      case '/playlists':
+        secondBreadName.value = '歌单管理'
+        break
+      case '/songlist':
+        secondBreadName.value = '歌曲管理'
+        break
+      case '/comment':
+        secondBreadName.value = '评论管理'
+        break
+      case '/songlistdetail':
       default:
         // 默认情况下的处理逻辑
         break
@@ -57,13 +64,6 @@ watch(
     changeBreadName()
   }
 )
-
-const getRmoveUse = inject('getRmove')
-const clickRemove = () => {
-  if (getRmoveUse) {
-    getRmoveUse()
-  }
-}
 
 const dialogVisible = ref(false)
 const showPopoverConfirm = () => {
@@ -79,7 +79,6 @@ const confirmExit = async () => {
   // 确认退出操作
   const id = computed(() => LoginerStore.userInfo.id)
   console.log(id.value)
-
   // await resetAdminTokenAPI(id.value)
   LoginerStore.clearUser()
   Router.push('/login')
@@ -115,14 +114,14 @@ onMounted(() => {
 
     <el-col :span="20">
       <div class="right">
-        <div class="isLogin" v-if="LoginerStore.userInfo?.id">
+        <div class="isLogin" v-if="LoginerStore.userInfo?.token">
           <div class="uerinfo">
             <el-dropdown size="small" style="background-color: transparent">
               <!-- 增加头像和id -->
               <div class="avatarName">
                 <el-avatar
                   size="small"
-                  :src="LoginerStore.userInfo?.awatar ? LoginerStore.userInfo?.awatar : circleUrl"
+                  :src="LoginerStore.userInfo?.avatar ? LoginerStore.userInfo?.avatar : circleUrl"
                 />
                 <span style="margin-left: 0.5rem">
                   {{ LoginerStore.userInfo.name }}
@@ -130,7 +129,7 @@ onMounted(() => {
               </div>
               <template #dropdown>
                 <el-dropdown-menu>
-                  <el-dropdown-item @click="$router.push('/loginInfo/basicinfo')"
+                  <el-dropdown-item @click="$router.replace('/loginInfo/basicinfo')"
                     >个人信息</el-dropdown-item
                   >
 
@@ -149,12 +148,10 @@ onMounted(() => {
     </el-col>
   </el-row>
 
-  <el-breadcrumb :separator-icon="ArrowRight" style="margin-top: 8px">
-    <el-breadcrumb-item :to="{ path: '/' }" @click="clickRemove">首页</el-breadcrumb-item>
-    <el-breadcrumb-item v-show="secondBread">{{ secondBreadName }}</el-breadcrumb-item>
-    <el-breadcrumb-item v-show="secondBread">{{ thitdBreadName }}</el-breadcrumb-item>
+  <el-breadcrumb :separator-icon="ArrowRight" style="padding-top: 8px; padding-bottom: 18px">
+    <el-breadcrumb-item>首页</el-breadcrumb-item>
+    <el-breadcrumb-item v-if="secondBread">{{ secondBreadName }}</el-breadcrumb-item>
   </el-breadcrumb>
-  <el-divider />
   <!-- router出口 -->
   <router-view></router-view>
 </template>

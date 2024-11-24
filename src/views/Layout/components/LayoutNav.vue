@@ -1,19 +1,5 @@
 <script setup>
-import { onMounted } from 'vue'
-
 const props = defineProps(['isCollapse'])
-
-//封装函数给点击首页时去除所有的is-active
-const removeActive = () => {
-  const removeMenus = document.querySelectorAll('#removeAcitve')
-  removeMenus.forEach((item) => {
-    item.classList.remove('is-active')
-  })
-}
-onMounted(() => {
-  removeActive()
-})
-defineExpose({ removeActive })
 </script>
 
 <template>
@@ -26,10 +12,12 @@ defineExpose({ removeActive })
   >
     <!-- 标题 -->
     <el-menu-item class="logo">
-      <span>CJ音乐平台后台管理</span>
+      <span
+        ><el-icon><Menu /></el-icon>音乐平台后台管理</span
+      >
     </el-menu-item>
     <!-- 首页 -->
-    <el-menu-item index="/" id="removeAcitve" :class="{ 'is-active': $route.path === '/' }">
+    <el-menu-item index="/" :class="{ 'is-active': $route.path === '/' }">
       <el-icon><House /></el-icon>
       <template #title>
         <span>首页</span>
@@ -37,34 +25,24 @@ defineExpose({ removeActive })
     </el-menu-item>
     <!-- 用户管理 -->
 
-    <el-menu-item index="/user" id="removeAcitve" :class="{ 'is-active': $route.path === '/user' }">
+    <el-menu-item index="/user" :class="{ 'is-active': $route.path === '/user' }">
       <el-icon><User /></el-icon>
       <template #title>
         <span>用户管理</span>
       </template>
     </el-menu-item>
-    <!-- <el-sub-menu
-      index="/book"
-      :class="{ 'is-active': $route.path.startsWith('/book') }"
-      id="removeAcitve"
-    >
+    <el-menu-item index="/singer" :class="{ 'is-active': $route.path === '/singer' }">
+      <el-icon><Star /></el-icon>
       <template #title>
-        <el-icon><Location /></el-icon>
-        <span>{{ $t('messages.book_manage') }}</span>
+        <span>歌手管理</span>
       </template>
-      <el-menu-item
-        id="removeAcitve"
-        index="/book/booklist"
-        :class="{ 'is-active': $route.path === '/book/booklist' }"
-        >{{ $t('messages.book_List') }}</el-menu-item
-      >
-      <el-menu-item
-        index="/book/bookcategory"
-        id="removeAcitve"
-        :class="{ 'is-active': $route.path === '/book/bookcategory' }"
-        >{{ $t('messages.book_catetory') }}</el-menu-item
-      >
-    </el-sub-menu> -->
+    </el-menu-item>
+    <el-menu-item index="/playlists" :class="{ 'is-active': $route.path === '/playlists' }">
+      <el-icon><Service /></el-icon>
+      <template #title>
+        <span>歌单管理</span>
+      </template>
+    </el-menu-item>
   </el-menu>
 </template>
 
@@ -83,7 +61,7 @@ defineExpose({ removeActive })
 .logo {
   font-weight: 700;
   height: 100px;
-  font-size: 19px;
+  font-size: 18px;
   cursor: default;
 }
 .logo:hover {
