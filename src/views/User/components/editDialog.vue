@@ -1,45 +1,47 @@
 <script  setup>
 import { reactive, computed, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
+import { updateUserByAdminAPI } from '@/apis/user'
 // 弹框功能设置
-const props = defineProps(['dialogFormVisible', 'title', 'clickRow', 'cannotInpId'])
+const props = defineProps(['dialogFormVisible', 'clickRow', 'cannotInpId'])
 const centerDialogVisible = computed(() => props.dialogFormVisible)
-const title = computed(() => props.title)
+
 const clickRow = computed(() => props.clickRow)
-const emit = defineEmits(['changeDialogVisible', 'updateClickRow'])
+const emit = defineEmits(['changeDialogVisible', 'updateClickRow', 'updateList'])
 const changeDialogVisible = () => {
   emit('updateClickRow', {}) // 发送事件给父组件，请求修改props.clickRow的值为null
   emit('changeDialogVisible', false)
 }
 const addForm = ref(null)
+const roleChooseList = [{ id: 1, role: 'teacher' }]
+const academyChooseList = [
+  { id: 1, academy: '学院1' },
+  { id: 2, academy: '学院2' },
+  { id: 3, academy: '学院3' },
+  { id: 4, academy: '学院4' },
+  { id: 5, academy: '学院5' },
+  { id: 6, academy: '学院6' },
+  { id: 7, academy: '学院7' },
+  { id: 8, academy: '学院8' },
+  { id: 9, academy: '学院9' },
+  { id: 10, academy: '学院10' }
+]
 const addform = reactive({
   user_id: null,
-  name: '',
-  account: null,
+  real_name: '',
   password: '',
   verify: '',
   gender: '',
-  phone: null,
-  email: ''
+  phone_number: null,
+  email: '',
+  role: '',
+  academy: ''
 })
 const rules = {
-  name: [
+  real_name: [
     {
       required: true,
       message: '请输入用户名',
-      trigger: 'blur'
-    }
-  ],
-  account: [
-    {
-      required: true,
-      message: '请输入账号',
-      trigger: 'blur'
-    },
-    {
-      type: Number,
-      min: 6,
-      message: '最少6位阿拉伯数字',
       trigger: 'blur'
     }
   ],
@@ -56,7 +58,7 @@ const rules = {
     }
   ],
   gender: [{ required: true, message: '请选择性别', trigger: 'blur' }],
-  phone: [
+  phone_number: [
     {
       required: true,
       message: '请输入手机号',
@@ -80,34 +82,47 @@ const rules = {
       message: '请输入有效的电子邮件地址', // 如果输入的电子邮件地址格式不正确，则显示此消息
       trigger: ['blur', 'change']
     }
+  ],
+  role: [
+    {
+      required: true,
+      message: '请选择角色',
+      trigger: 'blur'
+    }
+  ],
+  academy: [
+    {
+      required: true,
+      message: '请选择所属学院',
+      trigger: 'blur'
+    }
   ]
 }
 const submitadd = (addForm) => {
-  addForm.validate((valid) => {
+  addForm.validate(async (valid) => {
     if (valid) {
-      console.log(addform)
-
       // api数据请求，添加该用户的信息
-      emit('changeDialogVisible', false)
-      //  updateCommonUser(
-      //       addform.user_id,
-      //       addform.name,
-      //       parseInt(addform.account),
-      //       addform.password,
-      //       addform.verify,
-      //       addform.gender,
-      //       parseInt(addform.phone),
-      //       addform.email
-      //     )
-      //     .then(() => {
-      //       // 如果 addUser 没有报错，则执行成功提示
-      //       ElMessage({ type: 'success', message: '修改成功' })
-      //     })
-      //     .catch(() => {
-      //       // 处理请求失败的情况
-      //       ElMessage({ type: 'erro', message: '修改失败！请检查输入信息' })
-      //       // 在此处可以添加相应的错误处理逻辑，例如提示用户登录失败等
-      //     })
+      await updateUserByAdminAPI({
+        user_id: addform.user_id,
+        real_name: addform.real_name,
+        password: addform.password,
+        role: addform.role,
+        gender: addform.gender,
+        phone_number: parseInt(addform.phone_number),
+        email: addform.email,
+        academy: addform.academy
+      })
+        .then(() => {
+          // 如果 addUser 没有报错，则执行成功提示
+          ElMessage({ type: 'success', message: '修改成功' })
+          emit('changeDialogVisible', false)
+          emit('updateList')
+        })
+        .catch(() => {
+          // 处理请求失败的情况
+          ElMessage({ type: 'erro', message: '修改失败！请检查输入信息' })
+          // 在此处可以添加相应的错误处理逻辑，例如提示用户登录失败等
+        })
     } else {
       // 如果表单验证不通过，提醒
       ElMessage({ type: 'error', message: '修改失败！请检查输入信息' })
@@ -126,8 +141,8 @@ watch(
 <template>
   <el-dialog
     :model-value="centerDialogVisible"
-    :title="title"
-    width="500"
+    title="修改教师信息"
+    width="600"
     align-center
     :show-close="false"
     :lock-scroll="false"
@@ -137,14 +152,33 @@ watch(
       <el-form-item label="user_id" label-width="8.75rem" prop="user_id">
         <el-input v-model="addform.user_id" autocomplete="off" :disabled="cannotInpId" />
       </el-form-item>
-      <el-form-item label="用户名" label-width="8.75rem" prop="name">
-        <el-input v-model="addform.name" autocomplete="off" />
-      </el-form-item>
-      <el-form-item label="账号" label-width="8.75rem" prop="account">
-        <el-input v-model="addform.account" autocomplete="off" />
+      <el-form-item label="真实姓名" label-width="8.75rem" prop="real_name">
+        <el-input v-model="addform.real_name" autocomplete="off" />
       </el-form-item>
       <el-form-item label="密码" label-width="8.75rem" prop="password">
-        <el-input v-model="addform.password" autocomplete="off" />
+        <el-input v-model="addform.password" autocomplete="off" type="password" show-password />
+      </el-form-item>
+      <!-- 使用下拉框选择角色 -->
+      <el-form-item label="角色" label-width="8.75rem" prop="role">
+        <el-select v-model="addform.role" placeholder="请选择角色">
+          <el-option
+            v-for="item in roleChooseList"
+            :key="item.id"
+            :label="item.role"
+            :value="item.role"
+          />
+        </el-select>
+      </el-form-item>
+      <!-- 使用下拉框选择学院 -->
+      <el-form-item label="学院" label-width="8.75rem" prop="academy">
+        <el-select v-model="addform.academy" placeholder="请选择所属学院">
+          <el-option
+            v-for="item in academyChooseList"
+            :key="item.id"
+            :label="item.academy"
+            :value="item.academy"
+          />
+        </el-select>
       </el-form-item>
       <el-form-item label="性别" label-width="8.75rem" prop="gender">
         <el-radio-group v-model="addform.gender">
@@ -152,8 +186,8 @@ watch(
           <el-radio value="女">女</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label="电话" label-width="8.75rem" prop="phone">
-        <el-input v-model="addform.phone" autocomplete="off" />
+      <el-form-item label="电话" label-width="8.75rem" prop="phone_number">
+        <el-input v-model="addform.phone_number" autocomplete="off" />
       </el-form-item>
       <el-form-item label="邮箱" label-width="8.75rem" prop="email">
         <el-input type="email" v-model="addform.email" autocomplete="off" />

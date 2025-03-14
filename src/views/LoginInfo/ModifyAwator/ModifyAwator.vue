@@ -4,6 +4,7 @@ import { useLoginerStore } from '@/stores/LoginerStore'
 import { Picture as IconPicture } from '@element-plus/icons-vue'
 import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
+import { updateAvatarAPI } from '@/apis/user'
 import axios from 'axios'
 const LoginerStore = useLoginerStore()
 const currentAwator = ref('')
@@ -31,13 +32,13 @@ const handleFileChange = (event) => {
   formData.append('image', file)
   // 调用上传头像的方法 uploadAvatar
   axios
-    .post(`http://119.29.168.176:8080/library_ssm/file/uploadPicture`, formData, {
+    .post(`http://119.29.168.176:8080/linyinlu/file/uploadPicture`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     })
     .then((response) => {
-      currentAwator.value = response.data.result
+      currentAwator.value = response.data.data
       ElMessage.success({
         message: '上传成功',
         type: 'success'
@@ -52,9 +53,16 @@ const centerDialogVisible = ref(false)
 const uploadSave = async () => {
   if (currentAwator.value != '') {
     LoginerStore.userInfo.avatar = currentAwator.value
+    LoginerStore.setUserInfo(LoginerStore.userInfo)
     // 调用修改头像的方法,保存链接
-    // LoginerStore.uploadAvatar(LoginerId.value, currentAwator.value)
-    currentAwator.value = ''
+    const res = await updateAvatarAPI(LoginerStore.userInfo.user_id, currentAwator.value)
+    if (res.data) {
+      ElMessage.success({
+        message: '更新成功',
+        type: 'success'
+      })
+      currentAwator.value = ''
+    }
   } else {
     centerDialogVisible.value = true
   }

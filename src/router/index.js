@@ -4,18 +4,32 @@ import LoginIndex from '@/views/Login/LoginIndex.vue'
 import UserList from '@/views/User/UserList.vue'
 import LoginInfo from '@/views/LoginInfo/LoginInfo.vue'
 import BasicInfo from '@/views/LoginInfo/BasicInfo/BasicInfo.vue'
-import CancelAccount from '@/views/LoginInfo/CancelAccount/CancelAccount.vue'
 import ModifyAwator from '@/views/LoginInfo/ModifyAwator/ModifyAwator.vue'
 import PasswordManagement from '@/views/LoginInfo/PasswordManagement/PasswordManagement.vue'
-import SingerList from '@/views/Singer/SingerList.vue'
-import PlayLists from '@/views/Playlists/PlayLists.vue'
-import SongList from '@/views/SongForm/SongList.vue'
-import CommentList from '@/views/Comment/CommentList.vue'
+import AcademyPer from '@/views/AcademyPer/AcademyPerIndex.vue'
+import PerManage from '@/views/PerManage/PerManageIndex.vue'
+import PersonHisPer from '@/views/PersonHisPer/PersonHisPerIndex.vue'
+import PerSelf from '@/views/PerSelf/PerSelfIndex.vue'
+import TeacherPerIndicators from '@/views/TeacherPerIndicators/TeacherPerIndicatorsIndex.vue'
+import TeacherPerNow from '@/views/TeacherPerNow/TeacherPerNowIndex.vue'
+import indicatorsSettings from '@/views/indicatorsSettings/indicatorsSettingsIndex.vue'
+import PersonAssessment from '@/views/PersonAssessment/PersonAssessmentIndex.vue'
+import AdminAssessment from '@/views/AdminAssessment/AdminAssessmentIndex.vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { useLoginerStore } from '@/stores/LoginerStore'
 
 import { computed } from 'vue'
-
+import { ElMessage } from 'element-plus'
+const requireRole = (role) => (to, from, next) => {
+  const loginerStore = useLoginerStore()
+  loginerStore.getUserInfo()
+  const userRole = computed(() => loginerStore.userInfo.role)
+  if (userRole.value !== role) {
+    next(false) // 阻止路由跳转
+  } else {
+    next()
+  }
+}
 const router = createRouter({
   history: createWebHashHistory(),
 
@@ -50,38 +64,68 @@ const router = createRouter({
               path: 'passwordmanagement',
               component: PasswordManagement,
               name: 'PasswordManagement'
-            },
-            {
-              path: 'cancelaccount',
-              component: CancelAccount,
-              name: 'CancelAccount'
             }
           ]
         },
         {
           path: '/user',
           component: UserList,
-          name: 'UserList'
+          name: 'UserList',
+          beforeEnter: requireRole('admin')
         },
         {
-          path: '/singer',
-          component: SingerList,
-          name: 'SingerList'
+          path: '/indicatorsSettings',
+          component: indicatorsSettings,
+          name: 'indicatorsSettings',
+          beforeEnter: requireRole('admin')
         },
         {
-          path: '/playlists',
-          component: PlayLists,
-          name: 'PlayLists'
+          path: '/academyPer',
+          component: AcademyPer,
+          name: 'AcademyPer',
+          beforeEnter: requireRole('admin')
         },
         {
-          path: '/songlist',
-          component: SongList,
-          name: 'SongList'
+          path: '/perManage',
+          component: PerManage,
+          name: 'PerManage',
+          beforeEnter: requireRole('admin'),
+          meta: { keepAlive: true }
+        },
+
+        {
+          path: '/teacherPerIndicators',
+          component: TeacherPerIndicators,
+          name: 'TeacherPerIndicators',
+          beforeEnter: requireRole('admin')
         },
         {
-          path: '/comment', // 评论管理
-          component: CommentList,
-          name: 'CommentList'
+          path: '/adminAssessment',
+          component: AdminAssessment,
+          name: 'AdminAssessment',
+          beforeEnter: requireRole('admin')
+        },
+        {
+          path: '/personHisPer',
+          component: PersonHisPer,
+          beforeEnter: requireRole('teacher')
+        },
+        {
+          path: '/perSelf',
+          component: PerSelf,
+          name: 'PerSelf',
+          beforeEnter: requireRole('teacher')
+        },
+        {
+          path: '/personAssessment',
+          component: PersonAssessment,
+          name: 'PersonAssessment',
+          beforeEnter: requireRole('teacher')
+        },
+        {
+          path: '/teacherPerNow',
+          component: TeacherPerNow,
+          name: 'TeacherPerNow'
         }
       ]
     },
@@ -96,9 +140,14 @@ const router = createRouter({
 // 路由守卫
 router.beforeEach((to, from, next) => {
   const loginerStore = useLoginerStore()
-  const token = computed(() => loginerStore.userInfo.token) // 模拟用户是否登录
+  loginerStore.getUserInfo()
+  const token = computed(() => loginerStore.userInfo.token)
   // 如果访问的路由需要登录权限，并且用户未登录
   if (to.name !== 'LoginIndex' && !token.value) {
+    ElMessage({
+      type: 'warning',
+      message: '登录过期，请重新登录'
+    })
     next({ name: 'LoginIndex' }) // 重定向到登录页面
   } else {
     next() // 允许通过

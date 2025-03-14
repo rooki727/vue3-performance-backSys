@@ -8,23 +8,13 @@
     @updateList="updateList"
   ></editDialog>
   <div>
-    <el-table :data="currentPageData" style="width: 100%" @selection-change="handleSelectionChange">
+    <el-table :data="currentPageData" style="width: 100%">
       <el-table-column width="40" type="selection" />
-      <el-table-column fixed prop="user_id" label="user_id" width="100" />
-      <el-table-column prop="avatar" label="头像" width="113">
-        <template #default="scope">
-          <img :src="scope.row.avatar || '/avatar.jpg'" alt="" style="width: 50px; height: 50px" />
-        </template>
-      </el-table-column>
-      <el-table-column prop="real_name" label="真实姓名" width="120" />
-      <el-table-column prop="gender" label="性别" width="60" />
-      <el-table-column prop="role" label="角色" show-overflow-tooltip width="80" />
-      <el-table-column prop="account" label="账号" width="150" />
-      <el-table-column prop="phone_number" label="电话" width="210" />
-      <el-table-column prop="email" label="邮箱" show-overflow-tooltip width="200" />
-      <el-table-column prop="academy" label="学院" width="150" />
-
-      <el-table-column fixed="right" label="操作" width="130">
+      <el-table-column fixed prop="indicator_id" label="指标id" width="200" />
+      <el-table-column prop="indicator_name" label="指标名称" width="320" />
+      <el-table-column prop="weight" label="占比" width="160" />
+      <el-table-column prop="created_at" label="创建时间" show-overflow-tooltip width="400" />
+      <el-table-column fixed="right" label="操作" width="230">
         <template #default="scope">
           <el-button link type="primary" size="small" @click="handleEdit(scope.row)"
             ><el-icon size="20px"><EditPen /></el-icon
@@ -58,12 +48,11 @@
 <script setup>
 import editDialog from './editDialog.vue'
 import { computed, ref, inject } from 'vue'
-import { deleteUserAPI } from '@/apis/user'
+import { deleteIndicatorAPI } from '@/apis/indicators'
 import { ElMessage } from 'element-plus'
 // 获取t方法才可以在js代码里使用
 
 // 添加对话框
-const dialogTitle = ref('')
 const dialogFormVisible = ref(false)
 const clickRow = ref({})
 const cannotInpId = ref(true)
@@ -79,7 +68,7 @@ const updateClickRow = (newValue) => {
   clickRow.value = newValue
 }
 const props = defineProps({
-  tableCommonUser: {
+  indicatorsList: {
     type: Array
   }
 })
@@ -91,7 +80,7 @@ const background = ref(false)
 const disabled = ref(false)
 const currentPage = ref(1)
 // 将代码table监听获值
-const computedtable = computed(() => props.tableCommonUser)
+const computedtable = computed(() => props.indicatorsList)
 
 const totalRowSize = computed(() => computedtable.value?.length)
 const currentPageData = computed(() => {
@@ -99,24 +88,9 @@ const currentPageData = computed(() => {
   const endIndex = startIndex + pageSize.value
   return computedtable.value.slice(startIndex, endIndex)
 })
-// 获取选择框的内容
-const multipleSelection = ref([])
-const emit = defineEmits(['getDelTable'])
-
-// 获取多选框的数据
-const handleSelectionChange = (val) => {
-  multipleSelection.value = val
-  if (multipleSelection.value.length > 0) {
-    // 使用map方法遍历multipleSelection.value数组，并将每个选中项的id存储到一个新的数组中
-    const selectedIds = multipleSelection.value.map((item) => item.user_id)
-    // 将所选数据提供给父组件
-    emit('getDelTable', selectedIds)
-  }
-}
 
 // 编辑
 const handleEdit = (row) => {
-  dialogTitle.value = '编辑'
   changeDialogVisible(true)
   // 在这里使用 row 数据执行编辑操作
   clickRow.value = row
@@ -124,7 +98,7 @@ const handleEdit = (row) => {
 
 const handleDelete = async (row) => {
   // 在这里使用 row 数据执行删除操作
-  await deleteUserAPI(row.user_id)
+  await deleteIndicatorAPI({ indicator_id: row.indicator_id })
     .then(() => {
       ElMessage({ type: 'success', message: '删除成功' })
       getTableForm()

@@ -1,6 +1,6 @@
 <template>
   <div class="userheader">
-    <el-icon color="rgba(200, 83, 83, 0.604)" size="4.6rem"><UserFilled /></el-icon>
+    <el-icon color="skyblue" size="4.6rem"><UserFilled /></el-icon>
     <span style="color: gray">用户个人信息</span>
   </div>
   <el-divider content-position="center">以下为各项信息详情</el-divider>
@@ -28,11 +28,6 @@
         index="/loginInfo/passwordmanagement"
         :class="{ 'is-active': $route.path === '/loginInfo/passwordmanagement' }"
         >修改密码</el-menu-item
-      >
-      <el-menu-item
-        index="/loginInfo/cancelaccount"
-        :class="{ 'is-active': $route.path === '/loginInfo/cancelaccount' }"
-        >注销账号</el-menu-item
       >
     </el-menu>
   </div>

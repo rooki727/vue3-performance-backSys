@@ -1,5 +1,11 @@
 <script setup>
+import { useLoginerStore } from '@/stores/LoginerStore'
+import { computed } from 'vue'
+const loginerStore = useLoginerStore()
 const props = defineProps(['isCollapse'])
+const isAdmin = computed(() => {
+  return loginerStore.userInfo.role === 'admin'
+})
 </script>
 
 <template>
@@ -13,7 +19,7 @@ const props = defineProps(['isCollapse'])
     <!-- 标题 -->
     <el-menu-item class="logo">
       <span
-        ><el-icon><Menu /></el-icon>音乐平台后台管理</span
+        ><el-icon><Menu /></el-icon>高校绩效管理系统</span
       >
     </el-menu-item>
     <!-- 首页 -->
@@ -25,24 +31,62 @@ const props = defineProps(['isCollapse'])
     </el-menu-item>
     <!-- 用户管理 -->
 
-    <el-menu-item index="/user" :class="{ 'is-active': $route.path === '/user' }">
+    <el-menu-item index="/user" :class="{ 'is-active': $route.path === '/user' }" v-if="isAdmin">
       <el-icon><User /></el-icon>
       <template #title>
-        <span>用户管理</span>
+        <span>教师管理</span>
       </template>
     </el-menu-item>
-    <el-menu-item index="/singer" :class="{ 'is-active': $route.path === '/singer' }">
-      <el-icon><Star /></el-icon>
+    <el-menu-item
+      index="/indicatorsSettings"
+      :class="{ 'is-active': $route.path === '/indicatorsSettings' }"
+      v-if="isAdmin"
+      ><el-icon><Setting /></el-icon>
       <template #title>
-        <span>歌手管理</span>
+        <span>指标设置</span>
       </template>
     </el-menu-item>
-    <el-menu-item index="/playlists" :class="{ 'is-active': $route.path === '/playlists' }">
-      <el-icon><Service /></el-icon>
+    <el-menu-item
+      index="/teacherPerIndicators"
+      :class="{ 'is-active': $route.path === '/teacherPerIndicators' }"
+      v-if="isAdmin"
+      ><el-icon><Check /></el-icon>
       <template #title>
-        <span>歌单管理</span>
+        <span>当前季度绩效评定</span>
       </template>
     </el-menu-item>
+    <el-menu-item
+      index="/perManage"
+      :class="{ 'is-active': $route.path === '/perManage' }"
+      v-if="isAdmin"
+      ><el-icon><SetUp /></el-icon>
+      <template #title> <span>教师历史季度绩效管理</span> </template>
+    </el-menu-item>
+    <el-menu-item
+      index="/academyPer"
+      :class="{ 'is-active': $route.path === '/academyPer' }"
+      v-if="isAdmin"
+      ><el-icon><Flag /></el-icon
+      ><template #title> <span>学院季度绩效统计报表</span> </template></el-menu-item
+    >
+    <el-menu-item
+      index="/perSelf"
+      :class="{ 'is-active': $route.path === '/perSelf' }"
+      v-if="!isAdmin"
+      ><el-icon><DataLine /></el-icon
+      ><template #title> <span>绩效自评</span> </template></el-menu-item
+    >
+    <el-menu-item
+      index="/personHisPer"
+      :class="{ 'is-active': $route.path === '/personHisPer' }"
+      v-if="!isAdmin"
+      ><el-icon><Histogram /></el-icon
+      ><template #title> <span>个人历史绩效</span> </template></el-menu-item
+    >
+    <el-menu-item index="/teacherPerNow" :class="{ 'is-active': $route.path === '/teacherPerNow' }"
+      ><el-icon><TrendCharts /></el-icon
+      ><template #title> <span>本季度绩效报表公示</span> </template></el-menu-item
+    >
   </el-menu>
 </template>
 
@@ -58,6 +102,10 @@ const props = defineProps(['isCollapse'])
     color: rgb(43, 133, 207);
   }
 }
+.el-menu-item:hover {
+  background-color: rgb(101, 190, 238);
+  color: rgb(15, 122, 210);
+}
 .logo {
   font-weight: 700;
   height: 100px;
@@ -66,6 +114,7 @@ const props = defineProps(['isCollapse'])
 }
 .logo:hover {
   background-color: transparent;
+  color: #fff;
 }
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 12.5rem;

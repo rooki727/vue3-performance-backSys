@@ -26,10 +26,10 @@ const changeCollapse = () => {
   bottom: 0;
   background: linear-gradient(
     to bottom,
-    rgb(203, 183, 234),
-    rgb(234, 183, 232),
-    rgb(183, 213, 234),
-    rgb(171, 190, 235)
+    rgb(73, 104, 243),
+    rgb(71, 103, 247),
+    rgb(40, 58, 141),
+    rgb(20, 33, 88)
   ) !important;
 }
 .content {

@@ -6,7 +6,7 @@ import { useLoginerStore } from '@/stores/LoginerStore'
 import { useRouter } from 'vue-router'
 const Router = useRouter()
 const LoginerStore = useLoginerStore()
-const circleUrl = '/public/avatar.jpg'
+const circleUrl = '/avatar.jpg'
 const route = useRoute()
 const props = defineProps(['isCollapse'])
 const emit = defineEmits(['changeCollapse'])
@@ -38,19 +38,33 @@ const changeBreadName = () => {
       case '/loginInfo/cancelaccount':
         secondBreadName.value = '注销账号'
         break
-      case '/singer':
-        secondBreadName.value = '歌手管理'
+      case '/indicatorsSettings':
+        secondBreadName.value = '指标设置'
         break
-      case '/playlists':
-        secondBreadName.value = '歌单管理'
+      case '/teacherPerIndicators':
+        secondBreadName.value = '当前季度绩效评定'
         break
-      case '/songlist':
-        secondBreadName.value = '歌曲管理'
+      case '/perManage':
+        secondBreadName.value = '教师历史季度绩效管理'
         break
-      case '/comment':
-        secondBreadName.value = '评论管理'
+      case '/academyPer':
+        secondBreadName.value = '学院季度绩效统计报表'
         break
-      case '/songlistdetail':
+      case '/perSelf':
+        secondBreadName.value = '绩效自评'
+        break
+      case '/personHisPer':
+        secondBreadName.value = '个人历史绩效'
+        break
+      case '/teacherPerNow':
+        secondBreadName.value = '本季度绩效报表公示'
+        break
+      case '/personAssessment':
+        secondBreadName.value = '个人绩效详情'
+        break
+      case '/adminAssessment':
+        secondBreadName.value = '管理教师历史绩效详情'
+        break
       default:
         // 默认情况下的处理逻辑
         break
@@ -124,7 +138,7 @@ onMounted(() => {
                   :src="LoginerStore.userInfo?.avatar ? LoginerStore.userInfo?.avatar : circleUrl"
                 />
                 <span style="margin-left: 0.5rem">
-                  {{ LoginerStore.userInfo.name }}
+                  {{ LoginerStore.userInfo.real_name || LoginerStore.userInfo.account }}
                 </span>
               </div>
               <template #dropdown>
@@ -147,13 +161,21 @@ onMounted(() => {
       </div>
     </el-col>
   </el-row>
-
+  <el-alert
+    title="系统自使用当天起，从每年的1月起，三个月为一个季度，每位教师的自评数据会在管理员评定后七天自动清除，管理员评定后综合绩效会自动呈现在历史绩效报表中，请前往查看。"
+    type="warning"
+  />
   <el-breadcrumb :separator-icon="ArrowRight" style="padding-top: 8px; padding-bottom: 18px">
     <el-breadcrumb-item>首页</el-breadcrumb-item>
     <el-breadcrumb-item v-if="secondBread">{{ secondBreadName }}</el-breadcrumb-item>
   </el-breadcrumb>
   <!-- router出口 -->
-  <router-view></router-view>
+  <router-view v-slot="{ Component, route }">
+    <keep-alive v-if="route.meta.keepAlive">
+      <component :is="Component" />
+    </keep-alive>
+    <component v-else :is="Component" />
+  </router-view>
 </template>
 
 
@@ -161,10 +183,10 @@ onMounted(() => {
 .header {
   background: linear-gradient(
     to right,
-    rgb(203, 183, 234),
-    rgb(234, 183, 232),
-    rgb(183, 213, 234),
-    rgb(171, 190, 235)
+    rgb(73, 104, 243),
+    rgb(71, 103, 247),
+    rgb(108, 131, 236),
+    rgb(149, 166, 241)
   ) !important;
 
   position: relative;

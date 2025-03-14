@@ -4,7 +4,7 @@ import { useLoginerStore } from '@/stores/LoginerStore'
 // import { updatePasswordAPI } from '@/apis/login'
 import { ElMessage } from 'element-plus'
 import { useRouter } from 'vue-router'
-// import { getCaptchaAPI } from '@/apis/user'
+import { getCaptchaAPI, checkOldPasswordAPI, updatePasswordAPI } from '@/apis/user'
 // 获取t方法才可以在js代码里使用
 const ruleForm = reactive({
   Oripass: '',
@@ -12,15 +12,18 @@ const ruleForm = reactive({
   checkPass: '',
   captcha: ''
 })
+const isRightOldPassword = ref(false)
 const router = useRouter()
 const LoginerStore = useLoginerStore()
-// const LoginerId = computed(() => LoginerStore.userInfo.id)
-const LoginerOriPassword = computed(() => LoginerStore.userInfo.password)
 // 图片验证码
 const getcaptcha = ref([])
 const captchaString = computed(() => getcaptcha.value.map((item) => item.value).join(''))
 // 对象dom
 const ruleFormRef = ref()
+const checkOldPassword = async () => {
+  const res = await checkOldPasswordAPI(LoginerStore.userInfo.user_id, ruleForm.Oripass)
+  isRightOldPassword.value = res.data
+}
 // 确定密码函数
 const validateConfirm = (rule, value, callback) => {
   if (value === '') {
@@ -42,15 +45,19 @@ const submitForm = (formRef) => {
     if (valid) {
       // 如果表单验证通过，可以继续执行提交逻辑
       // 进行api提交
-      if (ruleForm.Oripass === LoginerOriPassword.value) {
-        // await updatePasswordAPI(LoginerId.value, ruleForm.pass)
-        ElMessage({
-          message: '修改密码成功',
-          type: 'success',
-          plain: true
+      await checkOldPassword()
+      if (isRightOldPassword.value) {
+        await updatePasswordAPI(LoginerStore.userInfo.user_id, ruleForm.pass).then((res) => {
+          if (res.data) {
+            ElMessage({
+              message: '修改密码成功',
+              type: 'success',
+              plain: true
+            })
+            router.replace('/login')
+            LoginerStore.clearUser()
+          }
         })
-        router.replace('/login')
-        LoginerStore.clearUser()
       } else {
         ElMessage({
           message: '原密码错误',
@@ -102,8 +109,8 @@ const rules = {
 // 假设一个验证功能：具体得用后端的接口提供的验证码
 
 const generateCaptcha = async () => {
-  // const res = await getCaptchaAPI()
-  // getcaptcha.value = res
+  const res = await getCaptchaAPI()
+  getcaptcha.value = res
 }
 
 onMounted(() => generateCaptcha())
@@ -164,9 +171,7 @@ onMounted(() => generateCaptcha())
         </el-button>
       </el-form-item>
       <el-form-item>
-        <el-button
-          style="background-color: rgba(200, 83, 83, 0.504); color: white"
-          @click="submitForm(ruleFormRef)"
+        <el-button style="background-color: skyblue; color: white" @click="submitForm(ruleFormRef)"
           >更新</el-button
         >
         <el-button @click="resetForm(ruleFormRef)">重置</el-button>

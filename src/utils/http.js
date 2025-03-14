@@ -5,7 +5,8 @@ import router from '@/router'
 import { useLoginerStore } from '@/stores/LoginerStore'
 import { refreshTokenAPI } from '@/apis/token'
 const httpInstance = axios.create({
-  baseURL: '',
+  baseURL: 'http://119.29.168.176:8080/linyinlu/',
+  // baseURL: 'http://localhost:8080/linyinlu/',
   timeout: 5000
 })
 
@@ -21,6 +22,7 @@ httpInstance.interceptors.request.use(
       // 在请求头中添加 token
       if (token) {
         config.headers.Authorization = `Bearer ${token}`
+        config.headers.RefreshToken = loginerStore.userInfo.refreshToken
       }
     }
     return config
@@ -46,17 +48,22 @@ httpInstance.interceptors.response.use(
     // 处理 token 过期失效问题
     if (response.data.code === '-403') {
       if (isTokenAboutToExpire(loginerStore.userInfo.token)) {
-        console.log('Token 即将过期，尝试刷新 token')
+        ElMessage({
+          type: 'warning',
+          message: 'Token已过期，尝试刷新token，当前操作若未生效，请重新尝试当前操作',
+          duration: 5000
+        })
         try {
-          const res = await refreshTokenAPI(
-            loginerStore.userInfo.id,
+          await refreshTokenAPI(
+            loginerStore.userInfo.user_id,
             loginerStore.userInfo.refreshToken
-          )
-          loginerStore.userInfo = res
-          // 重新前一请求
-          await httpInstance.request(response.config).then((res) => {
-            loginerStore.getNewLoginer(loginerStore.userInfo.id)
-            return res.data
+          ).then(async (res) => {
+            loginerStore.userInfo = res
+            // 重新前一请求
+            await httpInstance.request(response.config).then((res1) => {
+              loginerStore.getUserById()
+              return res1.data
+            })
           })
         } catch (error) {
           console.error('Token 刷新失败', error)

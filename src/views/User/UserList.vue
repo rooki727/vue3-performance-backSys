@@ -1,48 +1,31 @@
 <script setup>
 import UserTable from './components/UserTable.vue'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, provide } from 'vue'
 import addDialog from './components/addDialog.vue'
 import { ElMessage } from 'element-plus'
-
+import { getAllTeacherAPI, deleteUserAPI } from '@/apis/user'
 // 获取t方法才可以在js代码里使用
 
 // 搜索功能变量
 const searchInput = ref('')
 const dialogTitle = ref('')
 // 表格内容
-const tableCommonUser = ref([
-  {
-    user_id: 1,
-    avatar:
-      'http://119.29.168.176:8080/library_ssm/static/86b3855f-56ab-4723-ad50-2d3ca4097225_awatar11.jpg',
-    name: '张三',
-    gender: '男',
-    account: '12345678901',
-    password: '12345678901a',
-    phone: '12345678901',
-    email: '12345678901@qq.com',
-    birthday: '2000-01-01',
-    signature: '我太帅咯'
-  },
-  {
-    user_id: 2,
-    avatar: '',
-    name: '李四',
-    gender: '男',
-    account: '12345678901',
-    password: '12345678901a',
-    phone: '12345678901',
-    email: '12345678901@qq.com',
-    birthday: '2000-01-01',
-    signature: '我太帅咯'
-  }
-])
-
+const tableCommonUser = ref([])
+const originalData = ref([])
 // 获取table数据
 const getTableForm = async () => {
   // 请求接口
+  const res = await getAllTeacherAPI()
+  // 判断是否成功
+  if (res.code == 1) {
+    tableCommonUser.value = res.data
+    originalData.value = res.data
+  } else {
+    ElMessage({ type: 'error', message: '获取用户列表失败' })
+  }
 }
-
+// 使用 provide 暴露父组件的方法
+provide('getTableForm', getTableForm)
 // 添加对话框
 const dialogFormVisible = ref(false)
 const changeDialogVisible = (value) => {
@@ -51,16 +34,14 @@ const changeDialogVisible = (value) => {
 
 // 点击打开添加表单
 const openAddDialog = () => {
-  dialogTitle.value = '添加用户'
+  dialogTitle.value = '添加教师'
   changeDialogVisible(true)
 }
 
 // 搜索功能
-// 备份原始数据
-const originalData = [...tableCommonUser.value]
 const resetSearch = () => {
   searchInput.value = ''
-  tableCommonUser.value = [...originalData]
+  tableCommonUser.value = [...originalData.value]
 }
 let debounceTimer = null // 在函数外部定义定时器变量，以保证它在多个调用之间是共享的
 
@@ -73,10 +54,12 @@ const handleSearch = (inputvalue) => {
   debounceTimer = setTimeout(() => {
     // 如果输入为空，恢复原始数据
     if (inputvalue === '') {
-      tableCommonUser.value = [...originalData]
+      tableCommonUser.value = [...originalData.value]
     } else {
       // 根据输入值过滤数据
-      const filteredData = originalData.filter((item) => item?.name?.includes(inputvalue))
+      const filteredData = originalData.value.filter((item) =>
+        item?.real_name?.includes(inputvalue)
+      )
       // 更新表格数据
       tableCommonUser.value = filteredData
     }
@@ -87,15 +70,23 @@ const handleSearch = (inputvalue) => {
 const delTableId = ref([])
 const getDelTable = (value) => {
   delTableId.value = value
-  console.log(delTableId.value)
 }
-const blukDel = () => {
+const blukDel = async () => {
   if (delTableId.value.length > 0) {
-    // 执行请求操作
-    // delTableId.value.forEach((item) => deleteCommonUser(item))
+    // 执行请求操作（并行执行所有删除请求）
+    const deletePromises = delTableId.value.map((item) => deleteUserAPI(item))
+
+    // 等待所有删除请求完成
+    await Promise.all(deletePromises)
+
+    // 所有删除操作完成后
     ElMessage({ type: 'success', message: '批量删除成功' })
+
     // 删除完后清空数据
     delTableId.value = []
+
+    // 在所有操作完成后再调用 getTableForm
+    await getTableForm()
   } else {
     ElMessage({
       type: 'error',
@@ -115,13 +106,14 @@ onMounted(() => {
     :title="dialogTitle"
     :dialogFormVisible="dialogFormVisible"
     @changeDialogVisible="changeDialogVisible"
+    @updateList="getTableForm"
   ></addDialog>
   <div class="search">
     <el-input
       label="search"
-      v-model="searchInput"
+      v-model.lazy="searchInput"
       style="width: 33rem; margin-left: 1rem"
-      placeholder="根据name搜索"
+      placeholder="根据姓名搜索"
       @input="handleSearch"
       clearable
     ></el-input>
@@ -130,7 +122,7 @@ onMounted(() => {
   <el-divider border-style="dashed" />
   <div class="opTable">
     <el-button @click="openAddDialog" type="warning" style="margin-left: 2rem"
-      ><el-icon><Plus /></el-icon>添加用户</el-button
+      ><el-icon><Plus /></el-icon>添加教师</el-button
     >
     <el-button type="danger" @click="blukDel"
       ><el-icon><DeleteFilled /></el-icon>批量删除</el-button
