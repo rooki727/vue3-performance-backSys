@@ -17,7 +17,10 @@
     <el-button type="success" style="margin-left: 4rem; margin-top: -1.1rem" @click="exportExcel"
       >导出Excel</el-button
     >
-    <el-table style="padding: 10px" :data="perList">
+    <el-button type="danger" style="margin-left: 1.5rem; margin-top: -1.1rem" @click="exportPDF"
+      >导出PDF</el-button
+    >
+    <el-table ref="pdfTable" style="padding: 10px; width: 100%" :data="perList">
       <el-table-column prop="performance_id" label="绩效编号" width="200"></el-table-column>
       <el-table-column prop="performance_date" label="评定时间" width="400"></el-table-column>
       <el-table-column prop="real_name" label="姓名" width="200"></el-table-column>
@@ -52,7 +55,6 @@
   </div>
 </template>
 
-
 <script setup>
 import { findAllPerformanceNowAPI, deletePerformanceAPI } from '@/apis/performanceAssessment'
 import { computed, onMounted, ref } from 'vue'
@@ -61,6 +63,9 @@ import { throttle } from 'lodash'
 import { ElMessage } from 'element-plus'
 import { useLoginerStore } from '@/stores/LoginerStore'
 import * as XLSX from 'xlsx'
+import html2canvas from 'html2canvas'
+import jsPDF from 'jspdf'
+
 const loginerStore = useLoginerStore()
 const role = computed(() => loginerStore.userInfo.role)
 const router = useRouter()
@@ -69,6 +74,8 @@ const searchQuery = ref('')
 const page = ref(1)
 const pageSize = ref(10)
 const total = ref(0)
+const pdfTable = ref(null)
+
 const getPerformancesAssessmentsById = async () => {
   const res = await findAllPerformanceNowAPI({
     page: page.value,
@@ -78,11 +85,14 @@ const getPerformancesAssessmentsById = async () => {
   perList.value = res.data
   total.value = res.totalCount
 }
+
 const handleSearch = async () => {
   page.value = 1
   getPerformancesAssessmentsById()
 }
+
 const throttledHandleSearch = throttle(handleSearch, 800)
+
 const resetSearch = () => {
   searchQuery.value = ''
   page.value = 1
@@ -93,6 +103,7 @@ const handlePageChange = (newPage) => {
   page.value = newPage
   getPerformancesAssessmentsById()
 }
+
 const goTodeatil = (item) => {
   window.localStorage.setItem('performance_item', JSON.stringify(item.assessmentList))
   if (role.value === 'admin') {
@@ -101,6 +112,7 @@ const goTodeatil = (item) => {
     router.push('/personAssessment')
   }
 }
+
 const exportExcel = () => {
   const data = perList.value.map((item) => {
     const assessments = item.assessmentList
@@ -123,9 +135,56 @@ const exportExcel = () => {
   XLSX.utils.book_append_sheet(workbook, worksheet, '绩效数据')
   XLSX.writeFile(workbook, '当前季度绩效数据.xlsx')
 }
-// 删除
+
+const exportPDF = async () => {
+  try {
+    const table = pdfTable.value.$el.cloneNode(true)
+    // 移除操作列
+    const actionColumns = table.querySelectorAll('.el-table__fixed-right')
+    actionColumns.forEach((col) => col.remove())
+
+    // 设置临时样式
+    table.style.width = '100%'
+    table.style.overflow = 'visible'
+    document.body.appendChild(table)
+
+    const canvas = await html2canvas(table, {
+      scale: 2,
+      useCORS: true,
+      logging: false,
+      backgroundColor: '#ffffff',
+      scrollY: -window.scrollY
+    })
+
+    const imgData = canvas.toDataURL('image/png')
+    const pdf = new jsPDF('l', 'mm', 'a4') // 横向布局
+    const pageWidth = pdf.internal.pageSize.getWidth()
+    const pageHeight = pdf.internal.pageSize.getHeight()
+
+    // 计算图片比例
+    const imgWidth = pageWidth - 20 // 左右边距各10mm
+    const imgHeight = (canvas.height * imgWidth) / canvas.width
+
+    // 添加水印
+    pdf.setFontSize(40)
+    pdf.setTextColor(200, 200, 200)
+    pdf.text('绩效数据', pageWidth / 2, pageHeight / 2, {
+      align: 'center',
+      angle: 45
+    })
+
+    // 添加表格图片
+    pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight)
+
+    // 清理临时元素
+    document.body.removeChild(table)
+    pdf.save('当前季度绩效数据.pdf')
+  } catch (error) {
+    ElMessage.error('PDF导出失败: ' + error.message)
+  }
+}
+
 const handleDelete = async (row) => {
-  // 在这里使用 row 数据执行删除操作
   await deletePerformanceAPI({
     performance_id: row.performance_id
   })
@@ -134,17 +193,50 @@ const handleDelete = async (row) => {
       getPerformancesAssessmentsById()
     })
     .catch((error) => {
-      // 处理请求失败的情况
-      ElMessage({ type: 'erro', message: error })
-      // 在此处可以添加相应的错误处理逻辑，例如提示用户登录失败等
+      ElMessage({ type: 'error', message: error.message })
     })
 }
+
 onMounted(() => {
   getPerformancesAssessmentsById()
 })
 </script>
 
 <style lang="scss" scoped>
+@media print {
+  .el-table {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    &__header-wrapper,
+    &__body-wrapper {
+      width: 100% !important;
+    }
+
+    td,
+    th {
+      padding: 5px !important;
+      font-size: 12px !important;
+      white-space: normal !important;
+    }
+
+    .cell {
+      white-space: normal !important;
+      line-height: 1.5 !important;
+    }
+  }
+}
+
+.pdf-export-table {
+  .el-table {
+    width: max-content !important;
+
+    &__body {
+      width: 100% !important;
+    }
+  }
+}
+
 .titleTips {
   margin-left: 20px;
   height: 30px;
@@ -154,6 +246,7 @@ onMounted(() => {
   background-color: #edc878c4;
   color: #f50808d8;
 }
+
 .indicator-list {
   margin-left: 50px;
   margin-top: 20px;
@@ -167,6 +260,18 @@ onMounted(() => {
       line-height: 50px;
       border: 1px solid #858484;
     }
+  }
+}
+
+@media print {
+  .el-pagination,
+  .el-button,
+  .el-alert {
+    display: none !important;
+  }
+
+  .el-table__fixed-right {
+    display: none !important;
   }
 }
 </style>

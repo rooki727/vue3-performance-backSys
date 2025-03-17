@@ -45,19 +45,66 @@
 
 <script setup>
 import { useLoginerStore } from '@/stores/LoginerStore'
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { ElNotification } from 'element-plus'
 const router = useRouter()
 const loginerStore = useLoginerStore()
 const role = computed(() => loginerStore.userInfo.role)
 const assessmentList = window.localStorage.getItem('performance_item')
   ? JSON.parse(window.localStorage.getItem('performance_item'))
   : []
+// 处理数据，计算每个指标的平均分数并升序排序
+const processedAssessmentList = computed(() => {
+  const indicatorMap = new Map()
+
+  assessmentList.forEach((item) => {
+    if (!indicatorMap.has(item.indicator_name)) {
+      indicatorMap.set(item.indicator_name, { totalScore: 0, count: 0, basis: item.basis })
+    }
+    const indicator = indicatorMap.get(item.indicator_name)
+    indicator.totalScore += item.score
+    indicator.count += 1
+  })
+
+  const result = Array.from(indicatorMap.entries())
+    .map(([indicator_name, { totalScore, count, basis }]) => ({
+      indicator_name,
+      average_score: (totalScore / count).toFixed(2),
+      basis
+    }))
+    // 新增过滤条件
+    .filter((item) => parseFloat(item.average_score) < 80)
+    // 保留原有排序
+    .sort((a, b) => a.average_score - b.average_score)
+
+  return result
+})
+const openTip = (value) => {
+  ElNotification({
+    title: 'Warning',
+    message: `尊敬的${loginerStore.userInfo.real_name}老师，您该季度的【${value}】低于80分，有待提高~`,
+    type: 'warning',
+    duration: 0,
+    offset: 60
+  })
+}
 
 const goBack = () => {
   window.localStorage.removeItem('performance_item')
   router.go(-1)
 }
+onMounted(() => {
+  console.log(processedAssessmentList.value)
+
+  if (processedAssessmentList.value.length > 0) {
+    // 将processedAssessmentList的indicater_name字段提取出来转换为string
+    const indicatorNames = processedAssessmentList.value
+      .map((item) => item.indicator_name)
+      .join(',')
+    openTip(indicatorNames)
+  }
+})
 </script>
 
 <style lang="scss" scoped>
