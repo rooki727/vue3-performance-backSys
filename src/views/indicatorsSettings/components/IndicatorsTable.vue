@@ -19,14 +19,6 @@
           <el-button link type="primary" size="small" @click="handleEdit(scope.row)"
             ><el-icon size="20px"><EditPen /></el-icon
           ></el-button>
-
-          <el-popconfirm title="确认删除本行数据吗" @confirm="handleDelete(scope.row)">
-            <template #reference>
-              <el-button link type="primary" size="small"
-                ><el-icon style="color: red" size="20px"><Delete /></el-icon
-              ></el-button>
-            </template>
-          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
@@ -48,8 +40,6 @@
 <script setup>
 import editDialog from './editDialog.vue'
 import { computed, ref, inject } from 'vue'
-import { deleteIndicatorAPI } from '@/apis/indicators'
-import { ElMessage } from 'element-plus'
 // 获取t方法才可以在js代码里使用
 
 // 添加对话框
@@ -94,20 +84,6 @@ const handleEdit = (row) => {
   changeDialogVisible(true)
   // 在这里使用 row 数据执行编辑操作
   clickRow.value = row
-}
-
-const handleDelete = async (row) => {
-  // 在这里使用 row 数据执行删除操作
-  await deleteIndicatorAPI({ indicator_id: row.indicator_id })
-    .then(() => {
-      ElMessage({ type: 'success', message: '删除成功' })
-      getTableForm()
-    })
-    .catch((error) => {
-      // 处理请求失败的情况
-      ElMessage({ type: 'erro', message: error })
-      // 在此处可以添加相应的错误处理逻辑，例如提示用户登录失败等
-    })
 }
 </script>
 

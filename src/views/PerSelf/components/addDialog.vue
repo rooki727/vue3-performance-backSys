@@ -88,8 +88,14 @@ const submitadd = (addForm) => {
     :lock-scroll="false"
     :close-on-click-modal="false"
   >
+    <el-alert
+      title="请自评分数时，根据自己所上传对应指标数据的实际情况进行评分！"
+      type="warning"
+      show-icon
+      :closable="false"
+    ></el-alert>
     <!-- 使用下拉框选择指标 -->
-    <el-form-item label="指标" label-width="8.75rem" prop="academy">
+    <el-form-item label="指标" label-width="8.75rem" prop="academy" style="margin-top: 20px">
       <el-select v-model="addform.indicator_id" placeholder="请选择指标">
         <el-option
           v-for="item in filterIndicatorList"

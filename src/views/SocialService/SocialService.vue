@@ -1,27 +1,37 @@
 <script setup>
-import UserTable from './components/UserTable.vue'
-import { ref, onMounted, provide } from 'vue'
+import SocialTable from './components/SocialTable.vue'
+import { ref, onMounted, provide, computed } from 'vue'
 import addDialog from './components/addDialog.vue'
 import { ElMessage } from 'element-plus'
-import { getAllTeacherAPI, deleteUserAPI } from '@/apis/user'
-// 获取t方法才可以在js代码里使用
-
+import { getAllSocialAPI, getSocialByUserAPI, deleteSocialAPI } from '@/apis/socialService'
+import { isTeacher } from '@/utils/checkRole'
+import { useLoginerStore } from '@/stores/LoginerStore'
+import { useRoute } from 'vue-router'
+const loginerStore = useLoginerStore()
+loginerStore.getUserInfo()
+const role = computed(() => loginerStore.userInfo.role)
+const user_id = computed(() => loginerStore.userInfo.user_id)
 // 搜索功能变量
 const searchInput = ref('')
-const dialogTitle = ref('')
+const route = useRoute()
+
 // 表格内容
-const tableCommonUser = ref([])
+const socialTable = ref([])
 const originalData = ref([])
 // 获取table数据
 const getTableForm = async () => {
-  // 请求接口
-  const res = await getAllTeacherAPI()
+  let res = null
+  if (isTeacher(role.value)) {
+    res = await getSocialByUserAPI(user_id.value)
+  } else {
+    res = await getAllSocialAPI()
+  }
   // 判断是否成功
   if (res.code == 1) {
-    tableCommonUser.value = res.data
+    socialTable.value = res.data
     originalData.value = res.data
   } else {
-    ElMessage({ type: 'error', message: '获取用户列表失败' })
+    ElMessage({ type: 'error', message: '获取任务列表失败' })
   }
 }
 // 使用 provide 暴露父组件的方法
@@ -34,14 +44,13 @@ const changeDialogVisible = (value) => {
 
 // 点击打开添加表单
 const openAddDialog = () => {
-  dialogTitle.value = '添加教师'
   changeDialogVisible(true)
 }
 
 // 搜索功能
 const resetSearch = () => {
   searchInput.value = ''
-  tableCommonUser.value = [...originalData.value]
+  socialTable.value = [...originalData.value]
 }
 let debounceTimer = null // 在函数外部定义定时器变量，以保证它在多个调用之间是共享的
 
@@ -54,14 +63,14 @@ const handleSearch = (inputvalue) => {
   debounceTimer = setTimeout(() => {
     // 如果输入为空，恢复原始数据
     if (inputvalue === '') {
-      tableCommonUser.value = [...originalData.value]
+      socialTable.value = [...originalData.value]
     } else {
       // 根据输入值过滤数据
       const filteredData = originalData.value.filter((item) =>
         item?.real_name?.includes(inputvalue)
       )
       // 更新表格数据
-      tableCommonUser.value = filteredData
+      socialTable.value = filteredData
     }
   }, 500) // 500毫秒后触发搜索，可以根据需要调整
 }
@@ -74,7 +83,7 @@ const getDelTable = (value) => {
 const blukDel = async () => {
   if (delTableId.value.length > 0) {
     // 执行请求操作（并行执行所有删除请求）
-    const deletePromises = delTableId.value.map((item) => deleteUserAPI(item))
+    const deletePromises = delTableId.value.map((item) => deleteSocialAPI(item))
 
     // 等待所有删除请求完成
     await Promise.all(deletePromises)
@@ -96,19 +105,22 @@ const blukDel = async () => {
 }
 
 // 加载网页加载数据
-onMounted(() => {
-  getTableForm()
+onMounted(async () => {
+  await getTableForm()
+  if (route.query.real_name) {
+    searchInput.value = route.query.real_name
+    handleSearch(searchInput.value) // 赋值后手动触发搜索事件
+  }
 })
 </script>
 
 <template>
   <addDialog
-    :title="dialogTitle"
     :dialogFormVisible="dialogFormVisible"
     @changeDialogVisible="changeDialogVisible"
     @updateList="getTableForm"
   ></addDialog>
-  <div class="search">
+  <div class="search" v-if="!isTeacher(role)">
     <el-input
       label="search"
       v-model.lazy="searchInput"
@@ -122,21 +134,21 @@ onMounted(() => {
   <el-divider border-style="dashed" />
   <div class="opTable">
     <el-button @click="openAddDialog" type="warning" style="margin-left: 2rem"
-      ><el-icon><Plus /></el-icon>添加教师</el-button
+      ><el-icon><Plus /></el-icon>上传社会服务</el-button
     >
     <el-popconfirm title="确认删除本行数据吗" @confirm="blukDel">
       <template #reference>
         <el-button type="danger"
           ><el-icon><DeleteFilled /></el-icon>批量删除</el-button
-        >
-      </template>
+        ></template
+      >
     </el-popconfirm>
   </div>
 
   <el-divider border-style="dashed" />
   <div class="table">
     <div class="taleDiv">
-      <UserTable :tableCommonUser="tableCommonUser" @getDelTable="getDelTable"></UserTable>
+      <SocialTable :socialTable="socialTable" @getDelTable="getDelTable"></SocialTable>
     </div>
   </div>
 </template>

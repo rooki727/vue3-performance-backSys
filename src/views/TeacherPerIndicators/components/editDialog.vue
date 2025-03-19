@@ -2,6 +2,8 @@
 import { reactive, computed, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
 import { manageAssessmentAPI } from '@/apis/managerAssessment'
+import { useRouter } from 'vue-router'
+const router = useRouter()
 // 弹框功能设置
 const props = defineProps(['dialogFormVisible', 'clickRow', 'cannotInpId'])
 const centerDialogVisible = computed(() => props.dialogFormVisible)
@@ -81,6 +83,21 @@ const resetForm = () => {
   addform.score = ''
   addform.basis = ''
 }
+// 去管理中心
+const goToManage = (name, real_name) => {
+  if (name === '教学任务') {
+    router.replace(`/teachingTask?real_name=${real_name}`)
+    return
+  }
+  if (name === '科研') {
+    router.replace(`/research?real_name=${real_name}`)
+    return
+  }
+  if (name === '社会服务') {
+    router.replace(`/socialService?real_name=${real_name}`)
+    return
+  }
+}
 watch(
   () => clickRow.value,
   (oldVal) => {
@@ -99,6 +116,18 @@ watch(
     :lock-scroll="false"
     :close-on-click-modal="false"
   >
+    <el-alert
+      :title="`请管理员评定分数前，务必前往 '${selfForm.indicator_name}' 管理中心搜索 '${selfForm.real_name}' 教师的各项数据是否审核完成后，根据实际情况给予分数！`"
+      type="warning"
+      show-icon
+      :closable="false"
+    ></el-alert>
+    <el-link
+      type="primary"
+      @click="goToManage(selfForm.indicator_name, selfForm.real_name)"
+      style="margin-left: 11rem"
+      >点击前往{{ selfForm.indicator_name }}管理查看</el-link
+    >
     <el-form :model="addform" :rules="rules" ref="addForm">
       <el-form-item label="教师：" label-width="8.75rem">
         <template #default>{{ selfForm.real_name }}</template>

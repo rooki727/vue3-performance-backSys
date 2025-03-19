@@ -15,6 +15,9 @@ import TeacherPerNow from '@/views/TeacherPerNow/TeacherPerNowIndex.vue'
 import indicatorsSettings from '@/views/indicatorsSettings/indicatorsSettingsIndex.vue'
 import PersonAssessment from '@/views/PersonAssessment/PersonAssessmentIndex.vue'
 import AdminAssessment from '@/views/AdminAssessment/AdminAssessmentIndex.vue'
+import TeachingTask from '@/views/TeachingTask/TeachingTask.vue'
+import Research from '@/views/Reseacrh/ResearchIndex.vue'
+import SocialService from '@/views/SocialService/SocialService.vue'
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { useLoginerStore } from '@/stores/LoginerStore'
 
@@ -78,6 +81,21 @@ const router = createRouter({
           component: indicatorsSettings,
           name: 'indicatorsSettings',
           beforeEnter: requireRole('admin')
+        },
+        {
+          path: '/teachingTask',
+          component: TeachingTask,
+          name: 'TeachingTask'
+        },
+        {
+          path: '/research',
+          component: Research,
+          name: 'Research'
+        },
+        {
+          path: '/socialService',
+          component: SocialService,
+          name: 'SocialService'
         },
         {
           path: '/academyPer',

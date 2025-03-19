@@ -1,7 +1,6 @@
 <script setup>
 import IndicatorsTable from './components/IndicatorsTable.vue'
 import { ref, onMounted, provide } from 'vue'
-import addDialog from './components/addDialog.vue'
 import { ElMessage } from 'element-plus'
 import { getIndicatorListAPI } from '@/apis/indicators'
 
@@ -29,12 +28,6 @@ const changeDialogVisible = (value) => {
   dialogFormVisible.value = value
 }
 
-// 点击打开添加表单
-const openAddDialog = () => {
-  dialogTitle.value = '添加指标'
-  changeDialogVisible(true)
-}
-
 // 加载网页加载数据
 onMounted(() => {
   getTableForm()
@@ -49,11 +42,6 @@ onMounted(() => {
     @updateList="getTableForm"
   ></addDialog>
   <el-divider border-style="dashed" />
-  <div class="opTable">
-    <el-button @click="openAddDialog" type="warning" style="margin-left: 2rem; margin-bottom: 1rem"
-      ><el-icon><Plus /></el-icon>添加指标</el-button
-    >
-  </div>
   <span class="tips">温馨提示：修改或添加指标时，需调整占比值总和为1，（即100%）</span>
   <el-divider border-style="dashed" />
   <div class="table">

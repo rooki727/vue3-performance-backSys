@@ -20,13 +20,6 @@ const addform = reactive({
   weight: null
 })
 const rules = {
-  indicator_name: [
-    {
-      required: true,
-      message: '请输入指标',
-      trigger: 'blur'
-    }
-  ],
   weight: [
     {
       required: true,
@@ -85,7 +78,7 @@ watch(
         <el-input v-model="addform.indicator_id" autocomplete="off" :disabled="cannotInpId" />
       </el-form-item>
       <el-form-item label="指标名称" label-width="8.75rem" prop="indicator_name">
-        <el-input v-model="addform.indicator_name" autocomplete="off" />
+        <el-input v-model="addform.indicator_name" autocomplete="off" disabled="true" />
       </el-form-item>
       <el-form-item label="占比" label-width="8.75rem" prop="weight">
         <el-input v-model="addform.weight" autocomplete="off" />
