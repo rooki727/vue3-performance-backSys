@@ -89,7 +89,7 @@ const goToManage = (name, real_name) => {
     router.replace(`/teachingTask?real_name=${real_name}`)
     return
   }
-  if (name === '科研') {
+  if (name === '科研项目') {
     router.replace(`/research?real_name=${real_name}`)
     return
   }

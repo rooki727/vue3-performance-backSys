@@ -17,15 +17,31 @@
   <div>
     <el-table :data="currentPageData" style="width: 100%" @selection-change="handleSelectionChange">
       <el-table-column width="40" type="selection" />
-      <el-table-column fixed prop="task_id" label="task_id" width="100" />
+      <el-table-column fixed prop="research_id" label="research_id" width="110" />
       <el-table-column prop="real_name" label="真实姓名" width="120" />
-      <el-table-column prop="semester" label="学期" width="150" />
-      <el-table-column prop="course_name" label="课程名" width="180" />
-      <el-table-column prop="class_type" label="课程类型" width="100" />
-      <el-table-column prop="class_name" label="班级名" width="200" />
-      <el-table-column prop="credit_hours" label="学时" width="100" />
+      <el-table-column prop="title" label="标题" width="100" />
+      <el-table-column prop="category" label="科研类别" width="120" />
+      <el-table-column prop="sub_type" label="专利类别/成果类别" width="150" />
+      <el-table-column prop="level" label="级别" width="100" />
+      <el-table-column prop="start_date" label="开始时间" width="200" />
+      <el-table-column prop="end_date" label="结束时间" width="200" />
+      <el-table-column prop="funding" label="经费" width="100" />
+      <el-table-column prop="publisher" label="出版社" width="100" />
+      <el-table-column prop="ranking" label="排名" width="100" />
+      <el-table-column prop="is_authorized" label="是否授权" width="100" />
+      <el-table-column label="描述" width="180">
+        <template #default="scope">
+          <el-popover effect="light" trigger="hover" placement="top" width="auto">
+            <template #default>
+              <div>依据: {{ scope.row.description }}</div>
+            </template>
+            <template #reference>
+              <el-tag>鼠标移至此可查看描述</el-tag>
+            </template>
+          </el-popover>
+        </template>
+      </el-table-column>
       <el-table-column prop="created_date" label="上报时间" width="200" />
-
       <el-table-column label="审核状态" width="100">
         <template #default="scope">
           <el-tag
@@ -91,7 +107,7 @@
 <script setup>
 import editDialog from './editDialog.vue'
 import { computed, ref, inject } from 'vue'
-import { deleteTaskAPI, checkTaskAPI } from '@/apis/teachingTask'
+import { deleteResearchAPI, checkStatusAPI } from '@/apis/research'
 import { ElMessage } from 'element-plus'
 import { isTeacher } from '@/utils/checkRole'
 import { useLoginerStore } from '@/stores/LoginerStore'
@@ -116,7 +132,7 @@ const updateClickRow = (newValue) => {
   clickRow.value = newValue
 }
 const props = defineProps({
-  tableTask: {
+  researchTable: {
     type: Array
   }
 })
@@ -128,7 +144,7 @@ const background = ref(false)
 const disabled = ref(false)
 const currentPage = ref(1)
 // 将代码table监听获值
-const computedtable = computed(() => props.tableTask)
+const computedtable = computed(() => props.researchTable)
 
 const totalRowSize = computed(() => computedtable.value?.length)
 const currentPageData = computed(() => {
@@ -145,7 +161,7 @@ const handleSelectionChange = (val) => {
   multipleSelection.value = val
   if (multipleSelection.value.length > 0) {
     // 使用map方法遍历multipleSelection.value数组，并将每个选中项的id存储到一个新的数组中
-    const selectedIds = multipleSelection.value.map((item) => item.task_id)
+    const selectedIds = multipleSelection.value.map((item) => item.research_id)
     // 将所选数据提供给父组件
     emit('getDelTable', selectedIds)
   }
@@ -161,7 +177,7 @@ const handleEdit = (row) => {
 
 const handleDelete = async (row) => {
   // 在这里使用 row 数据执行删除操作
-  await deleteTaskAPI(row.task_id)
+  await deleteResearchAPI(row.research_id)
     .then(() => {
       ElMessage({ type: 'success', message: '删除成功' })
       getTableForm()
@@ -175,7 +191,7 @@ const handleDelete = async (row) => {
 const checkTask = async (row) => {
   if (row.check_status === '待审核') {
     // 在这里使用 row 数据执行审核操作
-    await checkTaskAPI({ task_id: row.task_id, check_status: '已审核' }).then(() => {
+    await checkStatusAPI({ research_id: row.research_id, check_status: '已审核' }).then(() => {
       ElMessage({ type: 'success', message: '审核成功' })
       getTableForm()
     })

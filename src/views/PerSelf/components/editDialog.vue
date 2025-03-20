@@ -73,13 +73,19 @@ watch(
 <template>
   <el-dialog
     :model-value="centerDialogVisible"
-    title="修改当前绩效数据"
+    title="修改当前指标数据"
     width="600"
     align-center
     :show-close="false"
     :lock-scroll="false"
     :close-on-click-modal="false"
   >
+    <el-alert
+      title="请自评分数时，根据自己所上传对应指标数据的实际情况进行评分！"
+      type="warning"
+      show-icon
+      :closable="false"
+    ></el-alert>
     <el-form :model="addform" :rules="rules" ref="addForm">
       <el-form-item label="绩效id" label-width="8.75rem">
         <template #default>{{ addform.self_assessment_id }}</template>

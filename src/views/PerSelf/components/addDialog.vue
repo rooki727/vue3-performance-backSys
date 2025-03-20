@@ -19,6 +19,13 @@ const addform = ref({
 })
 
 const rules = {
+  indicator_id: [
+    {
+      required: true,
+      message: '请选择指标',
+      trigger: 'blur'
+    }
+  ],
   score: [
     {
       required: true,

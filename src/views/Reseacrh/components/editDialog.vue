@@ -1,8 +1,9 @@
 <script  setup>
 import { computed, ref, watch } from 'vue'
 import { ElMessage } from 'element-plus'
-import { updateTaskAPI } from '@/apis/teachingTask'
+import { updateResearchAPI } from '@/apis/research'
 import axios from 'axios'
+import dayjs from 'dayjs'
 // 弹框功能设置
 const props = defineProps(['dialogFormVisible', 'clickRow', 'cannotInpId'])
 const centerDialogVisible = computed(() => props.dialogFormVisible)
@@ -12,14 +13,28 @@ const changeDialogVisible = () => {
   emit('updateClickRow', {}) // 发送事件给父组件，请求修改props.clickRow的值为null
   emit('changeDialogVisible', false)
 }
+const categoryList = ref([
+  { category_id: 1, category_name: '项目' },
+  { category_id: 2, category_name: '成果' },
+  { category_id: 3, category_name: '著作' },
+  { category_id: 4, category_name: '论文' },
+  { category_id: 4, category_name: '专利' },
+  { category_id: 5, category_name: '其他' }
+])
 const addForm = ref(null)
 const addform = ref({
-  task_id: null,
-  semester: '',
-  course_name: '',
-  class_type: '',
-  class_name: '',
-  credit_hours: null,
+  research_id: null,
+  title: '',
+  category: '',
+  sub_type: '',
+  level: '',
+  start_date: '',
+  end_date: '',
+  funding: null,
+  publisher: '',
+  ranking: '',
+  is_authorized: '',
+  description: '',
   file_link: ''
 })
 // 上传区
@@ -54,14 +69,26 @@ const handleFileChange = (event) => {
 const submitadd = (addForm) => {
   addForm.validate(async (valid) => {
     if (valid) {
+      const formattedStart = addform.value.start_date
+        ? dayjs(addform.value.start_date).format('YYYY-MM-DD HH:mm:ss')
+        : null
+      const formattedEnd = addform.value.end_date
+        ? dayjs(addform.value.end_date).format('YYYY-MM-DD HH:mm:ss')
+        : null
       // api数据请求，添加该用户的信息
-      await updateTaskAPI({
-        task_id: addform.value.task_id,
-        semester: addform.value.semester,
-        course_name: addform.value.course_name,
-        class_type: addform.value.class_type,
-        class_name: addform.value.class_name,
-        credit_hours: addform.value.credit_hours,
+      await updateResearchAPI({
+        research_id: addform.value.research_id,
+        title: addform.value.title,
+        category: addform.value.category,
+        sub_type: addform.value.sub_type,
+        level: addform.value.level,
+        start_date: formattedStart,
+        end_date: formattedEnd,
+        funding: addform.value.funding,
+        publisher: addform.value.publisher,
+        ranking: addform.value.ranking,
+        is_authorized: addform.value.is_authorized,
+        description: addform.value.description,
         file_link: addform.value.file_link
       })
         .then(() => {
@@ -81,44 +108,19 @@ const submitadd = (addForm) => {
     }
   })
 }
+
 const rules = {
-  semester: [
+  title: [
     {
       required: true,
-      message: '请输入姓学期',
+      message: '请输入标题',
       trigger: 'blur'
     }
   ],
-  course_name: [
+  category: [
     {
       required: true,
-      message: '请输入课程名',
-      trigger: 'blur'
-    }
-  ],
-  class_type: [
-    {
-      required: true,
-      message: '请输入课程类型',
-      trigger: 'blur'
-    }
-  ],
-  class_name: [
-    {
-      required: true,
-      message: '请输入班级名',
-      trigger: 'blur'
-    }
-  ],
-  credit_hours: [
-    {
-      required: true,
-      message: '请输入学时',
-      trigger: 'blur'
-    },
-    {
-      pattern: /^[0-9]*$/, // 正则表达式，验证输入为数字
-      message: '学时必须是数字',
+      message: '请选择科研类型',
       trigger: 'blur'
     }
   ],
@@ -126,6 +128,13 @@ const rules = {
     {
       required: true,
       message: '请输入user_id',
+      trigger: 'blur'
+    }
+  ],
+  funding: [
+    {
+      pattern: /^\d+(\.\d+)?$/, // 正则表达式，验证输入为整数或者小数
+      message: '经费必须是有效的数字（整数或浮动小数）',
       trigger: 'blur'
     }
   ]
@@ -141,28 +150,83 @@ watch(
 <template>
   <el-dialog
     :model-value="centerDialogVisible"
-    title="修改任务信息"
-    width="600"
+    title="修改科研信息"
+    width="1000"
     align-center
     :show-close="false"
     :lock-scroll="false"
     :close-on-click-modal="false"
   >
     <el-form :model="addform" :rules="rules" ref="addForm">
-      <el-form-item label="学期" label-width="8.75rem" prop="semester">
-        <el-input v-model="addform.semester" autocomplete="off" />
+      <el-form-item label="标题" label-width="8.75rem" prop="title">
+        <el-input v-model="addform.title" autocomplete="off" placeholder="请输入标题" />
       </el-form-item>
-      <el-form-item label="课程名" label-width="8.75rem" prop="course_name">
-        <el-input v-model="addform.course_name" autocomplete="off" />
+      <el-form-item label="科研类别" label-width="8.75rem" prop="category">
+        <el-select v-model="addform.category" placeholder="请选择科研类别">
+          <el-option
+            v-for="item in categoryList"
+            :key="item.category_id"
+            :label="item.category_name"
+            :value="item.category_id"
+          />
+        </el-select>
       </el-form-item>
-      <el-form-item label="课程类型" label-width="8.75rem" prop="class_type">
-        <el-input v-model="addform.class_type" autocomplete="off" />
+      <el-form-item label="专利类别/成果类别" label-width="8.75rem" prop="sub_type">
+        <el-input
+          v-model="addform.sub_type"
+          autocomplete="off"
+          placeholder="若为专利类别/成果类别，请注明专利类别/成果类别"
+        />
       </el-form-item>
-      <el-form-item label="班级名" label-width="8.75rem" prop="class_name">
-        <el-input v-model="addform.class_name" autocomplete="off" />
+      <el-form-item label="级别" label-width="8.75rem" prop="level">
+        <el-input v-model="addform.level" autocomplete="off" placeholder="若有级别，请输入级别" />
       </el-form-item>
-      <el-form-item label="学时" label-width="8.75rem" prop="credit_hours">
-        <el-input v-model="addform.credit_hours" autocomplete="off" />
+      <el-form-item label="开始时间" label-width="8.75rem">
+        <el-date-picker
+          v-model="addform.start_date"
+          type="datetime"
+          placeholder="若有协议，请输入开始时间"
+          size="default"
+        />
+      </el-form-item>
+      <el-form-item label="结束时间" label-width="8.75rem">
+        <el-date-picker
+          v-model="addform.end_date"
+          type="datetime"
+          placeholder="若为报告类别请输入结束时间"
+          size="default"
+        />
+      </el-form-item>
+      <el-form-item label="经费" label-width="8.75rem" prop="funding">
+        <el-input
+          v-model="addform.funding"
+          autocomplete="off"
+          placeholder="若为有经费，请输入经费"
+        />
+      </el-form-item>
+      <el-form-item label="出版社" label-width="8.75rem" prop="publisher">
+        <el-input
+          v-model="addform.publisher"
+          autocomplete="off"
+          placeholder="若为有出版社，请输入出版社"
+        />
+      </el-form-item>
+      <el-form-item label="排名" label-width="8.75rem" prop="ranking">
+        <el-input
+          v-model="addform.ranking"
+          autocomplete="off"
+          placeholder="若为有排名，请输入排名"
+        />
+      </el-form-item>
+      <el-form-item label="是否授权" label-width="8.75rem" prop="is_authorized">
+        <el-input
+          v-model="addform.is_authorized"
+          autocomplete="off"
+          placeholder="若为专利，请注明是否授权"
+        />
+      </el-form-item>
+      <el-form-item label="描述" label-width="8.75rem" prop="description">
+        <el-input v-model="addform.description" autocomplete="off" placeholder="描述" />
       </el-form-item>
       <el-form-item label="附件" label-width="8.75rem">
         <button class="upload-btn" id="upload-btn" @click="openFilePicker">
